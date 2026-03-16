@@ -1,0 +1,16 @@
+Index: Visitor.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Model/Visitor.php b/Model/Visitor.php
+--- a/Model/Visitor.php	(revision f075f6ac4e8b32dfd590c2603c360c7388b73ba6)
++++ b/Model/Visitor.php	(date 1603869115083)
+@@ -189,6 +189,7 @@
+             $consentLogCollection->filterByLastConsentRecord()
+                 ->filterByPolicyVersionAndLinkType($currentPolicy->getPolicyVersion())
+                 ->addFieldToFilter('main_table.' . WithConsentInterface::CUSTOMER_ID, $customerId)
++                ->addFieldToFilter('s.store_id', $storeId)
+                 ->addFieldToFilter('main_table.' . WithConsentInterface::ACTION, true);
+
+             $this->agreedConsents[$cacheKey] = $consentLogCollection->getColumnValues(

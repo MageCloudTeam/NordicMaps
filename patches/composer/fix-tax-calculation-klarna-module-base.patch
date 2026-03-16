@@ -1,0 +1,21 @@
+Index: module-base/Model/Calculator/Item.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- module-base/Model/Calculator/Item.php	(revision 3499a554296aca060e9c0525d22250c187306f37)
++++ module-base/Model/Calculator/Item.php	(date 1596056379500)
+@@ -108,12 +108,12 @@
+     private function applyTaxOnItem(array $itemResult, array $item): array
+     {
+         $itemResult['tax_rate']         = $this->helper->toApiFloat($item['tax_percent']);
+-        $itemResult['total_tax_amount'] = $this->helper->toApiFloat($item['base_tax_amount']);
+         $itemResult['unit_price']       = $this->helper->toApiFloat($item['base_price_incl_tax'])
+             ?: $this->helper->toApiFloat($item['base_row_total_incl_tax']);
+         $itemResult['total_amount']     = $this->helper->toApiFloat(
+             $item['base_row_total_incl_tax'] - $item['base_discount_amount']
+         );
++        $itemResult['total_tax_amount'] = round($itemResult['total_amount'] - $itemResult['total_amount'] * 10000 / (10000 + $itemResult['tax_rate']));
+ 
+         return $itemResult;
+     }

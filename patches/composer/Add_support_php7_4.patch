@@ -1,0 +1,24 @@
+Index: Smtp.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- a/Model/ZendMailTwo/Smtp.php	(revision 1d4800b99718154596ec384ede65f2b698aeeff6)
++++ b/Model/ZendMailTwo/Smtp.php	(date 1603366511042)
+@@ -274,7 +274,7 @@
+     public function getFromEmailAddress()
+     {
+         $result = $this->storeModel->getFrom();
+-        return $result['email'];
++        return $result['email'] ?? '';
+     }
+
+     /**
+@@ -283,6 +283,6 @@
+     public function getFromName()
+     {
+         $result = $this->storeModel->getFrom();
+-        return $result['name'];
++        return $result['name'] ?? '';
+     }
+ }

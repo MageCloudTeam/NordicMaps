@@ -1,0 +1,134 @@
+Index: ../Controller/Adminhtml/Promo/Quote/NewActionHtml.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- ../Controller/Adminhtml/Promo/Quote/NewActionHtml.php	(revision 2cb569d1e16c7eda51cb35cecfd589aeca7bf225)
++++ ../Controller/Adminhtml/Promo/Quote/NewActionHtml.php	(date 1597955548633)
+@@ -47,6 +47,7 @@
+         if ($model instanceof AbstractCondition) {
+             $model->setJsFormObject($formName);
+             $model->setFormName($formName);
++            $this->setJsFormObject($model);
+             $html = $model->asHtmlRecursive();
+         } else {
+             $html = '';
+@@ -54,4 +55,32 @@
+         $this->getResponse()
+             ->setBody($html);
+     }
+-}
++
++    /**
++     * Set jsFormObject for the model object
++     *
++     * @return void
++     * @param AbstractCondition $model
++     */
++    private function setJsFormObject(AbstractCondition $model): void
++    {
++        $requestJsFormName = $this->getRequest()->getParam('form');
++        $actualJsFormName = $this->getJsFormObjectName($model->getFormName());
++        if ($requestJsFormName === $actualJsFormName) { //new
++            $model->setJsFormObject($actualJsFormName);
++        } else { //edit
++            $model->setJsFormObject($requestJsFormName);
++        }
++    }
++
++    /**
++     * Get jsFormObject name
++     *
++     * @param string $formName
++     * @return string
++     */
++    private function getJsFormObjectName(string $formName): string
++    {
++        return $formName . 'rule_actions_fieldset_';
++    }
++}
+\ No newline at end of file
+Index: ../Controller/Adminhtml/Promo/Quote/NewConditionHtml.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- ../Controller/Adminhtml/Promo/Quote/NewConditionHtml.php	(revision 2cb569d1e16c7eda51cb35cecfd589aeca7bf225)
++++ ../Controller/Adminhtml/Promo/Quote/NewConditionHtml.php	(date 1597955548663)
+@@ -13,14 +13,16 @@
+ class NewConditionHtml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpPostActionInterface
+ {
+     /**
+-     * New condition html action
++     * New action html action
+      *
+      * @return void
+      */
+     public function execute()
+     {
+-        $id = $this->getRequest()->getParam('id');
+-        $formName = $this->getRequest()->getParam('form_namespace');
++        $id = $this->getRequest()
++            ->getParam('id');
++        $formName = $this->getRequest()
++            ->getParam('form_namespace');
+         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+         $type = $typeArr[0];
+ 
+@@ -31,21 +33,51 @@
+         )->setType(
+             $type
+         )->setRule(
+-            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
++            $this->_objectManager->create(Rule::class)
+         )->setPrefix(
+-            'conditions'
++            'actions'
+         );
+         if (!empty($typeArr[1])) {
+             $model->setAttribute($typeArr[1]);
+         }
+ 
+-        if ($model instanceof \Magento\Rule\Model\Condition\AbstractCondition) {
+-            $model->setJsFormObject($this->getRequest()->getParam('form'));
++        if ($model instanceof AbstractCondition) {
++            $model->setJsFormObject($formName);
+             $model->setFormName($formName);
++            $this->setJsFormObject($model);
+             $html = $model->asHtmlRecursive();
+         } else {
+             $html = '';
+         }
+-        $this->getResponse()->setBody($html);
++        $this->getResponse()
++            ->setBody($html);
++    }
++
++    /**
++     * Set jsFormObject for the model object
++     *
++     * @return void
++     * @param AbstractCondition $model
++     */
++    private function setJsFormObject(AbstractCondition $model): void
++    {
++        $requestJsFormName = $this->getRequest()->getParam('form');
++        $actualJsFormName = $this->getJsFormObjectName($model->getFormName());
++        if ($requestJsFormName === $actualJsFormName) { //new
++            $model->setJsFormObject($actualJsFormName);
++        } else { //edit
++            $model->setJsFormObject($requestJsFormName);
++        }
++    }
++
++    /**
++     * Get jsFormObject name
++     *
++     * @param string $formName
++     * @return string
++     */
++    private function getJsFormObjectName(string $formName): string
++    {
++        return $formName . 'rule_actions_fieldset_';
+     }
+ }

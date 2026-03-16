@@ -1,0 +1,24 @@
+Index: ../Model/Rule/Condition/Product.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- a/Model/Rule/Condition/Product.php	(revision 4fb32a4746a23e46beafb16aed043735a5a73be4)
++++ b/Model/Rule/Condition/Product.php	(date 1594322799918)
+@@ -189,8 +189,14 @@
+                 $storeId = $connection->getIfNullSql($alias . '.store_id', $this->storeManager->getStore()->getId());
+                 $linkField = $attribute->getEntity()->getLinkField();
+
++                $table = $collection->getTable('catalog_product_entity_varchar');
++
++                if ($attribute->getBackendType() === 'text') {
++                    $table = $collection->getTable('catalog_product_entity_text');
++                }
++
+                 $collection->getSelect()->join(
+-                    [$alias => $collection->getTable('catalog_product_entity_varchar')],
++                    [$alias => $table],
+                     "($alias.$linkField = e.$linkField) AND ($alias.store_id = $storeId)" .
+                     " AND ($alias.attribute_id = {$attribute->getId()})",
+                     []
+

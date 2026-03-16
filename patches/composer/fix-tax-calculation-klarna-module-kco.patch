@@ -1,0 +1,25 @@
+Index: module-kco/Model/Api/Builder/Kasper.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- module-kco/Model/Api/Builder/Kasper.php	(revision f3ed7c0f1475ecccc9fbb27df42c3185d9d3729d)
++++ module-kco/Model/Api/Builder/Kasper.php	(date 1596055210467)
+@@ -268,7 +268,16 @@
+         $address                    = $quote->isVirtual() ? $quote->getBillingAddress() : $quote->getShippingAddress();
+         $create['order_amount']     = $this->dataConverter->toApiFloat($address->getBaseGrandTotal());
+         $create['order_lines']      = $this->parameter->getOrderLines($quote->getStore());
+-        $create['order_tax_amount'] = $this->dataConverter->toApiFloat($address->getBaseTaxAmount());
++
++        $create['order_tax_amount'] = 0;
++
++        foreach ($create['order_lines'] as $line) {
++            $create['order_tax_amount'] += $line['total_tax_amount'] ?? 0;
++        }
++
++        if($create['order_tax_amount'] == 0) {
++            $create['order_tax_amount'] = $this->dataConverter->toApiFloat($address->getBaseTaxAmount());
++        }
+ 
+         if ($this->configHelper->isFptEnabled($store) && !$this->configHelper->getDisplayInSubtotalFpt($store)) {
+             $fptResult                  = $this->rate->getFptTax($quote);

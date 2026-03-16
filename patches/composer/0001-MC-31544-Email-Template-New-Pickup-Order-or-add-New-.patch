@@ -1,0 +1,1265 @@
+From 1f4166bc94bc3143e30e1f66243391ccd8434f1f Mon Sep 17 00:00:00 2001
+From: Vasya Tsviklinskyi <tsviklinskyi@gmail.com>
+Date: Tue, 7 Apr 2020 13:49:50 +0300
+Subject: [PATCH] MC-31544: Email Template New Pickup Order or add New Template
+ order items are missing in Mail
+
+---
+ .../Block/Order/Email/Creditmemo/Items.php    |  87 +++++++++++++++
+ .../Sales/Block/Order/Email/Invoice/Items.php |  87 +++++++++++++++
+ .../Magento/Sales/Block/Order/Email/Items.php |  51 +++++++++
+ .../Block/Order/Email/Shipment/Items.php      |  87 +++++++++++++++
+ .../Order/Email/Sender/CreditmemoSender.php   |   4 +-
+ .../Order/Email/Sender/InvoiceSender.php      |   4 +-
+ .../Model/Order/Email/Sender/OrderSender.php  |   4 +-
+ .../Order/Email/Sender/ShipmentSender.php     |   4 +-
+ .../Order/Shipment/Sender/EmailSender.php     |   2 +
+ .../Order/Email/Sender/AbstractSenderTest.php |   2 +-
+ .../Email/Sender/CreditmemoSenderTest.php     |  13 +++
+ .../Order/Email/Sender/InvoiceSenderTest.php  |  14 +++
+ .../Order/Email/Sender/OrderSenderTest.php    |   7 ++
+ .../Order/Email/Sender/ShipmentSenderTest.php |  14 +++
+ .../Order/Shipment/Sender/EmailSenderTest.php | 103 ++++++++++++------
+ .../view/frontend/email/creditmemo_new.html   |   4 +-
+ .../frontend/email/creditmemo_new_guest.html  |   6 +-
+ .../view/frontend/email/invoice_new.html      |   4 +-
+ .../frontend/email/invoice_new_guest.html     |   4 +-
+ .../Sales/view/frontend/email/order_new.html  |   3 +-
+ .../view/frontend/email/order_new_guest.html  |   3 +-
+ .../view/frontend/email/shipment_new.html     |   8 +-
+ .../frontend/email/shipment_new_guest.html    |   8 +-
+ .../sales_email_order_shipment_track.xml      |   4 +-
+ .../Magento_Sales/email/creditmemo_new.html   |   4 +-
+ .../email/creditmemo_new_guest.html           |   4 +-
+ .../luma/Magento_Sales/email/invoice_new.html |   4 +-
+ .../email/invoice_new_guest.html              |   4 +-
+ .../luma/Magento_Sales/email/order_new.html   |   3 +-
+ .../Magento_Sales/email/order_new_guest.html  |   3 +-
+ .../Magento_Sales/email/shipment_new.html     |   8 +-
+ .../email/shipment_new_guest.html             |   6 +-
+ 32 files changed, 496 insertions(+), 67 deletions(-)
+
+diff --git a/Block/Order/Email/Creditmemo/Items.php b/Block/Order/Email/Creditmemo/Items.php
+index 0b691eff575..0a1e87e5e0a 100644
+--- a/Block/Order/Email/Creditmemo/Items.php
++++ b/Block/Order/Email/Creditmemo/Items.php
+@@ -5,6 +5,13 @@
+  */
+ namespace Magento\Sales\Block\Order\Email\Creditmemo;
+
++use Magento\Framework\App\ObjectManager;
++use Magento\Framework\View\Element\Template\Context;
++use Magento\Sales\Api\CreditmemoRepositoryInterface;
++use Magento\Sales\Api\Data\OrderInterface;
++use Magento\Sales\Api\Data\CreditmemoInterface;
++use Magento\Sales\Api\OrderRepositoryInterface;
++
+ /**
+  * Sales Order Email creditmemo items
+  *
+@@ -14,6 +21,36 @@ namespace Magento\Sales\Block\Order\Email\Creditmemo;
+  */
+ class Items extends \Magento\Sales\Block\Items\AbstractItems
+ {
++    /**
++     * @var OrderRepositoryInterface
++     */
++    private $orderRepository;
++
++    /**
++     * @var CreditmemoRepositoryInterface
++     */
++    private $creditmemoRepository;
++
++    /**
++     * @param Context $context
++     * @param array $data
++     * @param OrderRepositoryInterface|null $orderRepository
++     * @param CreditmemoRepositoryInterface|null $creditmemoRepository
++     */
++    public function __construct(
++        Context $context,
++        array $data = [],
++        ?OrderRepositoryInterface $orderRepository = null,
++        ?CreditmemoRepositoryInterface $creditmemoRepository = null
++    ) {
++        $this->orderRepository =
++            $orderRepository ?: ObjectManager::getInstance()->get(OrderRepositoryInterface::class);
++        $this->creditmemoRepository =
++            $creditmemoRepository ?: ObjectManager::getInstance()->get(CreditmemoRepositoryInterface::class);
++
++        parent::__construct($context, $data);
++    }
++
+     /**
+      * Prepare item before output
+      *
+@@ -25,4 +62,54 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
+         $renderer->getItem()->setOrder($this->getOrder());
+         $renderer->getItem()->setSource($this->getCreditmemo());
+     }
++
++    /**
++     * Returns order.
++     *
++     * Custom email templates are only allowed to use scalar values for variable data.
++     * So order is loaded by order_id, that is passed to block from email template.
++     * For legacy custom email templates it can pass as an object.
++     *
++     * @return OrderInterface|null
++     */
++    public function getOrder()
++    {
++        $order = $this->getData('order');
++        if ($order !== null) {
++            return $order;
++        }
++
++        $orderId = (int)$this->getData('order_id');
++        if ($orderId) {
++            $order = $this->orderRepository->get($orderId);
++            $this->setData('order', $order);
++        }
++
++        return $this->getData('order');
++    }
++
++    /**
++     * Returns creditmemo.
++     *
++     * Custom email templates are only allowed to use scalar values for variable data.
++     * So creditmemo is loaded by creditmemo_id, that is passed to block from email template.
++     * For legacy custom email templates it can pass as an object.
++     *
++     * @return CreditmemoInterface|null
++     */
++    public function getCreditmemo()
++    {
++        $creditmemo = $this->getData('creditmemo');
++        if ($creditmemo !== null) {
++            return $creditmemo;
++        }
++
++        $creditmemoId = (int)$this->getData('creditmemo_id');
++        if ($creditmemoId) {
++            $creditmemo = $this->creditmemoRepository->get($creditmemoId);
++            $this->setData('creditmemo', $creditmemo);
++        }
++
++        return $this->getData('creditmemo');
++    }
+ }
+diff --git a/Block/Order/Email/Invoice/Items.php b/Block/Order/Email/Invoice/Items.php
+index bc7756816d3..cc2b197ab0e 100644
+--- a/Block/Order/Email/Invoice/Items.php
++++ b/Block/Order/Email/Invoice/Items.php
+@@ -6,6 +6,13 @@
+
+ namespace Magento\Sales\Block\Order\Email\Invoice;
+
++use Magento\Framework\App\ObjectManager;
++use Magento\Framework\View\Element\Template\Context;
++use Magento\Sales\Api\Data\InvoiceInterface;
++use Magento\Sales\Api\Data\OrderInterface;
++use Magento\Sales\Api\InvoiceRepositoryInterface;
++use Magento\Sales\Api\OrderRepositoryInterface;
++
+ /**
+  * Sales Order Email Invoice items
+  *
+@@ -14,6 +21,36 @@ namespace Magento\Sales\Block\Order\Email\Invoice;
+  */
+ class Items extends \Magento\Sales\Block\Items\AbstractItems
+ {
++    /**
++     * @var OrderRepositoryInterface
++     */
++    private $orderRepository;
++
++    /**
++     * @var InvoiceRepositoryInterface
++     */
++    private $invoiceRepository;
++
++    /**
++     * @param Context $context
++     * @param array $data
++     * @param OrderRepositoryInterface|null $orderRepository
++     * @param InvoiceRepositoryInterface|null $invoiceRepository
++     */
++    public function __construct(
++        Context $context,
++        array $data = [],
++        ?OrderRepositoryInterface $orderRepository = null,
++        ?InvoiceRepositoryInterface $invoiceRepository = null
++    ) {
++        $this->orderRepository =
++            $orderRepository ?: ObjectManager::getInstance()->get(OrderRepositoryInterface::class);
++        $this->invoiceRepository =
++            $invoiceRepository ?: ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
++
++        parent::__construct($context, $data);
++    }
++
+     /**
+      * Prepare item before output
+      *
+@@ -25,4 +62,54 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
+         $renderer->getItem()->setOrder($this->getOrder());
+         $renderer->getItem()->setSource($this->getInvoice());
+     }
++
++    /**
++     * Returns order.
++     *
++     * Custom email templates are only allowed to use scalar values for variable data.
++     * So order is loaded by order_id, that is passed to block from email template.
++     * For legacy custom email templates it can pass as an object.
++     *
++     * @return OrderInterface|null
++     */
++    public function getOrder()
++    {
++        $order = $this->getData('order');
++        if ($order !== null) {
++            return $order;
++        }
++
++        $orderId = (int)$this->getData('order_id');
++        if ($orderId) {
++            $order = $this->orderRepository->get($orderId);
++            $this->setData('order', $order);
++        }
++
++        return $this->getData('order');
++    }
++
++    /**
++     * Returns invoice.
++     *
++     * Custom email templates are only allowed to use scalar values for variable data.
++     * So invoice is loaded by invoice_id, that is passed to block from email template.
++     * For legacy custom email templates it can pass as an object.
++     *
++     * @return InvoiceInterface|null
++     */
++    public function getInvoice()
++    {
++        $invoice = $this->getData('invoice');
++        if ($invoice !== null) {
++            return $invoice;
++        }
++
++        $invoiceId = (int)$this->getData('invoice_id');
++        if ($invoiceId) {
++            $invoice = $this->invoiceRepository->get($invoiceId);
++            $this->setData('invoice', $invoice);
++        }
++
++        return $this->getData('invoice');
++    }
+ }
+diff --git a/Block/Order/Email/Items.php b/Block/Order/Email/Items.php
+index ddce387b910..e11981285f0 100644
+--- a/Block/Order/Email/Items.php
++++ b/Block/Order/Email/Items.php
+@@ -11,10 +11,61 @@
+  */
+ namespace Magento\Sales\Block\Order\Email;
+
++use Magento\Framework\App\ObjectManager;
++use Magento\Framework\View\Element\Template\Context;
++use Magento\Sales\Api\Data\OrderInterface;
++use Magento\Sales\Api\OrderRepositoryInterface;
++
+ /**
++ * Sales Order Email items.
++ *
+  * @api
+  * @since 100.0.2
+  */
+ class Items extends \Magento\Sales\Block\Items\AbstractItems
+ {
++    /**
++     * @var OrderRepositoryInterface
++     */
++    private $orderRepository;
++
++    /**
++     * @param Context $context
++     * @param array $data
++     * @param OrderRepositoryInterface|null $orderRepository
++     */
++    public function __construct(
++        Context $context,
++        array $data = [],
++        ?OrderRepositoryInterface $orderRepository = null
++    ) {
++        $this->orderRepository = $orderRepository ?: ObjectManager::getInstance()->get(OrderRepositoryInterface::class);
++
++        parent::__construct($context, $data);
++    }
++
++    /**
++     * Returns order.
++     *
++     * Custom email templates are only allowed to use scalar values for variable data.
++     * So order is loaded by order_id, that is passed to block from email template.
++     * For legacy custom email templates it can pass as an object.
++     *
++     * @return OrderInterface|null
++     */
++    public function getOrder()
++    {
++        $order = $this->getData('order');
++
++        if ($order !== null) {
++            return $order;
++        }
++        $orderId = (int)$this->getData('order_id');
++        if ($orderId) {
++            $order = $this->orderRepository->get($orderId);
++            $this->setData('order', $order);
++        }
++
++        return $this->getData('order');
++    }
+ }
+diff --git a/Block/Order/Email/Shipment/Items.php b/Block/Order/Email/Shipment/Items.php
+index a4c9a7b80a0..1f9b353180f 100644
+--- a/Block/Order/Email/Shipment/Items.php
++++ b/Block/Order/Email/Shipment/Items.php
+@@ -6,6 +6,13 @@
+
+ namespace Magento\Sales\Block\Order\Email\Shipment;
+
++use Magento\Framework\App\ObjectManager;
++use Magento\Framework\View\Element\Template\Context;
++use Magento\Sales\Api\Data\ShipmentInterface;
++use Magento\Sales\Api\Data\OrderInterface;
++use Magento\Sales\Api\OrderRepositoryInterface;
++use Magento\Sales\Api\ShipmentRepositoryInterface;
++
+ /**
+  * Sales Order Email Shipment items
+  *
+@@ -14,6 +21,36 @@ namespace Magento\Sales\Block\Order\Email\Shipment;
+  */
+ class Items extends \Magento\Sales\Block\Items\AbstractItems
+ {
++    /**
++     * @var OrderRepositoryInterface
++     */
++    private $orderRepository;
++
++    /**
++     * @var ShipmentRepositoryInterface
++     */
++    private $shipmentRepository;
++
++    /**
++     * @param Context $context
++     * @param array $data
++     * @param OrderRepositoryInterface|null $orderRepository
++     * @param ShipmentRepositoryInterface|null $creditmemoRepository
++     */
++    public function __construct(
++        Context $context,
++        array $data = [],
++        ?OrderRepositoryInterface $orderRepository = null,
++        ?ShipmentRepositoryInterface $creditmemoRepository = null
++    ) {
++        $this->orderRepository =
++            $orderRepository ?: ObjectManager::getInstance()->get(OrderRepositoryInterface::class);
++        $this->shipmentRepository =
++            $creditmemoRepository ?: ObjectManager::getInstance()->get(ShipmentRepositoryInterface::class);
++
++        parent::__construct($context, $data);
++    }
++
+     /**
+      * Prepare item before output
+      *
+@@ -25,4 +62,54 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
+         $renderer->getItem()->setOrder($this->getOrder());
+         $renderer->getItem()->setSource($this->getShipment());
+     }
++
++    /**
++     * Returns order.
++     *
++     * Custom email templates are only allowed to use scalar values for variable data.
++     * So order is loaded by order_id, that is passed to block from email template.
++     * For legacy custom email templates it can pass as an object.
++     *
++     * @return OrderInterface|null
++     */
++    public function getOrder()
++    {
++        $order = $this->getData('order');
++        if ($order !== null) {
++            return $order;
++        }
++
++        $orderId = (int)$this->getData('order_id');
++        if ($orderId) {
++            $order = $this->orderRepository->get($orderId);
++            $this->setData('order', $order);
++        }
++
++        return $this->getData('order');
++    }
++
++    /**
++     * Returns shipment.
++     *
++     * Custom email templates are only allowed to use scalar values for variable data.
++     * So shipment is loaded by shipment_id, that is passed to block from email template.
++     * For legacy custom email templates it can pass as an object.
++     *
++     * @return ShipmentInterface|null
++     */
++    public function getShipment()
++    {
++        $shipment = $this->getData('shipment');
++        if ($shipment !== null) {
++            return $shipment;
++        }
++
++        $shipmentId = (int)$this->getData('shipment_id');
++        if ($shipmentId) {
++            $shipment = $this->shipmentRepository->get($shipmentId);
++            $this->setData('shipment', $shipment);
++        }
++
++        return $this->getData('shipment');
++    }
+ }
+diff --git a/Model/Order/Email/Sender/CreditmemoSender.php b/Model/Order/Email/Sender/CreditmemoSender.php
+index e6d528fb93a..c27afe9fb5b 100644
+--- a/Model/Order/Email/Sender/CreditmemoSender.php
++++ b/Model/Order/Email/Sender/CreditmemoSender.php
+@@ -17,7 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
+ use Magento\Framework\DataObject;
+
+ /**
+- * Class CreditmemoSender
++ * Sends order creditmemo email to the customer.
+  *
+  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+  */
+@@ -108,7 +108,9 @@ class CreditmemoSender extends Sender
+
+             $transport = [
+                 'order' => $order,
++                'order_id' => $order->getId(),
+                 'creditmemo' => $creditmemo,
++                'creditmemo_id' => $creditmemo->getId(),
+                 'comment' => $creditmemo->getCustomerNoteNotify() ? $creditmemo->getCustomerNote() : '',
+                 'billing' => $order->getBillingAddress(),
+                 'payment_html' => $this->getPaymentHtml($order),
+diff --git a/Model/Order/Email/Sender/InvoiceSender.php b/Model/Order/Email/Sender/InvoiceSender.php
+index 79133af6d6f..05164d1b7b5 100644
+--- a/Model/Order/Email/Sender/InvoiceSender.php
++++ b/Model/Order/Email/Sender/InvoiceSender.php
+@@ -17,7 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
+ use Magento\Framework\DataObject;
+
+ /**
+- * Class InvoiceSender
++ * Sends order invoice email to the customer.
+  *
+  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+  */
+@@ -108,7 +108,9 @@ class InvoiceSender extends Sender
+
+             $transport = [
+                 'order' => $order,
++                'order_id' => $order->getId(),
+                 'invoice' => $invoice,
++                'invoice_id' => $invoice->getId(),
+                 'comment' => $invoice->getCustomerNoteNotify() ? $invoice->getCustomerNote() : '',
+                 'billing' => $order->getBillingAddress(),
+                 'payment_html' => $this->getPaymentHtml($order),
+diff --git a/Model/Order/Email/Sender/OrderSender.php b/Model/Order/Email/Sender/OrderSender.php
+index c67804475cd..a2d61c3b2d3 100644
+--- a/Model/Order/Email/Sender/OrderSender.php
++++ b/Model/Order/Email/Sender/OrderSender.php
+@@ -16,7 +16,8 @@ use Magento\Framework\Event\ManagerInterface;
+ use Magento\Framework\DataObject;
+
+ /**
+- * Class OrderSender
++ * Sends order email to the customer.
++ *
+  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+  */
+ class OrderSender extends Sender
+@@ -125,6 +126,7 @@ class OrderSender extends Sender
+     {
+         $transport = [
+             'order' => $order,
++            'order_id' => $order->getId(),
+             'billing' => $order->getBillingAddress(),
+             'payment_html' => $this->getPaymentHtml($order),
+             'store' => $order->getStore(),
+diff --git a/Model/Order/Email/Sender/ShipmentSender.php b/Model/Order/Email/Sender/ShipmentSender.php
+index c6b40800d51..4c8e1744ac0 100644
+--- a/Model/Order/Email/Sender/ShipmentSender.php
++++ b/Model/Order/Email/Sender/ShipmentSender.php
+@@ -108,7 +108,13 @@
+
+             $transport = [
+                 'order' => $order,
++                'order_id' => $order->getId(),
+                 'shipment' => $shipment,
++                'shipment_id' => $shipment->getId(),
++                'order_data' => [
++                    'customer_name' => $order->getCustomerName(),
++                    'is_not_virtual' => $order->getIsNotVirtual()
++                ],
+                 'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
+                 'billing' => $order->getBillingAddress(),
+                 'payment_html' => $this->getPaymentHtml($order),
+diff --git a/Model/Order/Shipment/Sender/EmailSender.php b/Model/Order/Shipment/Sender/EmailSender.php
+index 1d4418c5004..fe68555d9f7 100644
+--- a/Model/Order/Shipment/Sender/EmailSender.php
++++ b/Model/Order/Shipment/Sender/EmailSender.php
+@@ -104,7 +104,13 @@ class EmailSender extends Sender implements SenderInterface
+
+             $transport = [
+                 'order' => $order,
++                'order_id' => $order->getId(),
+                 'shipment' => $shipment,
++                'shipment_id' => $shipment->getId(),
++                'order_data' => [
++                    'customer_name' => $order->getCustomerName(),
++                    'is_not_virtual' => $order->getIsNotVirtual()
++                ],
+                 'comment' => $comment ? $comment->getComment() : '',
+                 'billing' => $order->getBillingAddress(),
+                 'payment_html' => $this->getPaymentHtml($order),
+diff --git a/Test/Unit/Model/Order/Email/Sender/AbstractSenderTest.php b/Test/Unit/Model/Order/Email/Sender/AbstractSenderTest.php
+index 2f4e0e927db..2864f846f5a 100644
+--- a/Test/Unit/Model/Order/Email/Sender/AbstractSenderTest.php
++++ b/Test/Unit/Model/Order/Email/Sender/AbstractSenderTest.php
+@@ -95,7 +95,7 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
+         $this->orderMock = $this->createPartialMock(
+             \Magento\Sales\Model\Order::class,
+             [
+-                'getStore', 'getBillingAddress', 'getPayment',
++                'getId', 'getStore', 'getBillingAddress', 'getPayment',
+                 '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
+                 'getCustomerEmail', 'getShippingAddress', 'setSendEmail',
+                 'setEmailSent', 'getCreatedAtFormatted', 'getIsNotVirtual',
+diff --git a/Test/Unit/Model/Order/Email/Sender/CreditmemoSenderTest.php b/Test/Unit/Model/Order/Email/Sender/CreditmemoSenderTest.php
+index 72a51a15db5..8162f89c3e2 100644
+--- a/Test/Unit/Model/Order/Email/Sender/CreditmemoSenderTest.php
++++ b/Test/Unit/Model/Order/Email/Sender/CreditmemoSenderTest.php
+@@ -12,6 +12,10 @@ use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+  */
+ class CreditmemoSenderTest extends AbstractSenderTest
+ {
++    private const CREDITMEMO_ID = 1;
++
++    private const ORDER_ID = 1;
++
+     /**
+      * @var \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender
+      */
+@@ -40,6 +44,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
+             \Magento\Sales\Model\Order\Creditmemo::class,
+             [
+                 'getStore',
++                'getId',
+                 '__wakeup',
+                 'getOrder',
+                 'setSendEmail',
+@@ -54,6 +59,10 @@ class CreditmemoSenderTest extends AbstractSenderTest
+         $this->creditmemoMock->expects($this->any())
+             ->method('getOrder')
+             ->will($this->returnValue($this->orderMock));
++        $this->creditmemoMock->method('getId')
++            ->willReturn(self::CREDITMEMO_ID);
++        $this->orderMock->method('getId')
++            ->willReturn(self::ORDER_ID);
+
+         $this->identityContainerMock = $this->createPartialMock(
+             \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity::class,
+@@ -142,7 +151,9 @@ class CreditmemoSenderTest extends AbstractSenderTest
+                 ->with(
+                     [
+                         'order' => $this->orderMock,
++                        'order_id' => self::ORDER_ID,
+                         'creditmemo' => $this->creditmemoMock,
++                        'creditmemo_id' => self::CREDITMEMO_ID,
+                         'comment' => $customerNoteNotify ? $comment : '',
+                         'billing' => $addressMock,
+                         'payment_html' => 'payment',
+@@ -285,7 +296,9 @@ class CreditmemoSenderTest extends AbstractSenderTest
+             ->with(
+                 [
+                     'order' => $this->orderMock,
++                    'order_id' => self::ORDER_ID,
+                     'creditmemo' => $this->creditmemoMock,
++                    'creditmemo_id' => self::CREDITMEMO_ID,
+                     'comment' => '',
+                     'billing' => $addressMock,
+                     'payment_html' => 'payment',
+diff --git a/Test/Unit/Model/Order/Email/Sender/InvoiceSenderTest.php b/Test/Unit/Model/Order/Email/Sender/InvoiceSenderTest.php
+index 00a1855055a..ef196ef229c 100644
+--- a/Test/Unit/Model/Order/Email/Sender/InvoiceSenderTest.php
++++ b/Test/Unit/Model/Order/Email/Sender/InvoiceSenderTest.php
+@@ -12,6 +12,10 @@ use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+  */
+ class InvoiceSenderTest extends AbstractSenderTest
+ {
++    private const INVOICE_ID = 1;
++
++    private const ORDER_ID = 1;
++
+     /**
+      * @var \Magento\Sales\Model\Order\Email\Sender\InvoiceSender
+      */
+@@ -40,6 +44,7 @@ class InvoiceSenderTest extends AbstractSenderTest
+             \Magento\Sales\Model\Order\Invoice::class,
+             [
+                 'getStore',
++                'getId',
+                 '__wakeup',
+                 'getOrder',
+                 'setSendEmail',
+@@ -55,6 +60,11 @@ class InvoiceSenderTest extends AbstractSenderTest
+             ->method('getOrder')
+             ->will($this->returnValue($this->orderMock));
+
++        $this->invoiceMock->method('getId')
++            ->willReturn(self::INVOICE_ID);
++        $this->orderMock->method('getId')
++            ->willReturn(self::ORDER_ID);
++
+         $this->identityContainerMock = $this->createPartialMock(
+             \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class,
+             ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
+@@ -148,7 +158,9 @@ class InvoiceSenderTest extends AbstractSenderTest
+                 ->with(
+                     [
+                         'order' => $this->orderMock,
++                        'order_id' => self::ORDER_ID,
+                         'invoice' => $this->invoiceMock,
++                        'invoice_id' => self::INVOICE_ID,
+                         'comment' => $customerNoteNotify ? $comment : '',
+                         'billing' => $addressMock,
+                         'payment_html' => 'payment',
+@@ -287,7 +299,9 @@ class InvoiceSenderTest extends AbstractSenderTest
+             ->with(
+                 [
+                     'order' => $this->orderMock,
++                    'order_id' => self::ORDER_ID,
+                     'invoice' => $this->invoiceMock,
++                    'invoice_id' => self::INVOICE_ID,
+                     'comment' => '',
+                     'billing' => $addressMock,
+                     'payment_html' => 'payment',
+diff --git a/Test/Unit/Model/Order/Email/Sender/OrderSenderTest.php b/Test/Unit/Model/Order/Email/Sender/OrderSenderTest.php
+index a033e41dd8e..9590602187f 100644
+--- a/Test/Unit/Model/Order/Email/Sender/OrderSenderTest.php
++++ b/Test/Unit/Model/Order/Email/Sender/OrderSenderTest.php
+@@ -9,6 +9,8 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+
+ class OrderSenderTest extends AbstractSenderTest
+ {
++    private const ORDER_ID = 1;
++
+     /**
+      * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender
+      */
+@@ -36,6 +38,9 @@ class OrderSenderTest extends AbstractSenderTest
+             ->method('getStore')
+             ->will($this->returnValue($this->storeMock));
+
++        $this->orderMock->method('getId')
++            ->willReturn(self::ORDER_ID);
++
+         $this->sender = new OrderSender(
+             $this->templateContainerMock,
+             $this->identityContainerMock,
+@@ -127,6 +132,7 @@ class OrderSenderTest extends AbstractSenderTest
+                     ->with(
+                         [
+                             'order' => $this->orderMock,
++                            'order_id' => self::ORDER_ID,
+                             'billing' => $addressMock,
+                             'payment_html' => 'payment',
+                             'store' => $this->storeMock,
+@@ -295,6 +301,7 @@ class OrderSenderTest extends AbstractSenderTest
+             ->with(
+                 [
+                     'order' => $this->orderMock,
++                    'order_id' => self::ORDER_ID,
+                     'billing' => $addressMock,
+                     'payment_html' => 'payment',
+                     'store' => $this->storeMock,
+diff --git a/Test/Unit/Model/Order/Email/Sender/ShipmentSenderTest.php b/Test/Unit/Model/Order/Email/Sender/ShipmentSenderTest.php
+index dcd80646b16..64dd9285ddf 100644
+--- a/Test/Unit/Model/Order/Email/Sender/ShipmentSenderTest.php
++++ b/Test/Unit/Model/Order/Email/Sender/ShipmentSenderTest.php
+@@ -15,6 +15,10 @@ use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+  */
+ class ShipmentSenderTest extends AbstractSenderTest
+ {
++    private const SHIPMENT_ID = 1;
++
++    private const ORDER_ID = 1;
++
+     /**
+      * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
+      */
+@@ -43,6 +47,7 @@ class ShipmentSenderTest extends AbstractSenderTest
+             \Magento\Sales\Model\Order\Shipment::class,
+             [
+                 'getStore',
++                'getId',
+                 '__wakeup',
+                 'getOrder',
+                 'setSendEmail',
+@@ -58,6 +63,11 @@ class ShipmentSenderTest extends AbstractSenderTest
+             ->method('getOrder')
+             ->will($this->returnValue($this->orderMock));
+
++        $this->shipmentMock->method('getId')
++            ->willReturn(self::SHIPMENT_ID);
++        $this->orderMock->method('getId')
++            ->willReturn(self::ORDER_ID);
++
+         $this->identityContainerMock = $this->createPartialMock(
+             \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class,
+             ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
+@@ -151,7 +161,9 @@ class ShipmentSenderTest extends AbstractSenderTest
+                 ->with(
+                     [
+                         'order' => $this->orderMock,
++                        'order_id' => self::ORDER_ID,
+                         'shipment' => $this->shipmentMock,
++                        'shipment_id' => self::SHIPMENT_ID,
+                         'comment' => $customerNoteNotify ? $comment : '',
+                         'billing' => $addressMock,
+                         'payment_html' => 'payment',
+@@ -291,7 +303,9 @@ class ShipmentSenderTest extends AbstractSenderTest
+             ->with(
+                 [
+                     'order' => $this->orderMock,
++                    'order_id' => self::ORDER_ID,
+                     'shipment' => $this->shipmentMock,
++                    'shipment_id' => self::SHIPMENT_ID,
+                     'comment' => '',
+                     'billing' => $addressMock,
+                     'payment_html' => 'payment',
+diff --git a/Test/Unit/Model/Order/Shipment/Sender/EmailSenderTest.php b/Test/Unit/Model/Order/Shipment/Sender/EmailSenderTest.php
+index 2262fbf03c1..9c080d422b0 100644
+--- a/Test/Unit/Model/Order/Shipment/Sender/EmailSenderTest.php
++++ b/Test/Unit/Model/Order/Shipment/Sender/EmailSenderTest.php
+@@ -5,96 +5,119 @@
+  */
+ namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Sender;
+
++use Magento\Framework\App\Config\ScopeConfigInterface;
++use Magento\Framework\Event\ManagerInterface;
++use Magento\Payment\Helper\Data;
++use Magento\Payment\Model\Info;
++use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
++use Magento\Sales\Api\Data\ShipmentInterface;
++use Magento\Sales\Model\Order;
++use Magento\Sales\Model\Order\Address;
++use Magento\Sales\Model\Order\Address\Renderer;
++use Magento\Sales\Model\Order\Email\Container\ShipmentIdentity;
++use Magento\Sales\Model\Order\Email\Container\Template;
++use Magento\Sales\Model\Order\Email\Sender;
++use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
++use Magento\Sales\Model\Order\Shipment\Sender\EmailSender;
++use Magento\Sales\Model\ResourceModel\Order\Shipment;
++use Magento\Store\Model\Store;
++use PHPUnit\Framework\TestCase;
++use Psr\Log\LoggerInterface;
++
+ /**
+  * Unit test for email notification sender for Shipment.
+  *
+  * @SuppressWarnings(PHPMD.TooManyFields)
+  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+  */
+-class EmailSenderTest extends \PHPUnit\Framework\TestCase
++class EmailSenderTest extends TestCase
+ {
++    private const SHIPMENT_ID = 1;
++
++    private const ORDER_ID = 1;
++
+     /**
+-     * @var \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
++     * @var EmailSender
+      */
+     private $subject;
+
+     /**
+-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
++     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $orderMock;
+
+     /**
+-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
++     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $storeMock;
+
+     /**
+-     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit_Framework_MockObject_MockObject
++     * @var Sender|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $senderMock;
+
+     /**
+-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
++     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $loggerMock;
+
+     /**
+-     * @var \Magento\Sales\Api\Data\ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
++     * @var ShipmentInterface|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $shipmentMock;
+
+     /**
+-     * @var \Magento\Sales\Api\Data\ShipmentCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
++     * @var ShipmentCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $commentMock;
+
+     /**
+-     * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
++     * @var Address|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $addressMock;
+
+     /**
+-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
++     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $globalConfigMock;
+
+     /**
+-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
++     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $eventManagerMock;
+
+     /**
+-     * @var \Magento\Payment\Model\Info|\PHPUnit_Framework_MockObject_MockObject
++     * @var Info|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $paymentInfoMock;
+
+     /**
+-     * @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
++     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $paymentHelperMock;
+
+     /**
+-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
++     * @var Shipment|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $shipmentResourceMock;
+
+     /**
+-     * @var \Magento\Sales\Model\Order\Address\Renderer|\PHPUnit_Framework_MockObject_MockObject
++     * @var Renderer|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $addressRendererMock;
+
+     /**
+-     * @var \Magento\Sales\Model\Order\Email\Container\Template|\PHPUnit_Framework_MockObject_MockObject
++     * @var Template|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $templateContainerMock;
+
+     /**
+-     * @var \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity|\PHPUnit_Framework_MockObject_MockObject
++     * @var ShipmentIdentity|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $identityContainerMock;
+
+     /**
+-     * @var \Magento\Sales\Model\Order\Email\SenderBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
++     * @var SenderBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+      */
+     private $senderBuilderFactoryMock;
+
+@@ -103,11 +126,11 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+      */
+     protected function setUp()
+     {
+-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
++        $this->orderMock = $this->getMockBuilder(Order::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+
+-        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
++        $this->storeMock = $this->getMockBuilder(Store::class)
+             ->setMethods(['getStoreId'])
+             ->disableOriginalConstructor()
+             ->getMock();
+@@ -119,21 +142,21 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+             ->method('getStore')
+             ->willReturn($this->storeMock);
+
+-        $this->senderMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Email\Sender::class)
++        $this->senderMock = $this->getMockBuilder(Sender::class)
+             ->disableOriginalConstructor()
+             ->setMethods(['send', 'sendCopyTo'])
+             ->getMock();
+
+-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
++        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+             ->disableOriginalConstructor()
+             ->getMockForAbstractClass();
+
+-        $this->shipmentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
++        $this->shipmentMock = $this->getMockBuilder(Order\Shipment::class)
+             ->disableOriginalConstructor()
+-            ->setMethods(['setSendEmail', 'setEmailSent'])
++            ->setMethods(['setSendEmail', 'setEmailSent', 'getId'])
+             ->getMock();
+
+-        $this->commentMock = $this->getMockBuilder(\Magento\Sales\Api\Data\ShipmentCommentCreationInterface::class)
++        $this->commentMock = $this->getMockBuilder(ShipmentCommentCreationInterface::class)
+             ->disableOriginalConstructor()
+             ->getMockForAbstractClass();
+
+@@ -141,7 +164,7 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+             ->method('getComment')
+             ->willReturn('Comment text');
+
+-        $this->addressMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Address::class)
++        $this->addressMock = $this->getMockBuilder(Address::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+
+@@ -151,16 +174,19 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+         $this->orderMock->expects($this->any())
+             ->method('getShippingAddress')
+             ->willReturn($this->addressMock);
++        $this->orderMock->expects($this->any())
++            ->method('getId')
++            ->willReturn(self::ORDER_ID);
+
+-        $this->globalConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
++        $this->globalConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+             ->disableOriginalConstructor()
+             ->getMockForAbstractClass();
+
+-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
++        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+             ->disableOriginalConstructor()
+             ->getMockForAbstractClass();
+
+-        $this->paymentInfoMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
++        $this->paymentInfoMock = $this->getMockBuilder(Info::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+
+@@ -168,7 +194,7 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+             ->method('getPayment')
+             ->willReturn($this->paymentInfoMock);
+
+-        $this->paymentHelperMock = $this->getMockBuilder(\Magento\Payment\Helper\Data::class)
++        $this->paymentHelperMock = $this->getMockBuilder(Data::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+
+@@ -177,11 +203,11 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+             ->with($this->paymentInfoMock, 1)
+             ->willReturn('Payment Info Block');
+
+-        $this->shipmentResourceMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Shipment::class)
++        $this->shipmentResourceMock = $this->getMockBuilder(Shipment::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+
+-        $this->addressRendererMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Address\Renderer::class)
++        $this->addressRendererMock = $this->getMockBuilder(Renderer::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+
+@@ -190,12 +216,12 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+             ->with($this->addressMock, 'html')
+             ->willReturn('Formatted address');
+
+-        $this->templateContainerMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Email\Container\Template::class)
++        $this->templateContainerMock = $this->getMockBuilder(Template::class)
+             ->disableOriginalConstructor()
+             ->getMock();
+
+         $this->identityContainerMock = $this->getMockBuilder(
+-            \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class
++            ShipmentIdentity::class
+         )
+         ->disableOriginalConstructor()
+         ->getMock();
+@@ -205,13 +231,13 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+             ->willReturn($this->storeMock);
+
+         $this->senderBuilderFactoryMock = $this->getMockBuilder(
+-            \Magento\Sales\Model\Order\Email\SenderBuilderFactory::class
++            SenderBuilderFactory::class
+         )
+         ->disableOriginalConstructor()
+         ->setMethods(['create'])
+         ->getMock();
+
+-        $this->subject = new \Magento\Sales\Model\Order\Shipment\Sender\EmailSender(
++        $this->subject = new EmailSender(
+             $this->templateContainerMock,
+             $this->identityContainerMock,
+             $this->senderBuilderFactoryMock,
+@@ -247,6 +273,9 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+             $this->commentMock = null;
+         }
+
++        $this->shipmentMock->expects($this->any())
++            ->method('getId')
++            ->willReturn(self::SHIPMENT_ID);
+         $this->shipmentMock->expects($this->once())
+             ->method('setSendEmail')
+             ->with($emailSendingResult);
+@@ -254,7 +283,9 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
+         if (!$configValue || $forceSyncMode) {
+             $transport = [
+                 'order' => $this->orderMock,
++                'order_id' => self::ORDER_ID,
+                 'shipment' => $this->shipmentMock,
++                'shipment_id' => self::SHIPMENT_ID,
+                 'comment' => $isComment ? 'Comment text' : '',
+                 'billing' => $this->addressMock,
+                 'payment_html' => 'Payment Info Block',
+diff --git a/view/frontend/email/creditmemo_new.html b/view/frontend/email/creditmemo_new.html
+index 5ae6f5f9d82..f475503528d 100644
+--- a/view/frontend/email/creditmemo_new.html
++++ b/view/frontend/email/creditmemo_new.html
+@@ -22,6 +22,8 @@
+ "var store_hours":"Store Hours",
+ "var creditmemo":"Credit Memo",
+ "var order":"Order",
++"var order_id": "Order DB Id",
++"var creditmemo_id": "Credit Memo DB Id",
+ "var order_data.is_not_virtual":"Order Type"
+ } @-->
+ {{template config_path="design/email/header_template"}}
+@@ -82,7 +84,7 @@
+                     {{/depend}}
+                 </tr>
+             </table>
+-            {{layout handle="sales_email_order_creditmemo_items" creditmemo=$creditmemo order=$order}}
++            {{layout handle="sales_email_order_creditmemo_items" creditmemo_id=$creditmemo_id order_id=$order_id}}
+         </td>
+     </tr>
+ </table>
+diff --git a/view/frontend/email/creditmemo_new_guest.html b/view/frontend/email/creditmemo_new_guest.html
+index 657de2aae20..d8a8a0baeca 100644
+--- a/view/frontend/email/creditmemo_new_guest.html
++++ b/view/frontend/email/creditmemo_new_guest.html
+@@ -21,7 +21,9 @@
+ "var store_hours":"Store Hours",
+ "var creditmemo":"Credit Memo",
+ "var order":"Order",
+-"var order_data.is_not_virtual":"Order Type"
++"var order_data.is_not_virtual":"Order Type",
++"var order_id": "Order DB Id",
++"var creditmemo_id": "Credit Memo DB Id"
+ } @-->
+ {{template config_path="design/email/header_template"}}
+
+@@ -80,7 +82,7 @@
+                     {{/depend}}
+                 </tr>
+             </table>
+-            {{layout handle="sales_email_order_creditmemo_items" creditmemo=$creditmemo order=$order}}
++            {{layout handle="sales_email_order_creditmemo_items" creditmemo_id=$creditmemo_id order_id=$order_id}}
+         </td>
+     </tr>
+ </table>
+diff --git a/view/frontend/email/invoice_new.html b/view/frontend/email/invoice_new.html
+index 68773ee9d75..c4818172449 100644
+--- a/view/frontend/email/invoice_new.html
++++ b/view/frontend/email/invoice_new.html
+@@ -22,6 +22,8 @@
+ "var store_hours":"Store Hours",
+ "var invoice": "Invoice",
+ "var order": "Order",
++"var order_id": "Order DB Id",
++"var invoice_id": "Invoice DB Id",
+ "var order_data.is_not_virtual": "Order Type"
+ } @-->
+ {{template config_path="design/email/header_template"}}
+@@ -82,7 +84,7 @@
+                     {{/depend}}
+                 </tr>
+             </table>
+-            {{layout area="frontend" handle="sales_email_order_invoice_items" invoice=$invoice order=$order}}
++            {{layout area="frontend" handle="sales_email_order_invoice_items" invoice_id=$invoice_id order_id=$order_id}}
+         </td>
+     </tr>
+ </table>
+diff --git a/view/frontend/email/invoice_new_guest.html b/view/frontend/email/invoice_new_guest.html
+index 5053ccc2ac6..c06630fd249 100644
+--- a/view/frontend/email/invoice_new_guest.html
++++ b/view/frontend/email/invoice_new_guest.html
+@@ -21,6 +21,8 @@
+ "var store_hours":"Store Hours",
+ "var invoice": "Invoice",
+ "var order": "Order",
++"var order_id": "Order DB Id",
++"var invoice_id": "Invoice DB Id",
+ "var order_data.is_not_virtual": "Order Type"
+ } @-->
+ {{template config_path="design/email/header_template"}}
+@@ -80,7 +82,7 @@
+                     {{/depend}}
+                 </tr>
+             </table>
+-            {{layout handle="sales_email_order_invoice_items" invoice=$invoice order=$order}}
++            {{layout handle="sales_email_order_invoice_items" invoice_id=$invoice_id order_id=$order_id}}
+         </td>
+     </tr>
+ </table>
+diff --git a/view/frontend/email/order_new.html b/view/frontend/email/order_new.html
+index 13c436b131b..a411e8d5b29 100644
+--- a/view/frontend/email/order_new.html
++++ b/view/frontend/email/order_new.html
+@@ -22,6 +22,7 @@
+ "var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL",
+ "var order_data.is_not_virtual":"Order Type",
+ "var order":"Order",
++"var order_id": "Order DB Id",
+ "var order_data.customer_name":"Customer Name"
+ } @-->
+
+@@ -90,7 +91,7 @@
+                     {{/depend}}
+                 </tr>
+             </table>
+-            {{layout handle="sales_email_order_items" order=$order area="frontend"}}
++            {{layout handle="sales_email_order_items" order_id=$order_id area="frontend"}}
+         </td>
+     </tr>
+ </table>
+diff --git a/view/frontend/email/order_new_guest.html b/view/frontend/email/order_new_guest.html
+index 866a1ad87f9..dc3a8e9f69a 100644
+--- a/view/frontend/email/order_new_guest.html
++++ b/view/frontend/email/order_new_guest.html
+@@ -21,6 +21,7 @@
+ "var store_email":"Store Email",
+ "var store_hours":"Store Hours",
+ "var order_data.is_not_virtual":"Order Type",
++"var order_id": "Order DB Id",
+ "var order":"Order"
+ } @-->
+ {{template config_path="design/email/header_template"}}
+@@ -85,7 +86,7 @@
+                     {{/depend}}
+                 </tr>
+             </table>
+-            {{layout handle="sales_email_order_items" order=$order}}
++            {{layout handle="sales_email_order_items" order_id=$order_id }}
+         </td>
+     </tr>
+ </table>
+diff --git a/view/frontend/email/shipment_new.html b/view/frontend/email/shipment_new.html
+index 39823a0c9d8..39397979d2a 100644
+--- a/view/frontend/email/shipment_new.html
++++ b/view/frontend/email/shipment_new.html
+@@ -23,7 +23,9 @@
+ "var store_hours":"Store Hours",
+ "var order_data.is_not_virtual": "Order Type",
+ "var shipment": "Shipment",
+-"var order": "Order"
++"var order": "Order",
++"var order_id": "Order DB Id",
++"var shipment_id": "Shipment DB Id"
+ } @-->
+ {{template config_path="design/email/header_template"}}
+
+@@ -59,7 +61,7 @@
+                 </tr>
+             </table>
+             {{/depend}}
+-            {{layout handle="sales_email_order_shipment_track" shipment=$shipment order=$order}}
++            {{layout handle="sales_email_order_shipment_track" shipment_id=$shipment_id order_id=$order_id}}
+             <table class="order-details">
+                 <tr>
+                     <td class="address-details">
+@@ -86,7 +88,7 @@
+                     {{/depend}}
+                 </tr>
+             </table>
+-            {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
++            {{layout handle="sales_email_order_shipment_items" shipment_id=$shipment_id order_id=$order_id}}
+         </td>
+     </tr>
+ </table>
+diff --git a/view/frontend/email/shipment_new_guest.html b/view/frontend/email/shipment_new_guest.html
+index ed2f52ed850..54c7f085064 100644
+--- a/view/frontend/email/shipment_new_guest.html
++++ b/view/frontend/email/shipment_new_guest.html
+@@ -22,7 +22,9 @@
+ "var store_hours":"Store Hours",
+ "var order_data.is_not_virtual": "Order Type",
+ "var shipment": "Shipment",
+-"var order": "Order"
++"var order": "Order",
++"var order_id": "Order DB Id",
++"var shipment_id": "Shipment DB Id"
+ } @-->
+ {{template config_path="design/email/header_template"}}
+
+@@ -57,7 +59,7 @@
+                 </tr>
+             </table>
+             {{/depend}}
+-            {{layout handle="sales_email_order_shipment_track" shipment=$shipment order=$order}}
++            {{layout handle="sales_email_order_shipment_track" shipment_id=$shipment_id order_id=$order_id}}
+             <table class="order-details">
+                 <tr>
+                     <td class="address-details">
+@@ -84,7 +86,7 @@
+                     {{/depend}}
+                 </tr>
+             </table>
+-            {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
++            {{layout handle="sales_email_order_shipment_items" shipment_id=$shipment_id order_id=$order_id}}
+         </td>
+     </tr>
+ </table>
+diff --git a/view/frontend/layout/sales_email_order_shipment_track.xml b/view/frontend/layout/sales_email_order_shipment_track.xml
+index bbc7f04ce94..489317cfa65 100644
+--- a/view/frontend/layout/sales_email_order_shipment_track.xml
++++ b/view/frontend/layout/sales_email_order_shipment_track.xml
+@@ -8,10 +8,10 @@
+ <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+     <update handle="sales_email_order_shipment_renderers"/>
+     <body>
+-        <block class="Magento\Framework\View\Element\Template" name="sales.order.email.shipment.track" template="Magento_Sales::email/shipment/track.phtml">
++        <block class="Magento\Sales\Block\Order\Email\Shipment\Items" name="sales.order.email.shipment.track" template="Magento_Sales::email/shipment/track.phtml">
+             <arguments>
+                 <argument name="tracking_url" xsi:type="object">Magento\Sales\Block\DataProviders\Email\Shipment\TrackingUrl</argument>
+             </arguments>
+         </block>
+     </body>
+-</page>
+\ No newline at end of file
++</page>
+--
+2.25.1
+

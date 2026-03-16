@@ -1,0 +1,16 @@
+Index: Observer/MerchantCheckboxNewsletterSignupValidation.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- a/Observer/MerchantCheckboxNewsletterSignupValidation.php	(revision 0812c6a3a798cadadf48ff71769d2700e1456ed1)
++++ b/Observer/MerchantCheckboxNewsletterSignupValidation.php	(date 1602844504913)
+@@ -82,7 +82,7 @@
+         /** @var \Magento\Quote\Model\Quote $quote */
+         $quote = $observer->getQuote();
+         $customerEmail = $quote->getCustomerEmail() ?: $quote->getCustomer()->getEmail();
+-        $newsLetter = $this->subscriber->loadByEmail($customerEmail);
++        $newsLetter = $this->subscriber->loadByEmail((string)$customerEmail);
+
+         $observer->getState()->setEnabled(!$newsLetter->isSubscribed());
+     }
