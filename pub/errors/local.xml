@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<config>
+    <skin>kartbutikken</skin>
+    <report>
+        <action>print</action>
+        <subject>Store Debug Information</subject>
+        <email_address></email_address>
+        <trash>leave</trash>
+        <dir_nesting_level>0</dir_nesting_level>
+    </report>
+</config>

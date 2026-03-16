@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title><?= $this->pageTitle ?></title>
+    <base href="<?= $this->getViewFileUrl() ?>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="*"/>
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+<div class="page-wrapper">
+    <header class="page-header sticky">
+        <div class="content header">
+            <div class="logo">
+                <a aria-label="store logo" href="/" title="Norges største kartbutikk på nett">
+                    <img class="lazy lazy-loading loaded"
+                         data-src="https://static.kartbutikken.no/media/logo/stores/2/Kartbutikken_Logo_EN_flag.svg"
+                         height="30"
+                         src="images/logo.svg"
+                         width="306">
+                </a>
+            </div>
+        </div>
+    </header>
+    <main class="page-main">
+        <?php require_once $contentTemplate; ?>
+    </main>
+</div>
+</body>
+</html>
