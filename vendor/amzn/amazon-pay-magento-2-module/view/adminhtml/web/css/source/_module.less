@@ -1,0 +1,39 @@
+tr[id$='_amazon_pay_advanced_sales_options_restrict_categories'] {
+    .action-select-wrap {
+        .action-select:after {
+            transform: none;
+        }
+        &._active .action-select:after {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+tr[id$='_amazon_pay_credentials_private_key_pem'],
+tr[id$='_amazon_pay_credentials_private_key_text'],
+tr[id$='_amazon_pay_credentials_private_key_selected'],
+tr[id$='_amazon_pay_credentials_private_key_selector'] {
+    display: none;
+}
+
+tr[id$='_amazon_pay_credentials_private_key_selector'] {
+    .value .private-key-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .use-default {
+        display: none;
+    }
+}
+
+#reset-auto-key-exchange-message {
+    display: none;
+    color: red;
+}
+
+#autokeyexchange_form {
+    button {
+        width: 320px;
+    }
+}

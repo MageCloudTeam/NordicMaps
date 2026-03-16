@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+
+/** @var Klarna\Keb\Block\Button $block */
+/** @var Magento\Framework\Escaper $escaper */
+if ($block->isKebEnabled() && $block->isEnabledOnMiniCart()): ?>
+    <klarna-express-button
+        data-locale="<?= $escaper->escapeHtml($block->getLocale()); ?>"
+        data-theme="<?= $escaper->escapeHtml($block->getTheme()); ?>"
+        data-label="<?= $escaper->escapeHtml($block->getLabel()); ?>"
+        data-shape="<?= $escaper->escapeHtml($block->getShape()); ?>"
+    />
+<?php endif ?>

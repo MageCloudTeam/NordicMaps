@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AmazonLoginOnlyRedirectActionGroup">
+        <arguments>
+            <argument name="openerName" type="string"/>
+        </arguments>
+
+        <waitForElement selector="{{AmazonLoginSection.continueButton}}" stepKey="waitForContinueButton"/>
+        <wait time="1" stepKey="allowButtonToActivate1"/>
+        <click selector="{{AmazonLoginSection.continueButton}}" stepKey="clickContinueAsButton"/>
+        <switchToWindow userInput="{{openerName}}" stepKey="switchBackToOpener"/>
+    </actionGroup>
+</actionGroups>

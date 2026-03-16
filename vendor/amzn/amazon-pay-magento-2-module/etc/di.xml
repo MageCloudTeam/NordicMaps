@@ -1,0 +1,523 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Amazon\Pay\Client\ClientFactoryInterface" type="Amazon\Pay\Client\ClientFactory" />
+    <preference for="AmazonPay\ClientInterface" type="Amazon\Pay\Client\Client" />
+
+    <preference for="Amazon\Pay\Api\CheckoutSessionManagementInterface" type="Amazon\Pay\Model\CheckoutSessionManagement" />
+    <preference for="Amazon\Pay\Api\Data\AsyncInterface" type="Amazon\Pay\Model\Async" />
+    <preference for="Amazon\Pay\Api\KeyUpgradeInterface" type="Amazon\Pay\Model\Config\KeyUpgrade" />
+
+    <preference for="Amazon\Pay\Domain\AmazonNameInterface" type="Amazon\Pay\Domain\AmazonName" />
+    <preference for="Amazon\Pay\Domain\AmazonAddressInterface" type="Amazon\Pay\Domain\AmazonAddress" />
+
+    <type name="Amazon\Pay\Domain\AmazonAddressFactory">
+        <arguments>
+            <argument name="addressDecoratorPool" xsi:type="array">
+                <item name="DE" xsi:type="string">Amazon\Pay\Domain\AmazonAddressDecoratorDe</item>
+                <item name="AT" xsi:type="string">Amazon\Pay\Domain\AmazonAddressDecoratorDe</item>
+                <item name="JP" xsi:type="string">Amazon\Pay\Domain\AmazonAddressDecoratorJp</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Amazon\Pay\Model\Subscription\SubscriptionManagerFactory">
+        <arguments>
+            <argument name="subscriptionManagerPool" xsi:type="array">
+                <item name="paradox_labs" xsi:type="array">
+                    <item name="module_name" xsi:type="string">ParadoxLabs_Subscriptions</item>
+                    <item name="module_classes" xsi:type="array">
+                        <item name="quoteManager" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\QuoteManager</item>
+                        <item name="itemManager" xsi:type="string">ParadoxLabs\Subscriptions\Model\Service\ItemManager</item>
+                        <item name="subscriptionRepository" xsi:type="string">ParadoxLabs\Subscriptions\Model\SubscriptionRepository</item>
+                        <item name="subscriptionConfig" xsi:type="string">ParadoxLabs\Subscriptions\Model\Config</item>
+                    </item>
+                    <item name="module_manager" xsi:type="string">Amazon\Pay\Model\Subscription\ParadoxLabsSubscriptionManager</item>
+                </item>
+                <item name="default" xsi:type="array">
+                    <item name="module_name" xsi:type="string">Amazon_Pay</item>
+                    <item name="module_manager" xsi:type="string">Amazon\Pay\Model\Subscription\AmazonSubscriptionManager</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Amazon_Pay_RemoteAddressWithAdditionalIpHeaders" type="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
+        <arguments>
+            <argument name="alternativeHeaders" xsi:type="array">
+                <item name="x-forwarded-for" xsi:type="string">HTTP_X_FORWARDED_FOR</item>
+                <item name="x-real-ip" xsi:type="string">HTTP_X_REAL_IP</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Amazon\Pay\Model\AmazonConfig">
+        <arguments>
+            <argument name="remoteAddress" xsi:type="object">Amazon_Pay_RemoteAddressWithAdditionalIpHeaders</argument>
+        </arguments>
+    </type>
+
+    <type name="Amazon\Pay\Command\Async\ProcessCommand">
+        <arguments>
+            <argument name="asyncCollectionFactory" xsi:type="object">Amazon\Pay\Model\ResourceModel\Async\CollectionFactory\Proxy</argument>
+            <argument name="asyncUpdater" xsi:type="object">Amazon\Pay\Model\AsyncUpdater\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="AmazonPayAsyncProcess" xsi:type="object">Amazon\Pay\Command\Async\ProcessCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Amazon\Pay\Command\Sales\AmazonChargePermissionCommand">
+        <arguments>
+            <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+            <argument name="orderRepository" xsi:type="object">Magento\Sales\Model\OrderRepository\Proxy</argument>
+            <argument name="amazonAdapter" xsi:type="object">Amazon\Pay\Model\Adapter\AmazonPayAdapter\Proxy</argument>
+            <argument name="searchCriteriaBuilder" xsi:type="object">Magento\Framework\Api\SearchCriteriaBuilder\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="AmazonChargePermissionCommand" xsi:type="object">Amazon\Pay\Command\Sales\AmazonChargePermissionCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Loggers -->
+    <type name="Amazon\Pay\Logger\AlexaLogger">
+        <arguments>
+            <argument name="name" xsi:type="string">amazonAlexaLogger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Amazon\Pay\Logger\Handler\Alexa</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Pay\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">amazonClientLogger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Amazon\Pay\Logger\Handler\Client</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Pay\Logger\AsyncIpnLogger">
+        <arguments>
+            <argument name="name" xsi:type="string">amazonAsyncIpnLogger</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Amazon\Pay\Logger\Handler\AsyncIpn</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Pay\Logger\ExceptionLogger">
+        <arguments>
+            <argument name="logger" xsi:type="object">Amazon\Pay\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Pay\Client\ClientFactory">
+        <arguments>
+            <argument name="logger" xsi:type="object">Amazon\Pay\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <!-- Payment Method Facade configuration -->
+
+    <virtualType name="AmazonPayFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Payment\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">AmazonPayValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">AmazonPayCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="AmazonPayVaultConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Amazon\Pay\Gateway\Config\Config::VAULT_CODE</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmazonPayVaultPaymentValueHandler" type="VaultPaymentDefaultValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">AmazonPayVaultConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmazonPayVaultValueHandlerPool" type="VaultPaymentValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">AmazonPayVaultPaymentValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmazonPayVaultFacade" type="Magento\Vault\Model\Method\Vault">
+        <arguments>
+            <argument name="config" xsi:type="object">AmazonPayVaultConfig</argument>
+            <argument name="valueHandlerPool" xsi:type="object">AmazonPayVaultValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">AmazonPayFacade</argument>
+            <argument name="code" xsi:type="const">Amazon\Pay\Gateway\Config\Config::VAULT_CODE</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="AmazonPayCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">AmazonPayAuthorizeCommand</item>
+                <item name="sale" xsi:type="string">AmazonPaySaleCommand</item>
+                <item name="capture" xsi:type="string">AmazonPayCaptureStrategyCommand</item>
+                <item name="settlement" xsi:type="string">AmazonPaySettlementCommand</item>
+                <item name="refund" xsi:type="string">AmazonPayRefundCommand</item>
+                <item name="void" xsi:type="string">AmazonPayVoidCommand</item>
+                <item name="cancel" xsi:type="string">AmazonPayVoidCommand</item>
+                <item name="vault_authorize" xsi:type="string">AmazonPayVaultAuthorizeCommand</item>
+                <item name="vault_sale" xsi:type="string">AmazonPayVaultSaleCommand</item>
+                <!-- <item name="vault_capture" xsi:type="string">AmazonPayVaultCaptureCommand</item> -->
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmazonPayCaptureStrategyCommand" type="Amazon\Pay\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">AmazonPayCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration reader -->
+    <virtualType name="AmazonPayGatewayConfig" type="Amazon\Pay\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Amazon\Pay\Gateway\Config\Config::CODE</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Command Manager -->
+    <virtualType name="AmazonPayCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">AmazonPayCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
+        <arguments>
+            <argument name="executors" xsi:type="array">
+                <item name="amazon_payment_v2" xsi:type="string">AmazonPayCommandManager</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Gateway Response Validators -->
+    <virtualType name="AuthorizeResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_open" xsi:type="string">Open</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SaleResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_capture_initiated" xsi:type="string">CaptureInitiated</item>
+                <item name="state_captured" xsi:type="string">Captured</item>
+                <item name="state_open" xsi:type="string">Open</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="SettlementResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_capture_initiated" xsi:type="string">CaptureInitiated</item>
+                <item name="state_captured" xsi:type="string">Captured</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RefundResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_refund_initiated" xsi:type="string">RefundInitiated</item>
+                <item name="state_refunded" xsi:type="string">Refunded</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VoidResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_closed" xsi:type="string">Closed</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="VaultResponseValidator" type="Amazon\Pay\Gateway\Validator\GeneralResponseValidator">
+        <arguments>
+            <argument name="validStates" xsi:type="array">
+                <item name="state_capture_initiated" xsi:type="string">CaptureInitiated</item>
+                <item name="state_captured" xsi:type="string">Captured</item>
+                <item name="state_authorized" xsi:type="string">Authorized</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Authorize command -->
+    <virtualType name="AmazonPayAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <!-- <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</argument> -->
+            <argument name="requestBuilder" xsi:type="object">AmazonPayAuthorizeSaleRequest</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeClient</argument>
+            <!-- <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument> -->
+            <argument name="handler" xsi:type="object">AmazonPayAuthorizationSaleHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">AuthorizeResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="AmazonPayAuthorizeSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="authorize" xsi:type="string">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</item>
+                <item name="vault" xsi:type="string">Amazon\Pay\Gateway\Request\VaultDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+
+    <virtualType name="AmazonPayAuthorizationSaleHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_details" xsi:type="string">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</item>
+                <item name="vault_details" xsi:type="string">Amazon\Pay\Gateway\Response\VaultDetailsHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+
+    <!-- Authorize and Capture command -->
+    <virtualType name="AmazonPaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <!-- <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder</argument> -->
+            <argument name="requestBuilder" xsi:type="object">AmazonPayAuthorizeSaleRequest</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SaleClient</argument>
+            <!-- <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleHandler</argument> -->
+            <argument name="handler" xsi:type="object">AmazonPayAuthorizationSaleHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">SaleResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Capture settlement command -->
+    <virtualType name="AmazonPaySettlementCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\SettlementRequestBuilder</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SettlementClient</argument>
+            <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\SettlementHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">SettlementResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Amazon\Pay\Gateway\Request\AuthorizationSaleRequestBuilder">
+        <arguments>
+            <argument name="config" xsi:type="object">AmazonPayGatewayConfig</argument>
+        </arguments>
+    </type>
+
+    <!-- Refund Command -->
+    <virtualType name="AmazonPayRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\SettlementRequestBuilder</argument>
+            <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\RefundHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\RefundClient</argument>
+            <argument name="validator" xsi:type="object">RefundResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Void command -->
+    <virtualType name="AmazonPayVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\VoidRequestBuilder</argument>
+            <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\VoidHandler</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\VoidClient</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">VoidResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Vault Authorize Command -->
+    <virtualType name="AmazonPayVaultAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleVaultRequestBuilder</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeSaleVaultClient</argument>
+            <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleVaultHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">VaultResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Vault Authorize and Capture command -->
+    <virtualType name="AmazonPayVaultSaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\AuthorizationSaleVaultRequestBuilder</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\AuthorizeSaleVaultClient</argument>
+            <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\AuthorizationSaleVaultHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">VaultResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Vault Capture settlement command -->
+    <!-- <virtualType name="AmazonPayVaultCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Amazon\Pay\Gateway\Request\SettlementVaultRequestBuilder</argument>
+            <argument name="client" xsi:type="object">Amazon\Pay\Gateway\Http\Client\SettlementClient</argument>
+            <argument name="handler" xsi:type="object">Amazon\Pay\Gateway\Response\SettlemenVaultHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Amazon\Pay\Gateway\Http\TransferFactory</argument>
+            <argument name="validator" xsi:type="object">SettlementResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+    -->
+
+    <!-- Value handlers infrastructure -->
+    <virtualType name="AmazonPayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">AmazonPayConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AmazonPayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">AmazonPayGatewayConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Amazon error code mapper -->
+    <virtualType name="Amazon\Pay\Gateway\ErrorMapper\VirtualConfigReader" type="Magento\Payment\Gateway\ErrorMapper\VirtualConfigReader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">amazon_error_mapping_pay.xml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Amazon\Pay\Gateway\ErrorMapper\VirtualMappingData" type="Magento\Payment\Gateway\ErrorMapper\MappingData">
+        <arguments>
+            <argument name="reader" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualConfigReader</argument>
+            <argument name="cacheId" xsi:type="string">amazon_error_mapping_pay</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Amazon\Pay\Gateway\ErrorMapper\VirtualErrorMessageMapper" type="Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapper">
+        <arguments>
+            <argument name="messageMapping" xsi:type="object">Amazon\Pay\Gateway\ErrorMapper\VirtualMappingData</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Order comments for currency differences  -->
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="amazon_pay_order_payment" type="Amazon\Pay\Plugin\OrderCurrencyComment" />
+    </type>
+
+    <preference for="Amazon\Pay\Api\CustomerLinkRepositoryInterface" type="Amazon\Pay\Model\CustomerLinkRepository" />
+    <preference for="Amazon\Pay\Api\CustomerLinkManagementInterface" type="Amazon\Pay\Model\CustomerLinkManagement" />
+    <preference for="Amazon\Pay\Api\CustomerManagementInterface" type="Amazon\Pay\Model\CustomerManagement" />
+    <preference for="Amazon\Pay\Api\Data\CustomerLinkInterface" type="Amazon\Pay\Model\ResourceModel\CustomerLink" />
+    <preference for="Amazon\Pay\Api\Data\CustomerLinkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <type name="Amazon\Pay\Model\Customer\MatcherInterface">
+        <arguments>
+            <argument name="matchers" xsi:type="array">
+                <item name="sessionmatcher" xsi:type="object">Amazon\Pay\Model\Customer\SessionMatcher</item>
+                <item name="idmatcher" xsi:type="object">Amazon\Pay\Model\Customer\IdMatcher</item>
+                <item name="emailmatcher" xsi:type="object">Amazon\Pay\Model\Customer\EmailMatcher</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="amazon_login_customer_repository" type="Amazon\Pay\Plugin\CustomerRepository" sortOrder="1" />
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\Customer\Collection">
+        <plugin name="amazon_login_customer_collection" type="Amazon\Pay\Plugin\CustomerCollection" sortOrder="1" />
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\Index">
+        <plugin name="amazon_login_cart_controller" type="Amazon\Pay\Plugin\CartController" sortOrder="1" />
+    </type>
+    <type name="Magento\Checkout\Controller\Index\Index">
+        <plugin name="amazon_login_checkout_controller" type="Amazon\Pay\Plugin\CheckoutController" sortOrder="1" />
+    </type>
+    <type name="Magento\Customer\Controller\Account\Login">
+        <plugin name="amazon_login_login_controller" type="Amazon\Pay\Plugin\LoginController" sortOrder="1" />
+    </type>
+    <type name="Magento\Customer\Controller\Account\Create">
+        <plugin name="amazon_login_create_controller" type="Amazon\Pay\Plugin\CreateController" sortOrder="1" />
+    </type>
+    <type name="Amazon\Pay\Controller\Login\Authorize">
+        <arguments>
+            <argument name="matcher" xsi:type="object">Amazon\Pay\Model\Customer\CompositeMatcher</argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Pay\Controller\Login\Checkout">
+        <arguments>
+            <argument name="matcher" xsi:type="object">Amazon\Pay\Model\Customer\CompositeMatcher</argument>
+        </arguments>
+    </type>
+    <type name="Amazon\Pay\Helper\Session">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderCustomerManagementInterface">
+        <plugin name="amazon_login_order_customer_service" type="Amazon\Pay\Plugin\OrderCustomerManagement" sortOrder="1" />
+    </type>
+    <type name="Magento\Payment\Model\Method\Adapter">
+        <plugin name="amazon_pay_pay_action" type="Amazon\Pay\Plugin\ModelMethodAdapter" sortOrder="1" />
+    </type>
+    <type name="Magento\Sales\Model\Order\Payment\Transaction\Manager">
+        <plugin name="amazon_pay_update_transaction_id" type="Amazon\Pay\Plugin\PaymentTransactionIdUpdate" sortOrder="1" />
+    </type>
+    <type name="Magento\Config\Model\Config">
+        <plugin name="amazon_pay_config" type="Amazon\Pay\Plugin\ConfigCredentialsValidator" sortOrder="100" disabled="false"/>
+    </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="amazon_payv2_legacy_order" type="Amazon\Pay\Plugin\LegacyPaymentHandler" />
+    </type>
+
+    <!-- Paradox Labs plugins -->
+    <type name="ParadoxLabs\Subscriptions\Model\SubscriptionRepository">
+        <plugin name="amazon_pay_paradox_labs_susbscription_cancel" type="Amazon\Pay\Plugin\SubscriptionRepository" />
+    </type>
+    <type name="ParadoxLabs\Subscriptions\Helper\Vault">
+        <plugin name="amazon_pay_paradox_labs_token_name" type="Amazon\Pay\Plugin\VaultHelper" />
+    </type>
+    <type name="ParadoxLabs\Subscriptions\Model\Service\Payment">
+        <plugin name="amazon_pay_paradox_labs_available_tokens" type="Amazon\Pay\Plugin\PaymentTokenService" />
+    </type>
+    <type name="Magento\Checkout\Model\PaymentInformationManagement">
+        <plugin name="amazon_pay_existing_vault_token" type="Amazon\Pay\Plugin\RecurringChargePermissionUpdate" />
+    </type>
+    <type name="Magento\Vault\Model\PaymentTokenRepository">
+        <plugin name="amazon_pay_token_delete" type="Amazon\Pay\Plugin\PaymentTokenRepository" />
+    </type>
+
+</config>

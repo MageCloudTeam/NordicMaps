@@ -1,0 +1,23 @@
+{
+    "klarna_shipping_method_gateway": {
+        "column": {
+            "shipping_id": true,
+            "klarna_session_id": true,
+            "is_active": true,
+            "shipping_method_id": true,
+            "is_pick_up_point": true,
+            "pick_up_point_name": true,
+            "shipping_amount": true,
+            "tax_amount": true,
+            "tax_rate": true,
+            "delivery_details": true,
+            "name": true
+        },
+        "index": {
+            "Klarna_Shipping_Method_Gateway_Klarna_Session_Id": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

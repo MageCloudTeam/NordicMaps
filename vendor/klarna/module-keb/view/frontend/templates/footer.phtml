@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+
+/** @var Klarna\Keb\Block\Footer $block */
+/** @var Magento\Framework\Escaper $escaper */
+
+if ($block->isKebEnabled()): ?>
+    <script
+        async
+        src="<?= $escaper->escapeUrl($block->getJsUrl()); ?>"
+        data-id="<?= $escaper->escapeHtml($block->getMid()); ?>"
+        data-environment="<?= $escaper->escapeHtml($block->getEnvironment()); ?>"
+    ></script>
+
+    <script>
+        window.klarnaExpressButtonAsyncCallback = function(){
+            Klarna.ExpressButton.on('user-authenticated', function (callbackData) {
+                var address = {
+                    firstname:callbackData.first_name,
+                    lastname:callbackData.last_name,
+                    street: {
+                        street1: callbackData.address.street_address,
+                        street2: callbackData.address.street_address2
+                    },
+                    city:callbackData.address.city,
+                    postcode:callbackData.address.postal_code,
+                    region_code: callbackData.address.region,
+                    country_id:callbackData.address.country,
+                    email:callbackData.email,
+                    telephone:callbackData.phone,
+                    save_in_address_book:1,
+                    same_as_other:1
+                };
+                jQuery.ajax({
+                    url: "<?= $escaper->escapeUrl($block->getKebUrl()); ?>",
+                    type: "POST",
+                    dataType: 'json',
+                    data: address,
+                    success: function(data) {
+                        if (data.method.length > 0) {
+                            var storage = JSON.parse(localStorage.getItem('mage-cache-storage'));
+                            if (!storage.hasOwnProperty('checkout-data')) {
+                                storage['checkout-data'] = {}
+                            }
+                            storage['checkout-data'].selectedPaymentMethod = data.method;
+                            localStorage.setItem('mage-cache-storage', JSON.stringify(storage));
+                        }
+                        window.location.href = data.url;
+                    },
+                    error: function(data) {
+                        console.log('ERROR: ', data);
+                    }
+                });
+            });
+        }
+    </script>
+<?php endif ?>

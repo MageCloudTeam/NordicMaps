@@ -1,0 +1,64 @@
+{
+    "name": "klarna/module-logger",
+    "description": "Klarna logging module",
+    "type": "magento2-module",
+    "license": "Apache-2.0",
+    "version": "2.0.9",
+    "support": {
+        "email": "magento@klarna.com"
+    },
+    "authors": [
+        {
+            "name": "Joe Constant",
+            "email": "joe.constant@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Dario Kassler",
+            "email": "dario.kassler@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Kenny Gilles",
+            "email": "kenny.gilles@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Markus Simon",
+            "email": "markus.simon2@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Fei Chen",
+            "email": "fei.chen@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Jason Grim",
+            "email": "jason.grim@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Christian Jung",
+            "email": "christian.jung@klarna.com",
+            "role": "Developer"
+        }
+    ],
+    "scripts": {
+        "test": "phpunit",
+        "cov": "phpunit --coverage-html coverage"
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0||~8.2.0||~8.3.0",
+        "magento/framework": "^103",
+        "ext-json": "*",
+        "monolog/monolog": "^2.3",
+        "psr/log": "^1.0||^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Klarna\\Logger\\": "."
+        },
+        "files": [ "registration.php" ]
+    }
+}

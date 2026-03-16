@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Akeneo Connector API Module
+ *
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2019 Agence Dn'D
+ * @license   https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.dnd.fr/
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Akeneo_Connector::config_akeneo_connector" title="Akeneo Connector Section" />
+                        </resource>
+                    </resource>
+                </resource>
+                <resource id="Magento_Backend::system">
+                    <resource id="Akeneo_Connector::akeneo_connector" title="Akeneo Connector Api" sortOrder="100">
+                        <resource id="Akeneo_Connector::akeneo_connector_job" title="Job API" sortOrder="10"/>
+                        <resource id="Akeneo_Connector::akeneo_connector_log" title="Log" sortOrder="20" />
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

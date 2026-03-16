@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Klarna\Kec\Controller\Klarna\UpdateQuote">
+        <arguments>
+            <argument name="klarnaQuoteRepository" xsi:type="object">Klarna\Kp\Model\QuoteRepository</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Controller\Onepage\Success">
+        <plugin sortOrder="1" name="KecSessionUpdateOnSuccessController" type="Klarna\Kec\Plugin\SuccessControllerPlugin"/>
+    </type>
+    <type name="Magento\Checkout\Block\Onepage\Success">
+        <plugin sortOrder="1" name="KecSessionUpdateOnSuccessBlock" type="Klarna\Kec\Plugin\SuccessBlockPlugin"/>
+    </type>
+</config>

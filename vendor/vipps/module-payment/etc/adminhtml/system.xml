@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2020 Vipps
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+  ~ documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+  ~ the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+  ~ and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+  ~ TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL
+  ~ THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+  ~ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  ~ IN THE SOFTWARE.
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="vipps_section" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Vipps</label>
+                <group id="vipps" translate="label comment" sortOrder="7" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label></label>
+                    <comment><![CDATA[Accept payments with Vipps in your Magento store. Make it easier for your customers to pay, and increase your conversion rates with Vipps. No setup fee or monthly fees.]]></comment>
+                    <fieldset_css>complex vipps-section</fieldset_css>
+                    <frontend_model>Vipps\Payment\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
+                    <attribute type="activity_path">payment/vipps/active</attribute>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable this Solution</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/vipps/active</config_path>
+                        <requires>
+                            <group id="vipps_required"/>
+                        </requires>
+                    </field>
+                    <group id="vipps_hint1" translate="text" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+                        <comment>https://www.vipps.no/</comment>
+                        <label>Vipps.no</label>
+                        <frontend_model>Vipps\Payment\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+                    </group>
+                    <group id="vipps_hint2" translate="text" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+                        <comment>https://github.com/vippsas/vipps-magento</comment>
+                        <label>Github</label>
+                        <frontend_model>Vipps\Payment\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+                    </group>
+                    <group id="vipps_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
+                        <label>Basic Settings</label>
+                        <attribute type="expanded">1</attribute>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="environment" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Environment</label>
+                            <source_model>Vipps\Payment\Model\Adminhtml\Source\Environment</source_model>
+                            <config_path>payment/vipps/environment</config_path>
+                        </field>
+                        <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Debug</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/vipps/debug</config_path>
+                        </field>
+                        <field id="profiling" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Request/Response Profiling</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/vipps/profiling</config_path>
+                        </field>
+                        <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Payment Action</label>
+                            <config_path>payment/vipps/vipps_payment_action</config_path>
+                            <source_model>Vipps\Payment\Model\Adminhtml\Source\PaymentAction</source_model>
+                            <attribute type="shared">1</attribute>
+                        </field>
+                        <field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Order status: order creation</label>
+                            <tooltip>Status given to newly created orders before payment result confirmation via server notifications from Vipps.</tooltip>
+                            <source_model>Vipps\Payment\Model\Adminhtml\Source\OrderStatus</source_model>
+                            <config_path>payment/vipps/order_status</config_path>
+                        </field>
+                        <field id="merchant_serial_number" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Merchant Serial number</label>
+                            <config_path>payment/vipps/merchant_serial_number</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        </field>
+                        <field id="client_id" translate="label" type="obscure" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Client ID</label>
+                            <config_path>payment/vipps/client_id</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        </field>
+                        <field id="client_secret" translate="label" type="obscure" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Client Secret</label>
+                            <config_path>payment/vipps/client_secret</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        </field>
+                        <field id="subscription_key1" translate="label" type="obscure" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Subscription Key</label>
+                            <comment>
+                                <![CDATA[Vipps-Subscription-Key (primary)]]>
+                            </comment>
+                            <tooltip>This can be found in User Profile page on Merchant developer portal after merchant account is created.</tooltip>
+                            <config_path>payment/vipps/subscription_key1</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        </field>
+                        <field id="test_credentials_wizard" translate="button_label" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label/>
+                            <button_label>Test Credentials</button_label>
+                            <frontend_model>Vipps\Payment\Block\Adminhtml\System\Config\TestCredentials</frontend_model>
+                            <requires>
+                                <group id="vipps_required"/>
+                            </requires>
+                        </field>
+                    </group>
+                    <include path="Vipps_Payment::system/checkout.xml"/>
+                    <include path="Vipps_Payment::system/express_checkout.xml"/>
+                    <include path="Vipps_Payment::system/cancellation.xml"/>
+                    <include path="Vipps_Payment::system/partial_void.xml"/>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

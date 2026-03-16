@@ -1,0 +1,12 @@
+"Gift Wrapping",Geschenkverpackung
+"Sales Tax",MwSt
+"Should not be enabled in production. Sensitive information is logged.","Sollte nicht in der Produktionsumgebung aktiviert sein, da sensible Informationen geloggt werden."
+"Klarna Shipping Options","Klarna Lieferoptionen"
+"Product size unit","Einheit der Produktgrößen"
+"Defines which unit will be used for the product size","Bestimmt, welche Einheit für die Produktgrößen verwendet wird"
+"Product length attribute","Attribut der Produktlänge"
+"Custom attribute for the product length attribute","Angepasstes Attribut für das Attribut der Produktlänge"
+"Product width attribute","Attribut der Produktweite"
+"Custom attribute for the product width attribute","Angepasstes Attribut für das Attribut die Produktweite"
+"Product height attribute","Attribut der Produkthöhe"
+"Custom attribute for the product height attribute","Angepasstes Attribut für das Attribut der Produkthöhe"

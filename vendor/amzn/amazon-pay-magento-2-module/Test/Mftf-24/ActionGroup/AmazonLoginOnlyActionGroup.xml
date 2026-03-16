@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AmazonLoginOnlyActionGroup">
+        <arguments>
+            <argument name="buttonSelector" defaultValue="{{AmazonLoginSection.login}}" type="string"/>
+        </arguments>
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+
+        <!--Verify Sign in with Amazon Button is present-->
+        <click selector="{{buttonSelector}}" stepKey="clickSignInWithAmazonButton"/>
+        <wait time="1" stepKey="allowPopupToOpen"/>
+        <switchToNextTab stepKey="switchToWindowLoginPopup"/>
+
+        <waitForElement selector="{{AmazonPageSection.emailField}}" stepKey="waitForEmailField"/>
+        <wait time="1" stepKey="allowButtonToActivate1"/>
+        <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="fillAmazonPageEmailField"/>
+        <fillField selector="{{AmazonPageSection.passwordField}}" userInput="{{AmazonAccount.password}}" stepKey="fillAmazonPagePasswordField"/>
+        
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\HandlePopupSecondScreen" method="handleClickOnly" stepKey="handlePopupSecondScreen">
+            <argument name="signInButton">{{AmazonPageSection.signInButton}}</argument>
+        </helper>
+
+        <helper class="\Amazon\Pay\Test\Mftf\Helper\HandlePopupSecondScreen" method="handleSignInConsent" stepKey="handleSignInConsent">
+            <argument name="consentButton">{{AmazonLoginSection.consentButton}}</argument>
+        </helper>
+        
+        <!-- Switch back to main window -->
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
+    </actionGroup>
+</actionGroups>

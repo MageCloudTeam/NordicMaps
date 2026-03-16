@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonShippingAddress" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Address"/>
+            <title value="Amazon Shipping Address"/>
+            <description value="User should be able to use Amazon address as checkout shipping address."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_address"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup"/>
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+        <!--Change shipping address-->
+        <click selector="{{AmazonCheckoutSection.editShippingButton}}" stepKey="clickAmazonEditShippingButton"/>
+        <wait time="1" stepKey="amazonSignInWorkaround" />
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="allowPopupToOpen" />
+
+        <!-- choose address -->
+        <waitForElement selector="{{AmazonPageSection.changeAddressButton}}" stepKey="waitForAmazonEditShippingPageLoad"/>
+        <click selector="{{AmazonPageSection.changeAddressButton}}" stepKey="clickChangeAmazonAddressButton"/>
+        <waitForElementVisible selector="{{AmazonPageSection.notSelectedAddress}}" stepKey="waitForNotSelectedAddress"/>
+        <click selector="{{AmazonPageSection.notSelectedAddress}}" stepKey="clickNotSelectedAddress"/>
+        <waitForElementVisible selector="{{AmazonPageSection.useAddressButton}}" stepKey="waitForUseAddressButton"/>
+        <click selector="{{AmazonPageSection.useAddressButton}}" stepKey="clickUseAddressButton"/>
+
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonChangedShippingPageLoad"/>
+        <wait time="1" stepKey="allowButtonToActivate2"/>
+        <!--Come back to checkout with changed address-->
+        <actionGroup ref="AmazonCheckoutActionGroup" stepKey="ChangedAmazonCheckoutActionGroup">
+            <argument name="openerName" value="{$openerName}"/>
+        </actionGroup>
+    </test>
+</tests>

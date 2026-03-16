@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonSigninCheckoutSuccess" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Signin Enabled Checkout"/>
+            <title value="Amazon Signin Enabled Checkout Success"/>
+            <description value="User should be able to sign in during checkout with Amazon Pay."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_signin"/>
+        </annotations>
+
+        <before>
+            <createData entity="SampleAmazonPaymentConfigLwa" stepKey="SampleAmazonPaymentConfigData"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer" before="logout">
+                <argument name="email" value="{{AmazonAccount.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup"/>
+        <actionGroup ref="AmazonGoToPaymentMethodActionGroup" stepKey="AmazonGoToPaymentMethodActionGroup"/>
+        <!--Verify only Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <seeElement selector="{{AmazonCheckoutSection.method}}" stepKey="seeAmazonPaymentMethod"/>
+        <!--Place order and see the logged in order number message-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="loggedInPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+    </test>
+</tests>

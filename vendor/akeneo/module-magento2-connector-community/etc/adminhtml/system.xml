@@ -1,0 +1,686 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Akeneo Connector Module
+ *
+ * @author    Agence Dn'D <contact@dnd.fr>
+ * @copyright 2019 Agence Dn'D
+ * @license   https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.dnd.fr/
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="akeneo_connector" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Akeneo Connector</label>
+            <tab>catalog</tab>
+            <resource>Akeneo_Connector::config_akeneo_connector</resource>
+            <group id="general" translate="label" sortOrder="10" showInDefault="1">
+                <label>General</label>
+                <field id="version" translate="label" type="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Extension Version</label>
+                    <backend_model>Akeneo\Connector\Model\Config\Version</backend_model>
+                </field>
+                <field id="documentation_link" translate="label" type="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Documentation link</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\DocumentationLink</frontend_model>
+                </field>
+                <field id="export_config_pdf" translate="label" type="button" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Export Akeneo Connector configuration</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\ExportPdf</frontend_model>
+                </field>
+            </group>
+            <group id="akeneo_api" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Akeneo API Configuration</label>
+                <field id="base_url" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo base URL</label>
+                </field>
+                <field id="username" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo username</label>
+                    <comment>The Akeneo user should have permissions to list</comment>
+                    <validate>no-whitespace</validate>
+                </field>
+                <field id="password" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo password</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="client_id" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo API client ID</label>
+                    <validate>no-whitespace</validate>
+                </field>
+                <field id="client_secret" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo API client secret</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <validate>no-whitespace</validate>
+                </field>
+                <field id="api_test" translate="label" type="button" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Api\Test</frontend_model>
+                    <label>Test API credentials</label>
+                </field>
+                <field id="edition" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo Edition</label>
+                    <source_model>Akeneo\Connector\Model\Source\Edition</source_model>
+                </field>
+                <field id="pagination_size" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Pagination size</label>
+                    <comment>Must be a value between 1 and 100. Default value is 100.</comment>
+                </field>
+                <field id="admin_channel" translate="label comment" type="select" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Admin Website Channel</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Channel</source_model>
+                    <comment>Set Adobe Commerce/Magento admin website default Akeneo channel</comment>
+                </field>
+                <field id="website_mapping" translate="label" type="text" sortOrder="91" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Website Mapping</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Website</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>Match the Adobe Commerce/Magento website with Akeneo channel</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="storage_engine" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Storage Engine</label>
+                    <source_model>Akeneo\Connector\Model\Source\Engine</source_model>
+                    <comment>Storage engine to use for temporary tables. MyISAM allows high scalability, with important number of attributes. InnoDB is recommended but may cause errors during import for a large catalog.</comment>
+                </field>
+            </group>
+            <group id="products_filters" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Filter Products</label>
+                <field id="mode" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Mode</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Mode</source_model>
+                </field>
+                <field id="completeness_type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Completeness type</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Completeness</source_model>
+                    <depends>
+                        <field id="mode">standard</field>
+                    </depends>
+                </field>
+                <field id="completeness_locales" translate="label comment" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Locales</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Locales</source_model>
+                    <comment>Select the locales to apply the completeness filter on</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="completeness_type" separator="," negative="1">
+                            <![CDATA[<,<=,>,>=,=,!=,no_condition]]></field>
+                        <field id="mode">standard</field>
+                    </depends>
+                </field>
+                <field id="completeness_value" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Completeness value</label>
+                    <comment>Has to be a value between 0 and 100</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="completeness_type" negative="1">no_condition</field>
+                        <field id="mode">standard</field>
+                    </depends>
+                </field>
+                <field id="model_completeness_type" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Model Completeness type</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\ModelCompleteness</source_model>
+                    <depends>
+                        <field id="mode">standard</field>
+                    </depends>
+                </field>
+                <field id="model_completeness_locales" translate="label comment" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Model Locales</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Locales</source_model>
+                    <comment>Select the locales to apply the product model completeness filter on</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="model_completeness_type" negative="1">no_condition</field>
+                        <field id="mode">standard</field>
+                    </depends>
+                </field>
+                <field id="status" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Status</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Status</source_model>
+                    <depends>
+                        <field id="mode">standard</field>
+                    </depends>
+                </field>
+                <field id="updated_mode" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated mode</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Update</source_model>
+                </field>
+                <field id="updated_lower" translate="label" type="date" sortOrder="90" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated before</label>
+                    <comment>Import only product updated before the given date. Leave blank for no filter.</comment>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Date</frontend_model>
+                    <depends>
+                        <field id="updated_mode">&lt;</field>
+                    </depends>
+                </field>
+                <field id="updated_greater" translate="label" type="date" sortOrder="100" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated after</label>
+                    <comment>Import only product updated after the given date. Leave blank for no filter.</comment>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Date</frontend_model>
+                    <depends>
+                        <field id="updated_mode">&gt;</field>
+                    </depends>
+                </field>
+                <field id="updated_between_after" translate="label" type="date" sortOrder="110" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated after</label>
+                    <comment>Import only product updated after the given date. Leave at least one blank for no filter.</comment>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Date</frontend_model>
+                    <depends>
+                        <field id="updated_mode">BETWEEN</field>
+                    </depends>
+                </field>
+                <field id="updated_between_before" translate="label" type="date" sortOrder="120" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated before</label>
+                    <comment>Import only product updated before the given date. Leave at least one blank for no filter.</comment>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Date</frontend_model>
+                    <depends>
+                        <field id="updated_mode">BETWEEN</field>
+                    </depends>
+                </field>
+                <field id="updated" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated</label>
+                    <comment>
+                        <![CDATA[Import only product updated since last X days. Leave blank for no filter.]]>
+                    </comment>
+                    <depends>
+                        <field id="updated_mode">SINCE LAST N DAYS</field>
+                    </depends>
+                </field>
+                <field id="updated_since_last_hours" translate="label" type="text" sortOrder="135" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated Since Last Hours</label>
+                    <comment>
+                        <![CDATA[Import only product updated since last X hours. Leave blank for no filter.]]>
+                    </comment>
+                    <depends>
+                        <field id="updated_mode">SINCE LAST N HOURS</field>
+                    </depends>
+                </field>
+                <field id="included_families" translate="label comment" type="multiselect" sortOrder="140" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Families to import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Family</source_model>
+                    <comment>
+                        <![CDATA[Select the families you want to retrieve products from.<br/> If the multiselect is empty, it means you don't have any families in your Akeneo, or the provided credentials are wrong.]]>
+                    </comment>
+                    <depends>
+                        <field id="mode">standard</field>
+                    </depends>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="advanced_filter" translate="label comment" type="textarea" sortOrder="150" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Advanced Product Filter</label>
+                    <backend_model>Akeneo\Connector\Model\Backend\Json</backend_model>
+                    <comment>
+                        <![CDATA[Build your query using a json.<br/>
+                        Please, ensure that your JSON format is valid before using advanced filter.<br/>]]>
+                    </comment>
+                    <depends>
+                        <field id="mode">advanced</field>
+                    </depends>
+                </field>
+                <field id="model_advanced_filter" translate="label comment" type="textarea" sortOrder="160" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Advanced Product Model Filter</label>
+                    <backend_model>Akeneo\Connector\Model\Backend\Json</backend_model>
+                    <comment>
+                        <![CDATA[Build your query using a json.<br/>
+                        Please, ensure that your JSON format is valid before using advanced filter.<br/>
+For example :<br/>
+<pre>
+{
+    "search": {
+        "enabled": [{
+            "operator": "=",
+            "value": true
+        }],
+        "sku": [{
+            "operator": "STARTS WITH",
+            "value": "A"
+        }]
+    },
+    "scope": "ecommerce",
+    "locales": "fr_FR,de_DE"
+}</pre>]]>
+                    </comment>
+                    <depends>
+                        <field id="mode">advanced</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="category" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Category</label>
+                <field id="is_active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Activate new categories</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Newly imported categories will be activated</comment>
+                </field>
+                <field id="include_in_menu" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Include new categories in menu</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Newly imported categories categories will be included in menu</comment>
+                </field>
+                <field id="is_anchor" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Set new categories in anchor mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Newly imported categories will be in anchor mode</comment>
+                </field>
+                <field id="included_categories" translate="label comment" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Categories to import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Category</source_model>
+                    <comment>
+                        <![CDATA[Select the categories you want to import.<br/> If the field is empty, it means you don't have any categories in your Akeneo, or the provided credentials are wrong.]]>
+                    </comment>
+                    <can_be_empty>1</can_be_empty>
+                    <depends>
+                        <field id="mode">standard</field>
+                    </depends>
+                </field>
+                <field id="override_content_staging" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Does Akeneo data override category content staging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[This parameter is only used on Adobe Commerce.<br /><br />
+                        <strong>Yes</strong> - Akeneo will override all category versions no matter what changes was scheduled.<br />
+                        <strong>No</strong> - Akeneo will only update the "base" version of the scheduled categories.]]>
+                    </comment>
+                </field>
+            </group>
+            <group id="families" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Filter Families</label>
+                <field id="updated_mode" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated mode</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\FamilyUpdate</source_model>
+                </field>
+                <field id="updated_greater" translate="label" type="date" sortOrder="90" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated after</label>
+                    <comment>Import only families updated after the given date. Leave blank for no filter.</comment>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Date</frontend_model>
+                    <depends>
+                        <field id="mode">standard</field>
+                        <field id="updated_mode">&gt;</field>
+                    </depends>
+                </field>
+                <depends>
+                    <field id="akeneo_connector/akeneo_api/edition" separator=",">greater_or_four_point_zero_point_sixty_two,greater_or_five,serenity,growth,seven</field>
+                </depends>
+            </group>
+            <group id="attribute" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Attributes</label>
+                <field id="types" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Additional types</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Type</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>Match specific Akeneo type with the Adobe Commerce/Magento input field</comment>
+                </field>
+                <field id="types_swatch" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Swatch types mapping</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\SwatchType</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>Map akeneo attribute with the Adobe Commerce/Magento Swatch Text / Visual Swatch attribute</comment>
+                </field>
+                <field id="option_code_as_admin_label" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Set attribute option code as Admin label for attribute options</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set this configuration to "Yes" in order to set the Akeneo option code as the attribute option Admin label in Adobe Commerce/Magento. If this configuration is set to "No", the Admin label of the option will be imported from Adobe Commerce/Magento locale configuration for the Admin scope.</comment>
+                </field>
+            </group>
+            <group id="filter_attribute" translate="label" type="text" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Filter Attributes</label>
+                <field id="updated_mode" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated mode</label>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\AttributeUpdate</source_model>
+                </field>
+                <field id="updated_greater" translate="label" type="date" sortOrder="20" showInDefault="1" showInWebsite="0"
+                    showInStore="0">
+                    <label>Updated after</label>
+                    <comment>Import only attributes updated after the given date. Leave blank for no filter.</comment>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Date</frontend_model>
+                    <depends>
+                        <field id="updated_mode">&gt;</field>
+                    </depends>
+                </field>
+                <field id="filter_attribute_code_mode" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Filter by attribute code</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="filter_attribute_code" translate="label comment" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Attribute codes to import</label>
+                    <comment>Select the attributes you want to import. Not choosing any attribute in this list will import all your attributes into Adobe Commerce/Magento.</comment>
+                    <source_model>Akeneo\Connector\Model\Source\Filters\Attribute</source_model>
+                    <depends>
+                        <field id="filter_attribute_code_mode">1</field>
+                    </depends>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <depends>
+                    <field id="akeneo_connector/akeneo_api/edition" separator=",">greater_or_four_point_zero_point_sixty_two,greater_or_five,serenity,growth,seven</field>
+                </depends>
+            </group>
+            <group id="product" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Products</label>
+                <field id="akeneo_attribute_code_for_sku" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo attribute code for SKU</label>
+                    <comment>Mapping used in Serenity, Growth and V7.0 Akeneo edition. The SKU behavior now looks closer to a normal attribute. If empty, run a fault and stop the product flow.</comment>
+                    <depends>
+                        <field id="akeneo_connector/akeneo_api/edition" separator=",">serenity,growth,seven</field>
+                    </depends>
+                </field>
+                <field id="website_attribute" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Website Attribute</label>
+                    <comment>Enter the code of the select or multiselect attribute used to associate products to your websites, leave blank to ignore</comment>
+                </field>
+                <field id="product_mapping_attribute" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo Attribute Code for Product Type Mapping</label>
+                    <comment>
+                        <![CDATA[- Code of the select attribute that will be used to select product type<br />- If empty, every product that is not a product model will be created as a simple product<br />- If “virtual“ value is found, the product will be created as a virtual product]]>
+                    </comment>
+                </field>
+                <field id="product_status_mode" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Status Mode</label>
+                    <source_model>Akeneo\Connector\Model\Source\StatusMode</source_model>
+                    <comment>
+                        <![CDATA[The "Status based on Completeness level" mode is only available for Akeneo version Growth, Serenity and 7.0.]]>
+                    </comment>
+                </field>
+                <field id="attribute_code_for_simple_product_statuses" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo Attribute code for Simple product statuses</label>
+                    <source_model>Akeneo\Connector\Model\Source\StatusMode</source_model>
+                    <depends>
+                        <field id="product_status_mode">attribute_product_mapping</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[The Akeneo attribute has to be a global or a scopable Yes/No Attribute. Localizable values won’t be used as a products cannot be disabled at Store View level.]]>
+                    </comment>
+                </field>
+                <field id="attribute_code_for_configurable_product_statuses" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo Attribute code for Configurable product statuses</label>
+                    <source_model>Akeneo\Connector\Model\Source\StatusMode</source_model>
+                    <depends>
+                        <field id="product_status_mode">attribute_product_mapping</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[The Akeneo attribute has to be a global or a scopable Yes/No Attribute. Localizable values won’t be used as a products cannot be disabled at Store View level.]]>
+                    </comment>
+                </field>
+                <field id="enable_simple_products_per_website" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Simple Products per website if completeness in channel is equal or greater than</label>
+                    <source_model>Akeneo\Connector\Model\Source\StatusMode</source_model>
+                    <depends>
+                        <field id="akeneo_connector/akeneo_api/edition" separator=",">serenity,growth,seven</field>
+                        <field id="product_status_mode">status_based_on_completeness_level</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[Completeness level should be a number between 0 and 100]]>
+                    </comment>
+                </field>
+                <field id="default_configurable_product_status" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default Configurable Products Status</label>
+                    <source_model>Akeneo\Connector\Model\Source\Activation</source_model>
+                    <depends>
+                        <field id="akeneo_connector/akeneo_api/edition" separator=",">serenity,growth,seven</field>
+                        <field id="product_status_mode">status_based_on_completeness_level</field>
+                    </depends>
+                </field>
+                <field id="activation" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default Product Status</label>
+                    <source_model>Akeneo\Connector\Model\Source\Activation</source_model>
+                    <depends>
+                        <field id="product_status_mode">default_product_status</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[Default status for product creation<br/>If a product is updated, status won't be modified unless it is disabled in Akeneo]]>
+                    </comment>
+                </field>
+
+                <field id="visibility_enabled" translate="label" type="select" sortOrder="32" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Visibility Mapping From Akeneo Attribute</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="default_visibility" translate="label" type="select" sortOrder="33" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default product visibility</label>
+                    <source_model>Magento\Catalog\Model\Product\Visibility</source_model>
+                    <depends>
+                        <field id="visibility_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="visibility_simple" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo Attribute Code For Simple Product Visibility</label>
+                    <depends>
+                        <field id="visibility_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="visibility_configurable" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo Attribute Code For Configurable Product Visibility</label>
+                    <depends>
+                        <field id="visibility_enabled">1</field>
+                    </depends>
+                </field>
+
+                <field id="attribute_mapping" translate="label" type="text" sortOrder="38" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Attribute Mapping</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Attribute</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>
+                        <![CDATA[Fill additional Adobe Commerce/Magento attributes from Akeneo attributes.<br/>
+"price" "special_price" and "cost" attributes won't be automatically mapped unless you explicitely declare them in this configuration.]]>
+                    </comment>
+                </field>
+                <field id="metrics" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Metric Attributes</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Metrics</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+                <field id="tax_class" translate="label" type="text" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default Tax Class</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Tax</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>Set up default tax class for website</comment>
+                </field>
+                <field id="configurable_attributes" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Configurable</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Configurable</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>
+                        <![CDATA[
+                        <strong>Type:</strong>
+                        <br />
+                        - <u>Mapping</u>: Declare each PIM common attributes you want to be mapped with another Adobe Commerce/Magento attribute. Fill the value field with the corresponding Adobe Commerce/Magento attribute. Example: Attribute = name_product_model and Value = name
+                        <br />
+                        - <u>First Variation value</u>: Declare each PIM variation specific attributes you want to be imported in Adobe Commerce/Magento configurable products. The value of the first variation associated to the product model will be inserted in the corresponding Adobe Commerce/Magento configurable product attribute. Leave the value field empty.
+                        <br />
+                        - <u>SQL Statement</u>: Use a SQL statement in the value field for custom value assignation from Akeneo Connector temporary tables. Example: Attribute = url_key and Value = LOWER(url_key)
+                        <br />
+                        - <u>Default value</u>: Fill the value field to assign a constant default value for a given attribute. Example: Attribute = enabled and Value = 0
+                        ]]>
+                    </comment>
+                </field>
+                <field id="association_related" translate="label comment" type="text" sortOrder="55" showInDefault="1" showInWebsite="0"
+                    showInStore="0" canRestore="1">
+                    <label>Akeneo association code for Related products</label>
+                    <comment>Note: Quantified associations cannot be mapped with Related.</comment>
+                </field>
+                <field id="association_upsell" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0"
+                    showInStore="0" canRestore="1">
+                    <label>Akeneo association code for Upsell products</label>
+                    <comment>Note: Quantified associations cannot be mapped with Upsell.</comment>
+                </field>
+                <field id="association_crossell" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="0"
+                    showInStore="0" canRestore="1">
+                    <label>Akeneo association code for Cross-sell products</label>
+                    <comment>Note: Quantified associations cannot be mapped with Cross-sell / Related / Upsell</comment>
+                </field>
+                <field id="media_enabled" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Import Image Attributes</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="media_gallery" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo Images Attributes</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Gallery</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>Enter all PIM attributes containing product images. All images specified will be imported to the product image gallery.</comment>
+                    <depends>
+                        <field id="media_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="media_images" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Images Mapping</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Image</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>Map Adobe Commerce/Magento image type for products. Associate the image type option to a PIM attribute specified in the Akeneo Attribute for Image Gallery field. After import, all specified options will be filled by their image if provided.</comment>
+                    <depends>
+                        <field id="media_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="file_enabled" translate="label" type="select" sortOrder="210" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Import File Attributes</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>All files will be downloaded in the 'pub/media/akeneo_connector/media_files' folder.</comment>
+                </field>
+                <field id="file_attribute" translate="label" type="text" sortOrder="220" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Akeneo File Attributes</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\File</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>
+                        <![CDATA[List all PIM file attributes you want to download when 'Import File Attributes' is enabled.<br />The path of each file will be imported to the corresponding product text attribute.<br />If 'Import File Attributes' is disabled, it won't override previously imported values from your file attributes in this field.]]>
+                    </comment>
+                </field>
+                <field id="akeneo_master" translate="label" type="select" sortOrder="230" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Does Akeneo data override content staging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[This parameter is only used on Adobe Commerce.<br /><br />
+                        <strong>Yes</strong> - Akeneo will override all product versions no matter what changes was scheduled.<br />
+                        <strong>No</strong> - Akeneo will only update the "base" version of the scheduled products.]]>
+                    </comment>
+                </field>
+                <field id="url_generation_enabled" translate="label" type="select" sortOrder="240" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Regenerate url rewrites</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="grouped_products" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Grouped products</label>
+                <field id="families_mapping" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Grouped product families and quantity association mapping</label>
+                    <frontend_model>Akeneo\Connector\Block\Adminhtml\System\Config\Form\Field\Grouped</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment><![CDATA[Map each grouped family from Akeneo to its corresponding quantified association.<br />Please make sure to only map quantified association.]]></comment>
+                </field>
+                <depends>
+                    <field id="akeneo_connector/akeneo_api/edition" separator=",">greater_or_five,serenity,growth,seven</field>
+                </depends>
+            </group>
+            <group id="index" translate="label" sortOrder="70" type="text" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Index</label>
+                <field id="index_category" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Reindex data after Category import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Index</source_model>
+                    <comment>Choose the index you want to trigger after the Category job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="index_family" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Reindex data after Family import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Index</source_model>
+                    <comment>Choose the index you want to trigger after the Family job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="index_attribute" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Reindex data after Attribute import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Index</source_model>
+                    <comment>Choose the index you want to trigger after the Attribute job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="index_option" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Reindex data after Option import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Index</source_model>
+                    <comment>Choose the index you want to trigger after the Option job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="index_product" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Reindex data after Product import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Index</source_model>
+                    <comment>Choose the index you want to trigger after the Product job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+            </group>
+            <group id="cache" translate="label" sortOrder="80" type="text" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Cache</label>
+                <field id="cache_type_category" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Flush cache types after Category import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Cache</source_model>
+                    <comment>Choose the cache type you want to flush after the Category job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="cache_type_family" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Flush cache types after Family import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Cache</source_model>
+                    <comment>Choose the cache type you want to flush after the Family job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="cache_type_attribute" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Flush cache types after Attribute import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Cache</source_model>
+                    <comment>Choose the cache type you want to flush after the Attribute job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="cache_type_option" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Flush cache types after Option import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Cache</source_model>
+                    <comment>Choose the cache type you want to flush after the Option job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="cache_type_product" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Flush cache types after Product import</label>
+                    <source_model>Akeneo\Connector\Model\Source\Cache</source_model>
+                    <comment>Choose the cache type you want to flush after the Product job is finished.</comment>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+            </group>
+            <group id="advanced" translate="label" sortOrder="120" showInDefault="1">
+                <label>Advanced</label>
+                <field id="advanced_log" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Advanced Loging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Activating advanced log may slow down the imports. Temporary tables won't be deleted at the end of their imports. Logs will be placed in var/log/akeneo_connector</comment>
+                </field>
+                <field id="enable_clean_logs" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Job Logs Cleaning</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>By default, the logs older than the number of days configured will be cleaned every day at 2AM</comment>
+                </field>
+                <field id="clean_logs" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Clear job logs after X days</label>
+                    <depends>
+                        <field id="enable_clean_logs">1</field>
+                    </depends>
+                </field>
+                <field id="email_job_report_enabled" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Job Report By Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Send job report by email</comment>
+                </field>
+                <field id="email_job_report_recipient" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Job Report Recipient Emails</label>
+                    <comment>Email addresses of job reports recipients separated by commas ','</comment>
+                    <validate>no-whitespace</validate>
+                    <depends>
+                        <field id="email_job_report_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="enable_job_grid_auto_reload" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Job grid auto reload</label>
+                    <comment>Job grid will refresh itself every 5 seconds</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

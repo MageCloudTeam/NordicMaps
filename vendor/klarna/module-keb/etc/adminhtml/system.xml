@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="klarna_section">
+                <group id="keb" translate="label" sortOrder="50" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Klarna Express Button</label>
+                    <field id="enabled" sortOrder="10" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Enable</label>
+                        <config_path>klarna/keb/enabled</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="enabled_minicart" sortOrder="11" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Enable on minicart</label>
+                        <config_path>klarna/keb/enabled_minicart</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="enabled_cart" sortOrder="12" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Enable on the cart page</label>
+                        <config_path>klarna/keb/enabled_cart</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="theme" sortOrder="20" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Button theme</label>
+                        <config_path>klarna/keb/theme</config_path>
+                        <source_model>Klarna\Keb\Model\System\Config\Source\Themes</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="label" sortOrder="30" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Button label</label>
+                        <config_path>klarna/keb/label</config_path>
+                        <source_model>Klarna\Keb\Model\System\Config\Source\Label</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="shape" sortOrder="40" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Button shape</label>
+                        <config_path>klarna/keb/shape</config_path>
+                        <source_model>Klarna\Keb\Model\System\Config\Source\Shapes</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="environment" sortOrder="50" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Environment</label>
+                        <config_path>klarna/keb/environment</config_path>
+                        <source_model>Klarna\Keb\Model\System\Config\Source\Environment</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

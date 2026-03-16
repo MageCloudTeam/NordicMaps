@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Klarna\Kco\Model\Provider\Base\Config">
+        <plugin name="klarna_kss_kco_provider_base_config" type="Klarna\Kss\Plugin\Provider\Base\ConfigPlugin" sortOrder="1"/>
+    </type>
+    <type name="Klarna\Base\Model\Quote\ShippingMethod\SelectionAssurance">
+        <plugin name="klarna_kss_checkout_shipping_method_selection_assurance" type="Klarna\Kss\Plugin\Model\Cart\ShippingMethod\SelectionAssurancePlugin"/>
+    </type>
+</config>

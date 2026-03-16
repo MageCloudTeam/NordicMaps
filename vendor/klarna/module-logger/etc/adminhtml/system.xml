@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <resource>Klarna_Logger::system_logging</resource>
+            <group id="klarna_section" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                <group id="api" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="debug" sortOrder="50" translate="label comment" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Logging general information</label>
+                        <config_path>klarna/api/debug</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                        <comment>Logging general information to a logging text file. Should not be enabled in production. Sensitive information is logged.</comment>
+                    </field>
+                    <field id="request_logging" sortOrder="60" translate="label comment" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Logging API requests to the database</label>
+                        <config_path>klarna/api/request_logging</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                        <comment>When disabled no API requests are logged.</comment>
+                    </field>
+                    <field id="delete_request_logs_after" sortOrder="70" translate="label comment" type="text"
+                           showInDefault="1"
+                           showInWebsite="0"
+                           canRestore="0">
+                        <label>API request log lifetime (days)</label>
+                        <validate>validate-zero-or-greater validate-digits</validate>
+                        <config_path>klarna/api/delete_request_logs_after</config_path>
+                        <comment>The value is needed for a cronjob to clear the respective Klarna api request logging database table. It is indicated in days.</comment>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

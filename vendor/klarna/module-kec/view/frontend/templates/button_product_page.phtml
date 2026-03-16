@@ -1,0 +1,81 @@
+<?php
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+
+/** @var Klarna\Kec\Block\Product $block */
+/** @var Magento\Framework\Escaper $escaper */
+?>
+
+<div id="klarna-kec-placeholder" style="width: 49%"></div>
+
+<?php
+
+if ($block->isShowable()): ?>
+
+    <script>
+
+        window.klarnaAsyncCallback = function () {
+            window.Klarna.Payments.Buttons.init({
+                client_key: "<?= $escaper->escapeUrl($block->getClientKey()) ?>",
+            }).load(
+                {
+                    container: "#klarna-kec-placeholder",
+                    theme: "<?= $escaper->escapeUrl($block->getTheme()) ?>",
+                    shape: "<?= $escaper->escapeUrl($block->getShape()) ?>",
+                    locale: "<?= $escaper->escapeUrl($block->getLocale()) ?>",
+                    on_click: (authorize) => {
+                        require(
+                            [
+                                'mage/storage',
+                                'mage/url',
+                                'jquery',
+                                'mage/validation'
+                            ], function (storage, urlBuilder, $) {
+                                var idContent = $('#product_addtocart_form');
+                                if (!idContent.valid()) {
+                                    return;
+                                }
+
+                                var elements = idContent[0];
+                                var form = new FormData(elements);
+                                var additionalInput = {
+                                    'use_existing_quote': 0
+                                }
+                                form.set('additional_input', JSON.stringify(additionalInput));
+
+                                $.ajax({
+                                    url: urlBuilder.build("kec/klarna/getPayLoad"),
+                                    data: form,
+                                    type: 'post',
+                                    dataType: 'json',
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+
+                                    success: function (result) {
+                                        authorize(
+                                            {
+                                                collect_shipping_address: true,
+                                                auto_finalize: false
+                                            },
+                                            result,
+                                            (klarnaResult) => {
+                                                require(['Klarna_Kec/js/action/workflow'], function (kec_workflow) {
+                                                    kec_workflow(klarnaResult, form);
+                                                });
+                                            }
+                                        );
+                                    }
+                                });
+                            },
+                        );
+                    }
+                }
+            );
+        };
+    </script>
+<?php endif ?>

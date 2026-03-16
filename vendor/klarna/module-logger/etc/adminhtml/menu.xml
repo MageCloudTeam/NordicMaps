@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Klarna_Logger::system_logging"
+             title="Logging"
+             translate="title"
+             module="Klarna_Logger"
+             sortOrder="10"
+             parent="Klarna_Base::menu"
+             action="klarna/index/logs"
+             resource="Klarna_Logger::system_logging"
+        />
+    </menu>
+</config>

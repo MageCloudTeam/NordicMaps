@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AmazonLoginOnlyRedirectActionGroup">
+        <waitForElement selector="{{AmazonPageSection.emailField}}" stepKey="waitForEmailField"/>
+        <wait time="1" stepKey="allowButtonToActivate1"/>
+        <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="fillAmazonPageEmailField"/>
+        <fillField selector="{{AmazonPageSection.passwordField}}" userInput="{{AmazonAccount.password}}" stepKey="fillAmazonPagePasswordField"/>
+        
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            try {
+                $remoteWebDriver->findElement(
+                    \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.signInButton}}')
+                )->click();
+                $remoteWebDriver->switchTo()->window($openerName);
+                $I->wait(5);
+            } catch (\Exception $ex) {
+                $I->comment('exception caught');
+            } catch (\Error $err) {
+                $I->comment('error caught');
+            }
+        }" stepKey="handlePopupSecondScreen"/>
+
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            try {
+                if (count($remoteWebDriver->getWindowHandles()) > 1) {
+                    $I->comment('Popup remained open, switching back to it');
+                    $I->switchToNextTab();
+    
+                    $loginConsent = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonLoginSection.consentButton}}'));
+    
+                    if (!empty($loginConsent)) {
+                        $I->comment('Click Continue button');
+                        $loginConsent[0]->click();
+                        $remoteWebDriver->switchTo()->window($openerName);
+                    }
+                } else {
+                    $I->comment('Popup closed, following redirect to account screen');
+                }
+            } catch (\Exception $ex) {
+
+            }
+        }" stepKey="handleSignInConsent"/>
+        
+    </actionGroup>
+</actionGroups>

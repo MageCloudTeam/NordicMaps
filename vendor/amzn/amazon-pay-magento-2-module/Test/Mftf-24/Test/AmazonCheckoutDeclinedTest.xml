@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutDeclined" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Checkout Declined"/>
+            <title value="Amazon Checkout Declined"/>
+            <description value="User should get declined message when Amazon Rejects the payment."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_checkout"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup">
+            <argument name="cc" value="3434" />
+        </actionGroup>
+        <actionGroup ref="AmazonGoToPaymentMethodActionGroup" stepKey="AmazonGoToPaymentMethodActionGroup"/>
+        <!--Verify only Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <seeElement selector="{{AmazonCheckoutSection.method}}" stepKey="seeAmazonPaymentMethod"/>
+        <!--Place order-->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+
+        <!--Wait for redirect to cart-->
+        <waitForPageLoad stepKey="waitRedirect"/>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForText userInput="transaction has been declined" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+    </test>
+</tests>

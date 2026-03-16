@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutPayNowDeclined" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Checkout"/>
+            <title value="Amazon Checkout Pay Now Declined"/>
+            <description value="User should be able to checkout with Amazon Pay."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_checkout"/>
+            <group value="amazon_pay_paynow"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{AmazonButtonPaymentConfig.path}} 1" stepKey="displayAmazonButtonPayment"/>
+        </before>
+        
+        <!-- shipping-->
+        <actionGroup ref="AmazonShipmentFormActionGroup" stepKey="fillShipping" />
+
+        <!-- amazon pay option -->
+        <click selector="{{AmazonCheckoutSection.method}}" stepKey="chooseAmazonMethod" />
+        <waitForPageLoad stepKey="waitForPayButton" />
+
+        <!-- amazon pay button -->
+        <waitForElement selector="{{AmazonButtonSection.payment}}" stepKey="seeAmazonPay" />
+        <executeJS function="return window.name;" stepKey="openerName"/>
+        <click selector="{{AmazonButtonSection.payment}}" stepKey="clickAmazonPay" />
+
+        <actionGroup ref="AmazonSwitchToPopupActionGroup" stepKey="switchToPopup" />
+        <actionGroup ref="AmazonLoginActionGroup" stepKey="amazonLogin"/>
+
+        <!-- choose card -->
+        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangePaymentMethod"/>
+
+        <wait time="1" stepKey="allowCardsToPopulate"/>
+        <click selector="{{AmazonPageSection.paymentMethodRadioButton('3434')}}" stepKey="clickPaymentRadioButton"/>
+
+        <wait time="1" stepKey="allowSelectButtonToPopulate"/>
+        <scrollTo selector="{{AmazonPageSection.usePaymentButton}}" stepKey="scrollToelectButton"/>
+        <wait time="1" stepKey="allowScrollToHappen"/>
+        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickSelectButton"/>
+
+        <!--Go back to checkout-->
+        <wait time="1" stepKey="allowContinueButtonToPopulate"/>
+
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="seePayNow" />
+        <wait time="2" stepKey="allowPayNowButtonToBeClickable" />
+        <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="payNow" />
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
+
+        <!--Wait for redirect to cart-->
+        <waitForPageLoad stepKey="waitRedirect"/>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForText userInput="transaction has been declined" selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForText"/>
+    </test>
+</tests>

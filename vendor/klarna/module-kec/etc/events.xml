@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_quote_remove_item">
+        <observer name="klarna_kec_disable_kec_workflow_for_item_removal" instance="Klarna\Kec\Observer\StopKecWorkflow"/>
+    </event>
+    <event name="sales_quote_add_item">
+        <observer name="klarna_kec_disable_kec_workflow_for_adding_item" instance="Klarna\Kec\Observer\StopKecWorkflow"/>
+    </event>
+    <event name="sales_quote_product_add_after">
+        <observer name="klarna_kec_disable_kec_workflow_for_adding_product" instance="Klarna\Kec\Observer\StopKecWorkflow"/>
+    </event>
+</config>

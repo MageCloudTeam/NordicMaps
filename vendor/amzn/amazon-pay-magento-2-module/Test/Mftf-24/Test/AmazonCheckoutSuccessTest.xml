@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AmazonCheckoutSuccess" extends="AmazonCheckoutButton">
+        <annotations>
+            <stories value="Amazon Checkout"/>
+            <title value="Amazon Checkout Success"/>
+            <description value="User should be able to checkout with Amazon Pay."/>
+            <severity value="CRITICAL"/>
+            <group value="amazon_pay"/>
+            <group value="amazon_pay_checkout"/>
+        </annotations>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <actionGroup ref="AmazonLoginAndCheckoutActionGroup" stepKey="AmazonLoginAndCheckoutActionGroup"/>
+        <actionGroup ref="AmazonGoToPaymentMethodActionGroup" stepKey="AmazonGoToPaymentMethodActionGroup"/>
+        <!--Verify only Amazon Pay method is visible-->
+        <seeNumberOfElements selector="{{CheckoutPaymentSection.availablePaymentSolutions}}" userInput="1" stepKey="seeSingleAvailablePaymentSolution"/>
+        <seeElement selector="{{AmazonCheckoutSection.method}}" stepKey="seeAmazonPaymentMethod"/>
+        <!--Place order-->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="guestPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
+        </actionGroup>
+
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="orderNumber" />
+        <magentoCLI command="amazon:payment:sales:verify-charge-permission" arguments="--orderId {$orderNumber}" stepKey="command" />
+        <assertStringContainsString stepKey="seeMerchantReferenceIdMatchesOrderNumber">
+            <expectedResult type="string">true</expectedResult>
+            <actualResult type="string">${command}</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

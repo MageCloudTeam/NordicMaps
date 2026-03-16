@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright © Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+namespace Amazon\Pay\Block\Adminhtml\System\Config\Form;
+
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\UrlInterface;
+
+class IpnUrl extends \Magento\Config\Block\System\Config\Form\Field
+{
+    /**
+     * Render element value
+     *
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _renderValue(AbstractElement $element)
+    {
+        $store = $this->_storeManager->getDefaultStoreView();
+        $valueReturn = '';
+
+        if ($store) {
+            $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB, true);
+            if ($baseUrl) {
+                $value       = $baseUrl . 'amazon_pay/payment/ipn/';
+                $valueReturn = "<div>".$this->escapeHtml($value)."</div>";
+            }
+        } else {
+            $valueReturn = 'You do not have permission to view this setting. The IPN URL is managed
+                from the Default Store View.';
+        }
+
+        $html = '<td class="value">';
+        $html .= $valueReturn;
+        if ($element->getComment() && $store) {
+            $html .= '<p class="note"><span>' . $element->getComment() . '</span></p>';
+        }
+        $html .= '</td>';
+
+        return $html;
+    }
+
+    /**
+     * Render element value
+     *
+     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return                                        string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _renderInheritCheckbox(AbstractElement $element)
+    {
+        return '<td class="use-default"></td>';
+    }
+}

@@ -1,0 +1,6 @@
+.hgignore
+vendor/
+.idea/
+.hg/
+composer.lock
+Jenkinsfile

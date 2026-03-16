@@ -1,0 +1,47 @@
+{
+    "name": "klarna/module-support",
+    "description": "Klarna Support Magento 2 Extension",
+    "type": "magento2-module",
+    "license": "Apache-2.0",
+    "version": "2.0.20",
+    "support": {
+        "email": "magento@klarna.com"
+    },
+    "authors": [
+        {
+            "name": "Markus Simon",
+            "email": "markus.simon2@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Dario Kassler",
+            "email": "dario.kassler@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Christian Jung",
+            "email": "christian.jung@klarna.com",
+            "role": "Developer"
+        }
+    ],
+    "scripts": {
+        "test": "phpunit",
+        "cov": "phpunit --coverage-html coverage"
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0||~8.2.0||~8.3.0",
+        "magento/framework": "^103",
+        "klarna/module-base": "10.0.19"
+    },
+    "autoload": {
+        "psr-4": {
+            "Klarna\\Support\\": "."
+        },
+        "files": [ "registration.php" ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Klarna\\Support\\Test\\": "Test/"
+        }
+    }
+}

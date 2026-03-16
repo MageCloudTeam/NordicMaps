@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="klarna_section" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                <group id="kec" translate="label" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Klarna Express Checkout</label>
+                    <field id="enabled" sortOrder="0" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable</label>
+                        <config_path>payment/kec/enabled</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="client_identifier" sortOrder="10" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Klarna Client Identifier</label>
+                        <config_path>payment/kec/client_identifier</config_path>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="position" translate="label" type="multiselect" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable on</label>
+                        <config_path>payment/kec/position</config_path>
+                        <source_model>Klarna\Kec\Model\System\Config\Source\Position</source_model>
+                        <can_be_empty>1</can_be_empty>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="theme" sortOrder="40" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Button theme</label>
+                        <config_path>payment/kec/theme</config_path>
+                        <source_model>Klarna\Kec\Model\System\Config\Source\Themes</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                    <field id="shape" sortOrder="50" translate="label" type="select" showInDefault="1"
+                           showInWebsite="1"
+                           showInStore="0">
+                        <label>Button shape</label>
+                        <config_path>payment/kec/shape</config_path>
+                        <source_model>Klarna\Kec\Model\System\Config\Source\Shapes</source_model>
+                        <depends>
+                            <field id="enabled">1</field>
+                        </depends>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Klarna\Kco\Model\Api\Builder\Kasper">
+        <plugin name="klarna_kss_process_merchant_urls"
+                type="Klarna\Kss\Plugin\ProcessMerchantUrlsPlugin"/>
+        <plugin name="klarna_kss_kasper"
+                type="Klarna\Kss\Plugin\KasperPlugin"/>
+    </type>
+    <type name="Klarna\Kco\Model\Cart\Validations\ShippingAmount">
+        <plugin name="klarna_kss_validation_shipping_amount"
+                type="Klarna\Kss\Plugin\Model\Cart\Validations\ShippingAmountPlugin"/>
+    </type>
+    <type name="Klarna\Orderlines\Model\Items\Discount">
+        <plugin name="klarna_kss_enable_discount_line"
+                type="Klarna\Kss\Plugin\Model\Checkout\Orderline\Items\Discount"/>
+    </type>
+    <type name="Klarna\Orderlines\Model\Items\Shipping\Handler">
+        <plugin name="klarna_kss_disable_shipping_line"
+                type="Klarna\Kss\Plugin\ShippingLinePlugin"/>
+    </type>
+    <type name="Klarna\Kco\Model\Cart\Validations\OrderTotal">
+        <plugin name="klarna_kss_order_total_validation"
+                type="Klarna\Kss\Plugin\Model\Cart\Validations\OrderTotalValidationPlugin"/>
+    </type>
+    <type name="Klarna\Kco\Model\Cart\FullUpdate">
+        <plugin name="klarna_kss_cart_fullupdate_plugin"
+                type="Klarna\Kss\Plugin\Model\Cart\FullUpdatePlugin"/>
+    </type>
+
+    <preference for="Klarna\Kss\Api\ShippingMethodGatewayRepositoryInterface" type="Klarna\Kss\Model\ShippingMethodGatewayRepository" />
+    <preference for="Klarna\Kss\Api\DeliveryDetailsInterface" type="Klarna\Kss\Model\DeliveryDetails"/>
+</config>

@@ -1,0 +1,318 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="klarna_section">
+                <group id="klarna_kco_required" translate="label" sortOrder="30" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Klarna Checkout</label>
+                    <attribute type="expanded">1</attribute>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                    <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1"
+                           showInWebsite="1" showInStore="0">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/klarna_kco/active</config_path>
+                    </field>
+                    <group id="checkout_general_settings" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                           showInStore="0"
+                           translate="label">
+                        <label>Checkout General settings</label>
+                        <field id="order_status" translate="label" type="select" sortOrder="1" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Status for new orders</label>
+                            <comment>New orders created will have this status. Default status is Processing.</comment>
+                            <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                            <config_path>payment/klarna_kco/order_status</config_path>
+                        </field>
+                        <field id="shipping_countries" translate="label comment" type="multiselect" sortOrder="2"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Shipping Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <comment>Supported shipping countries for Klarna.</comment>
+                            <config_path>payment/klarna_kco/shipping_countries</config_path>
+                        </field>
+                        <field id="shipping_and_billing_countries_same" sortOrder="3" translate="label" type="select" showInDefault="1"
+                               showInWebsite="1"
+                               showInStore="0">
+                            <label>Shipping countries and billing countries are the same</label>
+                            <config_path>payment/klarna_kco/shipping_and_billing_countries_same</config_path>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="billing_countries" translate="label comment" type="multiselect" sortOrder="4"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Billing Countries</label>
+                            <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                            <comment>Supported billing countries for Klarna.</comment>
+                            <config_path>payment/klarna_kco/billing_countries</config_path>
+                            <depends>
+                                <field id="shipping_and_billing_countries_same">0</field>
+                            </depends>
+                        </field>
+                        <field id="disable_customer_group" translate="label comment" type="multiselect" sortOrder="5"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Disable Klarna for specific customer groups</label>
+                            <source_model>Klarna\Kco\Model\System\Config\Source\Customer\Group</source_model>
+                            <backend_model>Klarna\Kco\Model\System\Config\Backend\Multiselect</backend_model>
+                            <can_be_empty>1</can_be_empty>
+                            <comment>Selected groups will see standard checkout instead of Klarna checkout.</comment>
+                            <config_path>payment/klarna_kco/disable_customer_group</config_path>
+                        </field>
+                        <field id="external_payment_methods" translate="label comment" type="multiselect" sortOrder="6"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>External Payment Methods</label>
+                            <source_model>Klarna\Kco\Model\System\Config\Source\Externalmethods</source_model>
+                            <backend_model>Klarna\Kco\Model\System\Config\Backend\Multiselect</backend_model>
+                            <can_be_empty>1</can_be_empty>
+                            <comment>Additional payment methods not processed through Klarna, e.g. PayPal, that can be included on the Klarna checkout page. Make sure to enable the specific payment method first for it to show up in the list</comment>
+                            <config_path>payment/klarna_kco/external_payment_methods</config_path>
+                        </field>
+                        <field id="guest_checkout" translate="label comment" type="select" sortOrder="7"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Allow Guest Checkout</label>
+                            <comment>If guests are allowed to buy through KCO. If not, guest customers will be redirected to Magento's default checkout. Registered customers will still see KCO.</comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>checkout/klarna_kco/guest_checkout</config_path>
+                        </field>
+                        <field id="enable_b2b" translate="label comment" type="select" sortOrder="8" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Enable B2B mode</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>Enable B2B checkout mode</comment>
+                            <config_path>checkout/klarna_kco/enable_b2b</config_path>
+                        </field>
+                        <field id="business_id_attribute" translate="label comment" type="select" sortOrder="9"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Business ID attribute</label>
+                            <source_model>Klarna\Kco\Model\System\Config\Source\Customer\CustomAttributes</source_model>
+                            <comment>Custom attribute for business id</comment>
+                            <depends>
+                                <field id="enable_b2b">1</field>
+                            </depends>
+                            <config_path>checkout/klarna_kco/business_id_attribute</config_path>
+                        </field>
+                        <field id="auto_focus" translate="label comment" type="select" sortOrder="10" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Auto focus Klarna Checkout</label>
+                            <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                            <config_path>checkout/klarna_kco/auto_focus</config_path>
+                        </field>
+                    </group>
+                    <group id="prefill_options" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                           showInStore="0"
+                           translate="label">
+                        <label>Prefill Options</label>
+                        <field id="merchant_prefill" translate="label comment" type="select" sortOrder="0"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Pre-fill Customer Details</label>
+                            <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                            <comment>Pre-fill Klarna Checkout with stored customer data.</comment>
+                            <config_path>checkout/klarna_kco/merchant_prefill</config_path>
+                        </field>
+                        <field id="prefill_notice" translate="label comment" type="select" sortOrder="10"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Customer pre-fill notice</label>
+                            <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                            <comment>Display a pre-fill notice to registered customer before submitting details to Klarna. The customer must accept the notice to have their account details shared with Klarna.</comment>
+                            <depends>
+                                <field id="merchant_prefill">1</field>
+                            </depends>
+                            <config_path>checkout/klarna_kco/prefill_notice</config_path>
+                        </field>
+                    </group>
+                    <group id="mandatory_field_options" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
+                           showInStore="0"
+                           translate="label">
+                        <label>Mandatory Field Options</label>
+                        <field id="title_mandatory" translate="label comment" type="select" sortOrder="0"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Title mandatory</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>Only available in certain markets.</comment>
+                            <config_path>checkout/klarna_kco/title_mandatory</config_path>
+                        </field>
+                        <field id="dob_mandatory" translate="label comment" type="select" sortOrder="10"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Date of birth mandatory</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>Only available in certain markets.</comment>
+                            <config_path>checkout/klarna_kco/dob_mandatory</config_path>
+                        </field>
+                        <field id="national_identification_number_mandatory" translate="label comment" type="select"
+                               sortOrder="20" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>National identification number mandatory</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>Only available in certain markets.</comment>
+                            <config_path>checkout/klarna_kco/national_identification_number_mandatory</config_path>
+                        </field>
+                        <field id="phone_mandatory" translate="label comment" type="select" sortOrder="30"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Telephone number mandatory</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>Only available in certain markets. NOTE: You must also update the attribute in Magento to make this field optional if you set this to 'no'</comment>
+                            <config_path>checkout/klarna_kco/phone_mandatory</config_path>
+                        </field>
+                    </group>
+                    <group id="shipping_options" type="text" sortOrder="40" showInDefault="1" showInWebsite="1"
+                           showInStore="0"
+                           translate="label">
+                        <label>Shipping Options</label>
+                        <field id="shipping_in_iframe" translate="label comment" type="select" sortOrder="0"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Shipping methods in iframe</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>Display shipping methods in Klarna iframe. (This is ignored and forced to 'no' in some markets)</comment>
+                            <config_path>checkout/klarna_kco/shipping_in_iframe</config_path>
+                        </field>
+                        <field id="packstation_enabled" translate="label comment" type="select" sortOrder="10"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Packstation Enabled</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>checkout/klarna_kco/packstation_enabled</config_path>
+                        </field>
+                        <field id="separate_address" translate="label comment" type="select" sortOrder="20"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Separate shipping addresses</label>
+                            <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                            <comment>Allow shipping address to be different from billing address.</comment>
+                            <config_path>checkout/klarna_kco/separate_address</config_path>
+                        </field>
+                    </group>
+                    <group id="url_options" type="text" sortOrder="50" showInDefault="1" showInWebsite="1"
+                           showInStore="0"
+                           translate="label">
+                        <label>URL Options</label>
+                        <field id="terms_url" translate="label comment" type="text" sortOrder="0" showInDefault="1"
+                               showInWebsite="1"
+                               showInStore="0">
+                            <label>URL to terms and conditions</label>
+                            <validate>required-entry</validate>
+                            <comment>URL to this store's own terms and conditions.</comment>
+                            <config_path>checkout/klarna_kco/terms_url</config_path>
+                        </field>
+                        <field id="cancellation_terms_url" translate="label comment" type="text" sortOrder="10"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>URL to cancellation terms</label>
+                            <comment>URL to this store's own cancellation terms and conditions.</comment>
+                            <config_path>checkout/klarna_kco/cancellation_terms_url</config_path>
+                        </field>
+                        <field id="failure_url" translate="label comment" type="text" sortOrder="20" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>URL to redirect for checkout failures</label>
+                            <comment>Must be a fully qualified URL. If left blank, defaults to the cart URL.</comment>
+                            <config_path>checkout/klarna_kco/failure_url</config_path>
+                        </field>
+                    </group>
+                    <group id="added_checkbox_options" type="text" sortOrder="60" showInDefault="1" showInWebsite="1"
+                           showInStore="0"
+                           translate="label">
+                        <label>Added Checkbox Options</label>
+                        <field id="merchant_checkbox" translate="label comment" type="select" sortOrder="0"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Merchant Checkbox</label>
+                            <source_model>Klarna\Kco\Model\System\Config\Source\MerchantCheckbox</source_model>
+                            <comment>Enable a checkbox within the checkout to trigger user behavior. May not be available in all markets.</comment>
+                            <config_path>checkout/klarna_kco/merchant_checkbox</config_path>
+                        </field>
+                        <field id="merchant_checkbox_text" translate="label comment" type="text" sortOrder="10"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Merchant Checkbox Text</label>
+                            <comment>Leave blank to use default text with selected method.</comment>
+                            <config_path>checkout/klarna_kco/merchant_checkbox_text</config_path>
+                        </field>
+                        <field id="merchant_checkbox_required" translate="label comment" type="select" sortOrder="20"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Merchant Checkbox Required</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>If the checkbox must be checked before the customer can place the order.</comment>
+                            <config_path>checkout/klarna_kco/merchant_checkbox_required</config_path>
+                        </field>
+                        <field id="merchant_checkbox_checked" translate="label comment" type="select" sortOrder="30"
+                               showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Merchant Checkbox Checked</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <comment>If the checkbox will be checked by default.</comment>
+                            <config_path>checkout/klarna_kco/merchant_checkbox_checked</config_path>
+                        </field>
+                        <field id="custom_checkboxes" translate="label" sortOrder="122" showInDefault="1"
+                               showInWebsite="1" showInStore="40">
+                            <label>Custom Checkboxes</label>
+                            <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                            <frontend_model>Klarna\Kco\Block\Adminhtml\System\Config\Checkout\Customcheckboxes</frontend_model>
+                            <comment>
+                                <![CDATA[Add multiple additional custom checkboxes to Klarna Checkout.]]>
+                            </comment>
+                            <config_path>checkout/klarna_kco/custom_checkboxes</config_path>
+                        </field>
+                    </group>
+                    <group id="klarna_kco_design" type="text" sortOrder="70" showInDefault="1" showInWebsite="1"
+                           showInStore="0" translate="label">
+                        <label>Design</label>
+                        <field id="color_button" translate="label comment" type="text" sortOrder="10" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Checkout button color</label>
+                            <comment>Example: #0072CC</comment>
+                            <config_path>checkout/klarna_kco_design/color_button</config_path>
+                        </field>
+                        <field id="color_button_text" translate="label comment" type="text" sortOrder="20"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Checkout button text color</label>
+                            <comment>Example: #0072CC</comment>
+                            <config_path>checkout/klarna_kco_design/color_button_text</config_path>
+                        </field>
+                        <field id="color_checkbox" translate="label comment" type="text" sortOrder="30"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Checkout checkbox color</label>
+                            <comment>Example: #0072CC</comment>
+                            <config_path>checkout/klarna_kco_design/color_checkbox</config_path>
+                        </field>
+                        <field id="color_checkbox_checkmark" translate="label comment" type="text" sortOrder="40"
+                               showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Checkout checkbox check mark color</label>
+                            <comment>Example: #0072CC</comment>
+                            <config_path>checkout/klarna_kco_design/color_checkbox_checkmark</config_path>
+                        </field>
+                        <field id="color_header" translate="label comment" type="text" sortOrder="50" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Checkout header color</label>
+                            <comment>Example: #0072CC</comment>
+                            <config_path>checkout/klarna_kco_design/color_header</config_path>
+                        </field>
+                        <field id="color_link" translate="label comment" type="text" sortOrder="60" showInDefault="1"
+                               showInWebsite="1"
+                               showInStore="0">
+                            <label>Checkout link color</label>
+                            <comment>Example: #0072CC</comment>
+                            <config_path>checkout/klarna_kco_design/color_link</config_path>
+                        </field>
+                        <field id="radius_border" translate="label comment" type="text" sortOrder="70" showInDefault="1"
+                               showInWebsite="1" showInStore="0">
+                            <label>Checkout border radius</label>
+                            <comment>Example: 0px</comment>
+                            <config_path>checkout/klarna_kco_design/radius_border</config_path>
+                        </field>
+                    </group>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

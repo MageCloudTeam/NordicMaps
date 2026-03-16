@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Open login popup and complete form-->
+    <actionGroup name="AmazonLoginAndCheckoutActionGroup">
+        <arguments>
+            <argument name="buttonSelector" defaultValue="{{AmazonButtonSection.checkout}}" type="string"/>
+            <argument name="cc" defaultValue="1111" type="string"/>
+        </arguments>
+
+        <!--Save opener window name since popup auto-closes-->
+        <executeJS function="return window.name;" stepKey="openerName"/>
+
+        <!--Go to Amazon Pay from the checkout and login-->
+        <waitForElement selector="{{buttonSelector}}" time="30" stepKey="apWaitForButton"/>
+        <wait time="1" stepKey="allowButtonToActivate"/>
+        <click selector="{{buttonSelector}}" stepKey="clickAmazonButton"/>
+
+        <wait time="1" stepKey="allowPopupToOpen"/>
+        <switchToNextTab stepKey="switchToLoginPopupWindow"/>
+
+        <!-- Fill in login form -->
+        <waitForElement selector="{{AmazonPageSection.emailField}}" time="30" stepKey="apWaitForLogin"/>
+        <fillField selector="{{AmazonPageSection.emailField}}" userInput="{{AmazonAccount.email}}" stepKey="apEnterEmail"/>
+        <fillField selector="{{AmazonPageSection.passwordField}}" userInput="{{AmazonAccount.password}}" stepKey="apEnterPassword"/>
+
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            try {
+                $remoteWebDriver->findElement(
+                    \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.signInButton}}')
+                )->click();
+                $remoteWebDriver->switchTo()->window($openerName);
+                $I->wait(5);
+            } catch (\Exception $ex) {
+                $I->comment('exception caught');
+            } catch (\Error $err) {
+                $I->comment('error caught');
+            }
+        }" stepKey="handlePopupSecondScreen"/>
+
+        <executeInSelenium function="function (\Facebook\WebDriver\Remote\RemoteWebDriver $remoteWebDriver) use ($I, $openerName) {
+            try {
+                if (count($remoteWebDriver->getWindowHandles()) > 1) {
+                    if ($I->executeJS('return window.name;') === $openerName) {
+                        $I->comment('Popup remained open, switching back to it');
+                        $I->switchToNextTab();
+                    }
+    
+                    $continueAs = $remoteWebDriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.continueButton}}'));
+
+                    if (!empty($continueAs)) {
+                        $I->comment('Click Continue as... button and return to checkout');
+                        $continueAs[0]->click();
+                        $remoteWebDriver->switchTo()->window($openerName);
+                        $I->waitForPageLoad(30);
+
+                        $I->comment('Wait for Edit button in address details');
+                        $editAddressSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonCheckoutSection.editShippingButton}}');
+                        $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                        $I->comment('Click Edit button to return to normal flow');
+                        $remoteWebDriver->findElement($editAddressSelector)->click();
+                        
+                        $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                        $I->switchToNextTab();
+                        $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                        $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                    } else {
+                        $I->comment('No continue button, standard maxo/pay now');
+                        $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                        $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                    }
+                } else {
+                    $I->comment('Popup closed, allowing checkout page to load');
+                    $I->comment('Wait for Edit button in address details');
+                    $editAddressSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonCheckoutSection.editShippingButton}}');
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::elementToBeClickable($editAddressSelector));
+                    $I->comment('Click Edit button to return to normal flow');
+                    $remoteWebDriver->findElement($editAddressSelector)->click();
+                    
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::numberOfWindowsToBe(2));
+                    $I->switchToNextTab();
+                    $addressIdSelector = \Facebook\WebDriver\WebDriverBy::cssSelector('{{AmazonPageSection.addressId}}');
+                    $remoteWebDriver->wait(30, 100)->until(\Facebook\WebDriver\WebDriverExpectedCondition::presenceOfElementLocated($addressIdSelector));
+                }
+            } catch (\Exception $ex) {
+
+            }
+        }" stepKey="navigateToAddressAndPaymentOptions" />
+
+        <!-- Load address list in DOM -->
+        <waitForElementVisible selector="{{AmazonPageSection.changeAddressButton}}" stepKey="waitForChangeAddressButton"/>
+        <wait time="2" stepKey="waitForChangeAddressClickable"/>
+        <click selector="{{AmazonPageSection.changeAddressButton}}" stepKey="clickChangeAddress"/>
+        <waitForElementVisible selector="{{AmazonPageSection.addressBackButton}}" stepKey="waitForAddressBackButton"/>
+        <click selector="{{AmazonPageSection.addressBackButton}}" stepKey="clickAddressBackButton"/>
+
+        <!--Get shipping address information-->
+        <grabAttributeFrom selector="{{AmazonPageSection.addressId}}" userInput="data-address_id" stepKey="amazonAddressId"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-name_on_address" stepKey="amazonAddressName"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-address_line1" stepKey="amazonAddressLine1Raw"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-address_line2" stepKey="amazonAddressLine2Raw"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-address_line3" stepKey="amazonAddressLine3Raw"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-city" stepKey="amazonAddressCity"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-zip_code" stepKey="amazonAddressZipCode"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-country" stepKey="amazonAddressCountryCode"/>
+        <grabAttributeFrom selector="{{AmazonPageSection.addressDetails({$amazonAddressId})}}" userInput="data-phone_number" stepKey="amazonAddressPhoneNumber"/>
+
+        <!-- choose card -->
+        <waitForElementVisible selector="{{AmazonPageSection.changePaymentButton}}" stepKey="waitForChangePaymentButton"/>
+        <click selector="{{AmazonPageSection.changePaymentButton}}" stepKey="clickChangePaymentMethod"/>
+        <waitForElementVisible selector="{{AmazonPageSection.paymentMethodRadioButton(cc)}}" stepKey="waitForPaymentMethods"/>
+        <click selector="{{AmazonPageSection.paymentMethodRadioButton(cc)}}" stepKey="clickPaymentMethod"/>
+        <waitForElementVisible selector="{{AmazonPageSection.usePaymentButton}}" stepKey="waitForUsePaymentMethodButton"/>
+        <click selector="{{AmazonPageSection.usePaymentButton}}" stepKey="clickUsePaymentMethodButton"/>
+
+        <!--Go back to checkout-->
+        <waitForElement selector="{{AmazonPageSection.checkoutButton}}" stepKey="waitForAmazonCheckoutButton"/>
+        <wait time="1" stepKey="allowContinueButtonToActivate"/>
+        <click selector="{{AmazonPageSection.checkoutButton}}" stepKey="clickAmazonCheckoutButton"/>
+
+        <!-- Switch back to main window -->
+        <switchToWindow userInput="{$openerName}" stepKey="switchToWindowOpener" />
+
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <wait time="1" stepKey="allowAddressToPopulate"/>
+        <!--Filter out address data-->
+        <executeJS function="return '{$amazonAddressLine1Raw}' !== 'null' ? '{$amazonAddressLine1Raw}' : ''" stepKey="amazonAddressLine1"/>
+        <executeJS function="return '{$amazonAddressLine2Raw}' !== 'null' ? '{$amazonAddressLine2Raw}' : ''" stepKey="amazonAddressLine2"/>
+        <executeJS function="return '{$amazonAddressLine3Raw}' !== 'null' ? '{$amazonAddressLine3Raw}' : ''" stepKey="amazonAddressLine3"/>
+        <grabAttributeFrom selector="{{AmazonCheckoutSection.countryNameByCode({$amazonAddressCountryCode})}}" userInput="data-title" stepKey="amazonAddressCountryName"/>
+        <!--Verify correct shipping address is displayed-->
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressName" stepKey="seeAmazonAddressName"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressLine1" stepKey="seeAmazonAddressLine1"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressLine2" stepKey="seeAmazonAddressLine2"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressLine3" stepKey="seeAmazonAddressLine3"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressCity" stepKey="seeAmazonAddressCity"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressZipCode" stepKey="seeAmazonAddressZipCode"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressCountryName" stepKey="seeAmazonAddressCountryName"/>
+        <see selector="{{AmazonCheckoutSection.shippingAddress}}" userInput="$amazonAddressPhoneNumber" stepKey="seeAmazonAddressPhoneNumber"/>
+    </actionGroup>
+</actionGroups>

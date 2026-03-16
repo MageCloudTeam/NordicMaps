@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="klarna_section" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                <group id="klarna_shipping_required" translate="label" sortOrder="70" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Klarna Shipping Options</label>
+                    <attribute type="expanded">1</attribute>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                    <field id="product_size_unit" translate="label comment" type="select" sortOrder="30" showInDefault="1"
+                           showInWebsite="1" showInStore="0">
+                        <label>Product size unit</label>
+                        <source_model>Klarna\Orderlines\Model\System\Config\Source\Productunit</source_model>
+                        <comment>Defines which unit will be used for the product size</comment>
+                        <config_path>klarna/shipping/product_unit</config_path>
+                    </field>
+                    <field id="product_length_attribute" translate="label comment" type="select" sortOrder="40" showInDefault="1"
+                           showInWebsite="1" showInStore="0">
+                        <label>Product length attribute</label>
+                        <source_model>Klarna\Orderlines\Model\System\Config\Source\Customproductattributes</source_model>
+                        <comment>Custom attribute for the product length attribute</comment>
+                        <config_path>klarna/shipping/length</config_path>
+                    </field>
+                    <field id="product_width_attribute" translate="label comment" type="select" sortOrder="50" showInDefault="1"
+                           showInWebsite="1" showInStore="0">
+                        <label>Product width attribute</label>
+                        <source_model>Klarna\Orderlines\Model\System\Config\Source\Customproductattributes</source_model>
+                        <comment>Custom attribute for the product width attribute</comment>
+                        <config_path>klarna/shipping/width</config_path>
+                    </field>
+                    <field id="product_height_attribute" translate="label comment" type="select" sortOrder="60" showInDefault="1"
+                           showInWebsite="1" showInStore="0">
+                        <label>Product height attribute</label>
+                        <source_model>Klarna\Orderlines\Model\System\Config\Source\Customproductattributes</source_model>
+                        <comment>Custom attribute for the product height attribute</comment>
+                        <config_path>klarna/shipping/height</config_path>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

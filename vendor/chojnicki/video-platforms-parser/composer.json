@@ -1,0 +1,43 @@
+{
+    "name": "chojnicki/video-platforms-parser",
+    "description": "Easy to use SDK with grabber for multiple platforms at once like YouTube, Dailymotion, Facebook and more.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["parser", "grabber", "youtube", "dailymotion", "facebook", "video", "liveleak", "cda", "laravel"],
+    "authors": [
+        {
+            "name": "chojnicki",
+            "email": "lukchojnicki@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "ext-dom": "*",
+        "ext-libxml": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "3.*||4.*||5.*",
+        "phpunit/phpunit": "^8.5.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Chojnicki\\VideoPlatformsParser\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Chojnicki\\VideoPlatformsParser\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Chojnicki\\VideoPlatformsParser\\ServiceProvider"
+            ],
+            "aliases": {
+                "VideoPlatformsParser": "Chojnicki\\VideoPlatformsParser\\Facade"
+            }
+        }
+    }
+}

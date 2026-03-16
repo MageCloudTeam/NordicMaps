@@ -1,0 +1,74 @@
+{
+    "name": "klarna/module-base",
+    "description": "Klarna Base Magento 2 Extension",
+    "type": "magento2-module",
+    "license": "Apache-2.0",
+    "version": "10.0.19",
+    "support": {
+        "email": "magento@klarna.com"
+    },
+    "authors": [
+        {
+            "name": "Joe Constant",
+            "email": "joe.constant@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Dario Kassler",
+            "email": "dario.kassler@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Kenny Gilles",
+            "email": "kenny.gilles@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Markus Simon",
+            "email": "markus.simon2@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Fei Chen",
+            "email": "fei.chen@klarna.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Jason Grim",
+            "email": "jason.grim@klarna.com",
+            "role": "Developer"
+        }
+    ],
+    "scripts": {
+        "test": "phpunit",
+        "cov": "phpunit --coverage-html coverage"
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0||~8.2.0||~8.3.0",
+        "guzzlehttp/guzzle": "^7.3.0",
+        "magento/framework": "^103",
+        "magento/module-bundle": "^100.1|^101.0",
+        "magento/module-catalog": "^103.0|^104.0",
+        "magento/module-config": "^101.0|^101.2",
+        "magento/module-customer": "^102.0|^103.0",
+        "magento/module-directory": "^100.1|^100.4",
+        "magento/module-payment": "^100.1|^100.4",
+        "magento/module-paypal": "^100.3|^101.0",
+        "magento/module-quote": "^101.0|^101.2",
+        "magento/module-sales": "^102.0|^103.0",
+        "magento/module-store": "^101.0|^101.1",
+        "magento/module-tax": "^100.1|^100.4",
+        "klarna/module-logger": "2.0.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Klarna\\Base\\": "."
+        },
+        "files": [ "registration.php" ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Klarna\\Base\\Test\\": "Test/"
+        }
+    }
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- API Preferences -->
+    <preference for="Magestat\LogWebapi\Api\LoggerInterface" type="Magestat\LogWebapi\Model\Logger"/>
+    <preference for="Magestat\LogWebapi\Api\Handler\LogFileInterface" type="Magestat\LogWebapi\Model\Handler\LogFile"/>
+
+    <!-- Plugins -->
+    <type name="Magento\Framework\Webapi\Rest\Response">
+        <plugin name="magestat-rest-response" type="Magestat\LogWebapi\Plugin\Rest\Response"/>
+    </type>
+ 
+    <!-- Proxies -->
+    <type name="Magestat\LogWebapi\Model\Logger">
+        <arguments>
+            <argument name="httpRequest" xsi:type="object">Magento\Framework\HTTP\PhpEnvironment\Request\Proxy</argument>
+        </arguments>
+    </type>
+</config>

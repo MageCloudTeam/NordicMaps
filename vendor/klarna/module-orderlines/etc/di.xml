@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Klarna\Orderlines\Model\Container\Parameter">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="items" xsi:type="object">\Klarna\Orderlines\Model\Items\Items</item>
+                <item name="shipping" xsi:type="object">\Klarna\Orderlines\Model\Items\Shipping\Handler</item>
+                <item name="discount" xsi:type="object">\Klarna\Orderlines\Model\Items\Discount\Handler</item>
+                <item name="tax" xsi:type="object">\Klarna\Orderlines\Model\Items\Tax\Handler</item>
+                <item name="giftcard" xsi:type="object">\Klarna\Orderlines\Model\Items\Giftcard\Handler</item>
+                <item name="customerbalance" xsi:type="object">\Klarna\Orderlines\Model\Items\Customerbalance\Handler</item>
+                <item name="reward" xsi:type="object">\Klarna\Orderlines\Model\Items\Reward\Handler</item>
+                <item name="giftwrap" xsi:type="object">\Klarna\Orderlines\Model\Items\GiftWrap</item>
+                <item name="surcharge" xsi:type="object">\Klarna\Orderlines\Model\Items\Surcharge\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

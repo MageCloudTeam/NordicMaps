@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="klarna_shipping_method_gateway" resource="default" engine="innodb" comment="klarna_shipping_method_gateway">
+        <column xsi:type="int" name="shipping_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Klarna Shipping Id"/>
+        <column xsi:type="varchar" name="klarna_session_id" nullable="false" length="50" comment="Klarna session id"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false" default="0" comment="Provides the information if it can be used for the respective klarna quote"/>
+        <column xsi:type="varchar" name="shipping_method_id" nullable="false" length="255" default="" comment="Shipping method id which is returned from the api"/>
+        <column xsi:type="smallint" name="is_pick_up_point" padding="6" unsigned="false" nullable="false" identity="false" default="0" comment="Indicates if the selected shipping method is a pick up point"/>
+        <column xsi:type="varchar" name="pick_up_point_name" nullable="false" length="255" default="" comment="Name of the pick up point"/>
+        <column xsi:type="decimal" name="shipping_amount" scale="2" precision="10" unsigned="false" nullable="false" default="0" comment="Shipping amount"/>
+        <column xsi:type="decimal" name="tax_amount" scale="2" precision="10" unsigned="false" nullable="false" default="0" comment="Tax amount"/>
+        <column xsi:type="decimal" name="tax_rate" scale="2" precision="10" unsigned="false" nullable="false" default="0" comment="Tax rate"/>
+        <column xsi:type="text" name="delivery_details" nullable="true" comment="Delivery details from TMS"/>
+        <column xsi:type="text" name="name" nullable="true" comment="Name of the shipping method"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="shipping_id"/>
+        </constraint>
+        <index referenceId="Klarna_Shipping_Method_Gateway_Klarna_Session_Id" indexType="btree">
+            <column name="klarna_session_id"/>
+        </index>
+    </table>
+</schema>

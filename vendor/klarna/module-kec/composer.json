@@ -1,0 +1,30 @@
+{
+    "name": "klarna/module-kec",
+    "description": "Klarna Express Checkout Magento 2 Extension",
+    "type": "magento2-module",
+    "license": "Apache-2.0",
+    "version": "1.0.7",
+    "support": {
+        "email": "magento@klarna.com"
+    },
+    "authors": [
+        {
+            "name": "Dario Kassler",
+            "email": "dario.kassler@klarna.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "~7.4.0||~8.1.0||~8.2.0||~8.3.0",
+        "magento/framework": "^103",
+        "klarna/module-base": "10.0.19",
+        "klarna/module-payments": "9.0.27",
+        "klarna/module-logger": "2.0.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Klarna\\Kec\\": "."
+        },
+        "files": [ "registration.php" ]
+    }
+}

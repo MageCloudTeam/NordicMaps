@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Klarna Bank AB (publ)
+ *
+ * For the full copyright and license information, please view the NOTICE
+ * and LICENSE files that were distributed with this source code.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="footer">
+            <block class="Klarna\Kec\Block\Footer"
+                   name="klarna.kec.footer"
+                   template="Klarna_Kec::footer.phtml"
+            />
+        </referenceBlock>
+        <referenceContainer name="checkout.cart.methods">
+            <block class="Klarna\Kec\Block\Cart"
+                   name="klarna.kec.cart"
+                   template="Klarna_Kec::button_cart_page.phtml"
+            />
+        </referenceContainer>
+        <referenceBlock name="product.info.addtocart">
+            <block class="Klarna\Kec\Block\Product"
+                   name="klarna.kec.product"
+                   template="Klarna_Kec::button_product_page.phtml"
+            />
+        </referenceBlock>
+        <referenceBlock name="product.info.addtocart.bundle">
+            <block class="Klarna\Kec\Block\Product"
+                   name="klarna.kec.product.bundled"
+                   template="Klarna_Kec::button_product_page.phtml"
+            />
+        </referenceBlock>
+        <referenceBlock name="product.info.addtocart.additional">
+            <block class="Klarna\Kec\Block\Product"
+                   name="klarna.kec.product.additional"
+                   template="Klarna_Kec::button_product_page.phtml"
+            />
+        </referenceBlock>
+    </body>
+</page>

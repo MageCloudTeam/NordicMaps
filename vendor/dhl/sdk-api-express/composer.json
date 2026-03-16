@@ -1,0 +1,46 @@
+{
+  "name": "dhl/sdk-api-express",
+  "description": "API communication to the DHL Express web services.",
+  "type": "library",
+  "license": "OSL-3.0",
+  "authors":[
+    {
+      "name": "Christoph Aßmann",
+      "email": "christoph.assmann@netresearch.de",
+      "homepage": "https://www.netresearch.de/",
+      "role": "Developer"
+    },
+    {
+      "name": "Rico Sonntag",
+      "email": "rico.sonntag@netresearch.de",
+      "homepage": "https://www.netresearch.de/",
+      "role": "Developer"
+    }
+  ],
+  "config": {
+    "platform": {
+      "php": "5.6"
+    }
+  },
+  "require": {
+    "ext-dom": "*",
+    "ext-soap": "*",
+    "psr/log": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dhl\\Express\\": ""
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Dhl\\Express\\": [
+        "Test/Unit",
+        "Test/Integration"
+      ]
+    }
+  }
+}
