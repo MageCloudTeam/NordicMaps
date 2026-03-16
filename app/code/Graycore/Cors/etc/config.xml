@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <web>
+            <api_rest>
+                <cors_allowed_origins></cors_allowed_origins>
+                <cors_allowed_methods></cors_allowed_methods>
+                <cors_allowed_headers></cors_allowed_headers>
+                <cors_max_age>86400</cors_max_age>
+                <cors_allow_credentials>0</cors_allow_credentials>
+            </api_rest>
+            <graphql>
+                <cors_allowed_origins></cors_allowed_origins>
+                <cors_allowed_methods></cors_allowed_methods>
+                <cors_allowed_headers></cors_allowed_headers>
+                <cors_max_age>86400</cors_max_age>
+                <cors_allow_credentials>0</cors_allow_credentials>
+            </graphql>
+        </web>
+    </default>
+</config>

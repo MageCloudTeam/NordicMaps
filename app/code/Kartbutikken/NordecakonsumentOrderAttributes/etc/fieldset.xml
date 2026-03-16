@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:DataObject/etc/fieldset.xsd">
+    <scope id="global">
+        <fieldset id="sales_convert_quote">
+            <field name="use_invoice_email">
+                <aspect name="to_order"/>
+            </field>
+            <field name="invoice_email">
+                <aspect name="to_order"/>
+            </field>
+            <field name="reference_code">
+                <aspect name="to_order"/>
+            </field>
+        </fieldset>
+    </scope>
+</config>

@@ -1,0 +1,16 @@
+<div class="field" style="margin-bottom: 1.5rem">
+    <div class="control">
+        <input type="text" name="payment[reference_code]"
+               class="input-text" value="" data-bind="
+                   event: {change: userChanges},
+                   attr: {
+                        id: 'payment_reference_code',
+                        title: $t('Reference Code'),
+                        'data-validate': JSON.stringify({'required':false}),
+                        'placeholder': $t('Reference Code'),
+                    },
+                    valueUpdate: 'keyup',
+                    value: paymentFormData.reference_code
+                "/>
+    </div>
+</div>

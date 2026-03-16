@@ -1,0 +1,51 @@
+// /**
+//  * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+//  * @author: <mailto:volodymyr@hryvinskyi.com>
+//  * @github: <https://github.com/hryvinskyi>
+//  */
+
+//
+//  Blank theme mobile styles
+//  _____________________________________________
+
+//  These mobile styles are mandatory and will be used as basis according to the mobile first design
+
+//
+//  Global lib + theme styles + theme extends
+//  ---------------------------------------------
+
+@import '_styles.less';
+@import (reference) 'source/_extends.less';
+
+//
+//  Magento Import instructions
+//  ---------------------------------------------
+
+//@magento_import 'source/_module.less'; // Theme modules
+//@magento_import 'source/_widgets.less'; // Theme widgets
+
+//
+//  Media queries collector
+//  ---------------------------------------------
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+
+    /** Start xl */
+    @media all and (min-width: @screen__l), print {
+        .media-width('min', @screen__l);
+    }
+}
+
+@media-target: 'desktop'; // Sets target device for this file
+@media-common: false; // Sets not to output common styles
+
+//
+//  Global variables override
+//  ---------------------------------------------
+
+@import 'source/_theme.less';
+
+//
+//  Extend for minor customisation
+//  ---------------------------------------------
+
+//@magento_import 'source/_extend.less';

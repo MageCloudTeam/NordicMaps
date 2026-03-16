@@ -1,0 +1,39 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<if args="isAllowed()">
+    <if args="isSalable($row())">
+        <form data-role="tocart-form"
+              data-bind="attr: {action: $row()['add_to_cart_button'].url,}, mageInit: {catalogAddToCart:{}}"
+              method="post">
+            <input type="hidden" name="product" data-bind="attr: {value: $row().id}">
+            <input type="hidden" name="uenc" data-bind="attr: {value: getUnec($row())}">
+            <div data-bind="html: formKeyInput"></div>
+            <div class="box-to-cart" data-bind="mageInit: {qtyAddToCart:{}}">
+                <div class="control">
+                    <div class="qty-minus">
+                        <a href="javascript:void(0)" class="btn-qty minus">-</a>
+                    </div>
+                    <div class="qty-input">
+                        <input type="number" name="qty" value="1" class="input-text qty"></div>
+                    <div class="qty-plus">
+                        <a href="javascript:void(0)" class="btn-qty plus">+</a>
+                    </div>
+                </div>
+                <button type="submit" class="action tocart green">
+                    <span text="$t('Add to cart')"/>
+                </button>
+            </div>
+        </form>
+    </if>
+
+    <ifnot args="isSalable($row())">
+        <div class="stock unavailable">
+            <text args="$t('Availability')"/>
+            <span translate="'Out of stock'"/>
+        </div>
+    </ifnot>
+</if>

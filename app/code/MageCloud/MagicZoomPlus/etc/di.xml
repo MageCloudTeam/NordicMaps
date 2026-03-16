@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="MagicToolbox\MagicZoomPlus\Classes\MagicZoomPlusModuleCoreClass">
+        <plugin name="MageCloud_MagicZoomPlus::add_translations"
+                type="MageCloud\MagicZoomPlus\Plugin\AddTranslations"/>
+    </type>
+    <type name="MageCloud\MagicZoomPlus\Plugin\AddTranslations">
+        <arguments>
+            <argument name="translated" xsi:type="array">
+                <item name="textHoverZoomHint" xsi:type="string">textHoverZoomHint</item>
+                <item name="textHoverZoomHintForMobile" xsi:type="string">textHoverZoomHintForMobile</item>
+                <item name="textClickZoomHint" xsi:type="string">textClickZoomHint</item>
+                <item name="textClickZoomHintForMobile" xsi:type="string">textClickZoomHintForMobile</item>
+                <item name="textExpandHint" xsi:type="string">textExpandHint</item>
+                <item name="textExpandHintForMobile" xsi:type="string">textExpandHintForMobile</item>
+                <item name="textBtnClose" xsi:type="string">textBtnClose</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,18 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Free Shipping Bar for Magento 2
+ */
+
+namespace Amasty\ShippingBar\Controller\Adminhtml\Profile;
+
+use Amasty\ShippingBar\Controller\Adminhtml\AbstractProfile;
+
+class NewAction extends AbstractProfile
+{
+    public function execute()
+    {
+        $this->_forward('edit');
+    }
+}

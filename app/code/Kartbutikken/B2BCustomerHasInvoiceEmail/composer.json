@@ -1,0 +1,22 @@
+{
+	"name": "kartbutikken/2b-customer-has-invoice-email",
+	"version": "1.0.0",
+	"description": "N/A",
+	"type": "magento2-module",
+	"require": {
+		"magento/framework": "*",
+		"magento/module-customer": "102.0.*",
+		"magento/module-sales": "102.0.*"
+	},
+	"license": [
+		"Proprietary"
+	],
+	"autoload": {
+		"files": [
+			"registration.php"
+		],
+		"psr-4": {
+			"Kartbutikken\\B2BCustomerHasInvoiceEmail\\": ""
+		}
+	}
+}

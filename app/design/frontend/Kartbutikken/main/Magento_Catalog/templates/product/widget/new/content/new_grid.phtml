@@ -1,0 +1,168 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Template for displaying new products widget
+ *
+ * @var $block \Magento\Catalog\Block\Product\Widget\NewWidget
+ */
+
+// phpcs:disable Magento2.Files.LineLength.MaxExceeded
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionInterface;
+
+if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())) {
+    $type = 'widget-new-grid';
+
+    $mode = 'grid';
+
+    $image = 'new_products_content_widget_grid';
+    $title = __('New Products');
+    $items = $block->getProductCollection()->getItems();
+
+    $showWishlist = true;
+    $showCompare = false;
+    $showCart = true;
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    $description = false;
+    $fontendConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(\Kartbutikken\Theme\Model\Config\Catalog\Frontend::class);
+    $showQuantity  = $fontendConfig->isShowQuantity();
+}
+?>
+
+<?php if ($exist) :?>
+    <div class="block widget block-new-products <?= /* @noEscape */ $mode ?>">
+        <div class="block-title">
+            <strong role="heading" aria-level="2"><?= $block->escapeHtml($title) ?></strong>
+        </div>
+        <div class="block-content">
+            <?= /* @noEscape */ '<!-- ' . $image . '-->' ?>
+            <div class="products-<?= /* @noEscape */ $mode ?> <?= /* @noEscape */ $mode ?>">
+                <ol class="product-items <?= /* @noEscape */ $type ?>">
+                    <?php foreach ($items as $_item) :?>
+                    <li class="product-item">
+                        <div class="product-item-info">
+                            <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
+                               class="product-item-photo">
+                                <?= $block->getImage($_item, $image)->toHtml() ?>
+                            </a>
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <a title="<?= $block->escapeHtml($_item->getName()) ?>"
+                                       href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>"
+                                       class="product-item-link">
+                                        <?= $block->escapeHtml($_item->getName()) ?>
+                                    </a>
+                                </strong>
+                                <?= $block->getProductPriceHtml($_item, $type); ?>
+
+                                <?php if ($templateType) :?>
+                                    <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                                <?php endif; ?>
+                                <div class="product-item-inner">
+                                    <?php if ($showWishlist || $showCompare || $showCart) :?>
+                                        <div class="product-item-actions">
+                                            <?php if ($showCart) :?>
+                                                <div class="actions-primary">
+                                                    <?php if ($_item->isSaleable()) :?>
+                                                        <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)) :?>
+                                                            <button class="action tocart primary"
+                                                                    data-mage-init='{"redirectUrl":{"url":"<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"}}'
+                                                                    type="button"
+                                                                    title="<?= $block->escapeHtmlAttr(__('Add to cart')) ?>">
+                                                                <span><?= $block->escapeHtml(__('Add to cart')) ?></span>
+                                                            </button>
+                                                        <?php else :?>
+                                                            <?php
+                                                            $postDataHelper = $this->helper(Magento\Framework\Data\Helper\PostHelper::class);
+                                                            $urlHelper = $this->helper(Magento\Framework\Url\Helper\Data::class);
+                                                            $postParams = $postDataHelper->getPostData(
+                                                                $block->escapeUrl($block->getAddToCartUrl($_item)),
+                                                                [
+                                                                    'product' => (int) $_item->getEntityId(),
+                                                                    ActionInterface::PARAM_NAME_URL_ENCODED => $urlHelper->getEncodedUrl($block->escapeUrl($block->getAddToCartUrl($_item)))
+                                                                ]
+                                                            );
+                                                            $postParams = json_decode($postParams, 1);
+                                                            ?>
+                                                            <form data-role="tocart-form" data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>" data-mage-init='{"catalogAddToCart":{}}' action="<?= $block->escapeUrl($postParams['action']) ?>" method="post">
+                                                                <input type="hidden" name="product" value="<?= $block->escapeHtmlAttr($postParams['data']['product']) ?>">
+                                                                <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                                                <?= $block->getBlockHtml('formkey') ?>
+                                                                <?php if ($showQuantity): ?>
+                                                                <div class="box-to-cart" data-mage-init='{"qtyAddToCart":{}}'>
+                                                                    <div class="control">
+                                                                        <div class="qty-minus">
+                                                                            <a href="javascript:void(0)" class="btn-qty minus">-</a>
+                                                                        </div>
+                                                                        <div class="qty-input">
+                                                                            <input type="number" name="qty" title="<?= __('Qty'); ?>" value="1" class="input-text qty"></div>
+                                                                        <div class="qty-plus">
+                                                                            <a href="javascript:void(0)" class="btn-qty plus">+</a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <button type="submit" title="<?= __('Add to cart'); ?>" class="action tocart green transparent">
+                                                                        <span><?= __('Add to cart'); ?></span>
+                                                                    </button>
+                                                                </div>
+                                                                <?php else: ?>
+                                                                <button type="submit"
+                                                                        title="<?= $block->escapeHtml(__('Add to cart')) ?>"
+                                                                        class="action tocart green transparent">
+                                                                    <span><?= $block->escapeHtml(__('Add to cart')) ?></span>
+                                                                </button>
+                                                                <?php endif; ?>
+                                                            </form>
+                                                        <?php endif; ?>
+                                                    <?php else :?>
+                                                        <?php if ($_item->getIsSalable()) :?>
+                                                            <div class="stock available">
+                                                                <span><?= $block->escapeHtml(__('In stock')) ?></span>
+                                                            </div>
+                                                        <?php else :?>
+                                                            <div class="stock unavailable">
+                                                                <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if ($showWishlist || $showCompare) :?>
+                                                <div class="actions-secondary" data-role="add-to-links">
+                                                    <?php if ($this->helper(Magento\Wishlist\Helper\Data::class)->isAllow() && $showWishlist) :?>
+                                                        <a href="#"
+                                                           data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>'
+                                                           class="action towishlist"
+                                                           data-action="add-to-wishlist"
+                                                           title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                            <span><?= $block->escapeHtml(__('Add to Wish List')) ?></span>
+                                                        </a>
+                                                    <?php endif; ?>
+                                                    <?php if ($block->getAddToCompareUrl() && $showCompare) :?>
+                                                        <?php $compareHelper = $this->helper(Magento\Catalog\Helper\Product\Compare::class);?>
+                                                        <a href="#" class="action tocompare"
+                                                           data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>'
+                                                           title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>">
+                                                            <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
+                                                        </a>
+                                                    <?php endif; ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                     </li>
+                    <?php endforeach ?>
+                </ol>
+            </div>
+            <?= $block->getPagerHtml() ?>
+        </div>
+    </div>
+<?php endif;?>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="redmorelink" class="MageCloud\ReadMore\Block\Link">
+        <label translate="true">MageCloud Read More Link</label>
+        <description translate="true">Read More Link</description>
+        <parameters>
+            <parameter name="open" xsi:type="text" required="true" visible="true">
+                <label translate="true">Open link text</label>
+            </parameter>
+            <parameter name="close" xsi:type="text" required="true" visible="true">
+                <label translate="true">Close link text</label>
+            </parameter>
+            <parameter name="type_page" xsi:type="select" required="true" visible="true">
+                <label translate="true">Type</label>
+                <options>
+                    <option name="category" value="category" selected="true">
+                        <label translate="true">Category</label>
+                    </option>
+                    <option name="product" value="product">
+                        <label translate="true">Product</label>
+                    </option>
+                    <option name="cms_block" value="cms_block">
+                        <label translate="true">CMS Block</label>
+                    </option>
+                    <option name="cms_page" value="cms_page">
+                        <label translate="true">CMS Page</label>
+                    </option>
+                    <option name="custom" value="custom">
+                        <label translate="true">Custom</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="custom_selector" xsi:type="text">
+                <label translate="true">Custom selector</label>
+                <description translate="true">Insert custom parent element css selector</description>
+                <depends>
+                    <parameter name="type_page" value="custom"/>
+                </depends>
+                <value>.read-more-wrapper</value>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

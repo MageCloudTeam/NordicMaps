@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget class="MageCloud\VideoWidget\Block\Widget\VideoWidget" id="magecloud_video_widget">
+        <label>MageCloud Video Widget</label>
+        <description>Widget for insert video from youtube or vimeo</description>
+        <parameters>
+            <parameter name="show_title" xsi:type="select" visible="true" sort_order="10"
+                       source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label>Show/Hide Video Title</label>
+            </parameter>
+            <parameter name="video_title" required="false" sort_order="20" visible="true" xsi:type="text">
+                <label>Video Title</label>
+                <depends>
+                    <parameter name="show_title" value="1"/>
+                </depends>
+            </parameter>
+            <parameter name="style_type" xsi:type="select" visible="true" sort_order="30"
+                       source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label>Use auto width and height</label>
+            </parameter>
+            <parameter name="video_width" required="false" sort_order="40" visible="true" xsi:type="text">
+                <label>Video Width</label>
+                <depends>
+                    <parameter name="style_type" value="0"/>
+                </depends>
+                <value>560</value>
+            </parameter>
+            <parameter name="video_height" required="false" sort_order="50" visible="true" xsi:type="text">
+                <label>Video Height</label>
+                <depends>
+                    <parameter name="style_type" value="0"/>
+                </depends>
+                <value>315</value>
+            </parameter>
+            <parameter name="video_source" required="true" sort_order="60" visible="true" xsi:type="select"
+                       source_model="MageCloud\VideoWidget\Model\VideoSource">
+                <label>Video Source</label>
+            </parameter>
+            <parameter name="video_id" required="true" sort_order="70" visible="true" xsi:type="text">
+                <label>Video ID (ID only)</label>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>
+

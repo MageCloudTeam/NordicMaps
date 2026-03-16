@@ -1,0 +1,19 @@
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="quickview_area">
+            <block class="MagicToolbox\MagicScroll\Block\Html\Head" name="magicscroll-header"
+                   template="MagicToolbox_MagicScroll::html/quick-view/head.phtml">
+                <arguments>
+                    <argument name="page" xsi:type="string">product</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block name="magecloud-currency-settings.configuration"
+                   class="Magento\Framework\View\Element\Template"
+                   template="MageCloud_CurrencySettings::head/configuration.phtml">
+                <arguments>
+                    <argument name="viewModel"
+                              xsi:type="object">\MageCloud\CurrencySettings\ViewModel\CurrencySettingsInterface</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,113 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Hryvinskyi\Base\Helper\Html;
+use MageCloud\VideoWidget\Block\Widget\VideoWidget;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\Cms\Model\Page as CmsPage;
+
+/**
+ * @var VideoWidget $block
+ */
+
+$sourceType   = (int) $block->getData('video_source');
+$videoId      = $block->getData('video_id');
+
+$objectManager = ObjectManager::getInstance();
+/** @var PageConfig $pageConfig */
+$pageConfig   = $objectManager->get(PageConfig::class);
+$pageTitle    = (string) $pageConfig->getTitle()->get();
+$videoTitle   = $block->getData('video_title') ?: $pageTitle;
+
+$fileModified = date('Y-m-d', filemtime(__FILE__));
+
+$updateDate = '';
+try {
+    $pageId = $block->getRequest()->getParam('page_id');
+    if ($pageId) {
+        /** @var CmsPage $cmsPage */
+        $cmsPage = $objectManager->create(CmsPage::class)->load($pageId);
+        $updateTime = $cmsPage->getUpdateTime();
+        if ($updateTime) {
+            $updateDate = substr($updateTime, 0, 10);
+        }
+    }
+} catch (\Exception $e) {
+    $updateDate = '';
+}
+$uploadDate = $block->getData('video_upload_date') ?: ($updateDate ?: $fileModified);
+
+$description  = $block->getData('video_description');
+
+$videoUrlBase = $sourceType === 1
+    ? 'https://player.vimeo.com/video/'
+    : 'https://www.youtube.com/embed/';
+$videoUrl     = $videoUrlBase . $videoId;
+
+if ($sourceType === 1) {
+    $thumbnailUrl = $block->getData('thumbnail_url');
+    if (empty($thumbnailUrl)) {
+        $oEmbedUrl = 'https://vimeo.com/api/oembed.json?url=' . urlencode($videoUrl);
+        try {
+            $oEmbedData = @json_decode(@file_get_contents($oEmbedUrl), true);
+            $thumbnailUrl = $oEmbedData['thumbnail_url_large']
+                ?? $oEmbedData['thumbnail_url']
+                ?? '';
+        } catch (\Exception $e) {
+            $thumbnailUrl = '';
+        }
+    }
+} else {
+    $thumbnailUrl = sprintf('https://img.youtube.com/vi/%s/hqdefault.jpg', $videoId);
+}
+
+$structuredData = [
+    '@context'     => 'https://schema.org',
+    '@type'        => 'VideoObject',
+    'name'         => $videoTitle,
+    'thumbnailUrl' => $thumbnailUrl,
+    'uploadDate'   => $uploadDate,
+    'contentUrl'   => $videoUrl,
+    'embedUrl'     => $videoUrl,
+];
+
+if (!empty($description)) {
+    $structuredData['description'] = $description;
+}
+
+$options = [
+    'src'                   => $videoUrl,
+    'frameborder'           => '0',
+    'allowfullscreen'       => 'allowfullscreen',
+    'mozallowfullscreen'    => 'mozallowfullscreen',
+    'msallowfullscreen'     => 'msallowfullscreen',
+    'oallowfullscreen'      => 'oallowfullscreen',
+    'webkitallowfullscreen' => 'webkitallowfullscreen',
+    'title'                 => $videoTitle,
+];
+
+$styleType = (int) $block->getData('style_type');
+if ($styleType === 0) {
+    $options['width']  = $block->getData('video_width');
+    $options['height'] = $block->getData('video_height');
+}
+?>
+
+    <script type="application/ld+json">
+<?= json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
+</script>
+
+<?php if ($block->getData('show_title')): ?>
+    <h2><?= htmlspecialchars($videoTitle, ENT_QUOTES, 'UTF-8') ?></h2>
+<?php endif; ?>
+
+<?php if (!empty($videoId)): ?>
+    <div class="responsive-width-video<?php if ($styleType === 1): ?> auto-width-and-height<?php endif; ?>">
+        <?= Html::tag('iframe', '', $options) ?>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget_file.xsd">
+
+    <widget id="products_list">
+        <parameters>
+            <parameter name="template" xsi:type="select">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="weltpxel" value="Kartbutikken_WeltPixelCatalogWidget::product-carousel.phtml">
+                        <label translate="true">WeltPixel Carousel Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>
+

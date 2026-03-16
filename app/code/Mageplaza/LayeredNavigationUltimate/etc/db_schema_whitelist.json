@@ -1,0 +1,24 @@
+{
+    "layered_product_pages": {
+        "column": {
+            "page_id": true,
+            "name": true,
+            "page_title": true,
+            "status": true,
+            "route": true,
+            "store_ids": true,
+            "position": true,
+            "default_attributes": true,
+            "description": true,
+            "meta_title": true,
+            "meta_keywords": true,
+            "meta_description": true,
+            "cms_position": true,
+            "cms_block": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "LAYERED_PRODUCT_PAGES_ROUTE": true
+        }
+    }
+}

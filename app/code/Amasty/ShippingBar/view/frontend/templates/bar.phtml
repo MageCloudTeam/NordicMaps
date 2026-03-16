@@ -1,0 +1,16 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Free Shipping Bar for Magento 2
+ */ /** @var \Amasty\ShippingBar\Block\Frontend\Bar $block */ ?>
+<div data-bind="scope: 'amasty-shipbar-<?= $block->getPosition() ?>'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+            }
+        }
+    </script>
+</div>

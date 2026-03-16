@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="store.links" remove="true"/>
+        <referenceContainer name="header.panel.wrapper" remove="true"/>
+        <referenceContainer name="footer_links" remove="true"/>
+
+        <referenceContainer name="footer-container">
+            <container name="footer.container.wrapper" after="footer.container.top" htmlTag="div"
+                       htmlClass="footer content footer-container-wrapper">
+                <container name="footer.container.wrapper.left" htmlTag="div" htmlClass="footer-container-left-wrapper">
+                    <container name="footer.container.wrapper.left.links.first" htmlTag="div"
+                               label="Footer Container Links First Column" htmlClass="links-column links-column-first"/>
+                    <container name="footer.container.wrapper.left.links.second" htmlTag="div"
+                               label="Footer Container Links Second Column" htmlClass="links-column links-column-second"/>
+                    <container name="footer.container.wrapper.left.links.third" htmlTag="div"
+                               label="Footer Container Links Third Column" htmlClass="links-column links-column-third"/>
+                    <container name="footer.container.wrapper.left.links.fourth" htmlTag="div"
+                               label="Footer Container Links Fourth Column" htmlClass="links-column links-column-fourth"/>
+                </container>
+                <container name="footer.container.wrapper.right" htmlTag="div" htmlClass="footer-container-right-wrapper">
+                    <container name="footer.container.wrapper.right.sociallinks" htmlTag="div"
+                               label="Footer Container Social Links" htmlClass="social-links"/>
+                </container>
+            </container>
+        </referenceContainer>
+
+        <referenceContainer name="page.wrapper">
+            <container name="header-alert" label="Page Header Alert" as="header-alert" htmlTag="div"
+                       htmlClass="header alert" after="header.container" />
+        </referenceContainer>
+
+        <referenceBlock name="navigation.sections">
+            <block class="Magento\Framework\View\Element\Template" name="account.store" after="store.menu"
+                   group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                <arguments>
+                    <argument name="title" translate="true" xsi:type="string">Account</argument>
+                </arguments>
+                <block class="Magento\Customer\Block\Account\Navigation" name="account.store.links">
+                    <arguments>
+                        <argument name="css_class" xsi:type="string">header links</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="store.settings">
+            <arguments>
+                <argument name="title" translate="true" xsi:type="string">Choose store</argument>
+            </arguments>
+            <referenceBlock name="store.settings.language" template="Kartbutikken_WebsiteLocator::languages-flugs.phtml">
+                <arguments>
+                    <argument name="id_modifier" xsi:type="string">nav</argument>
+                    <argument name="view_model"
+                              xsi:type="object">Kartbutikken\WebsiteLocator\ViewModel\SwitcherUrlProvider</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock remove="true" name="store.settings.currency" />
+        </referenceBlock>
+
+        <move element="store_language" destination="panel-top"/>
+
+        <referenceContainer name="form.subscribe" remove="true"/>
+
+    </body>
+</page>

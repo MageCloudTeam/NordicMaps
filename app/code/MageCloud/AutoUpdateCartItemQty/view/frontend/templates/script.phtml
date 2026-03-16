@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+
+?>
+<script>
+    require([
+        'jquery',
+        'Magento_Checkout/js/action/get-totals',
+        'Magento_Customer/js/customer-data',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/cart/cache',
+        'Magento_Checkout/js/model/shipping-rate-registry',
+    ], function ($, getTotalsAction, customerData, quote, cartCache, rateRegistry) {
+
+        $(document).ready(function () {
+            $(document).on('keypress', 'input[name$="[qty]"]', function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    $(this).change();
+                }
+            });
+
+            $(document).on('change', 'input[name$="[qty]"]', function (e) {
+                e.preventDefault();
+                console.log(e);
+                let form = $('form#form-validate');
+                $.ajax({
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    showLoader: true,
+                    success: function (res) {
+                        let parsedResponse = $.parseHTML(res),
+                            result = $(parsedResponse).find("#form-validate"),
+                            sections = ['cart'],
+                            address = quote.shippingAddress();
+
+                        $("#form-validate").replaceWith(result);
+
+                        // Update shipping address
+                        cartCache.clear('rates');
+                        rateRegistry.set(address.getCacheKey(), null);
+                        quote.shippingAddress(address);
+
+                        // This is for reloading the minicart
+                        customerData.reload(sections, true);
+
+                        // This is for reloading the totals summary
+                        getTotalsAction([], $.Deferred());
+                    },
+                    error: function (xhr, status, error) {
+                        let err = eval("(" + xhr.responseText + ")");
+                        console.log(err.Message);
+                    }
+                });
+            });
+        });
+    });
+</script>

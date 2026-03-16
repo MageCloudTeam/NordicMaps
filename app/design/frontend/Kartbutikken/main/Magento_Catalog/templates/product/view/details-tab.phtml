@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Magento\Catalog\Block\Product\View\Description;
+use Magento\Catalog\Helper\Output;
+
+/**
+ * @var Description $block
+ * @var Output $output
+ */
+$output = $this->helper(Output::class);
+
+echo /* @noEscape */ $output->productAttribute(
+        $block->getProduct(),
+        $block->getProduct()->getDescription(),
+        'description'
+);

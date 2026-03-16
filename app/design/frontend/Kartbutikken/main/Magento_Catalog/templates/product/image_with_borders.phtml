@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var $imageHelper \Magento\Catalog\Helper\Image
+ * @var $escaper \Magento\Framework\Escaper
+ */
+$imageHelper = $this->helper(\Magento\Catalog\Helper\Image::class);
+?>
+<?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
+
+<span class="product-image-container"
+      style="width:<?= $block->escapeHtmlAttr($block->getWidth()) ?>px;">
+    <span class="product-image-wrapper"
+          style="padding-bottom: <?= ($block->getRatio() * 100) ?>%;">
+        <img class="<?= $block->escapeHtmlAttr($block->getClass()) ?>"
+            <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+                <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+            <?php endforeach; ?>
+            src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
+            max-width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
+            max-height="<?= $block->escapeHtmlAttr($block->getHeight()) ?>"
+            alt="<?= /* @noEscape */ $block->stripTags($block->getLabel(), null, true) ?>"/></span>
+</span>

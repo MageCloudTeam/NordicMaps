@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Magento\Catalog\Block\Product\View\Description;
+use Magento\Catalog\Helper\Output;
+
+/**
+ * @var Description $block
+ * @var Output $output
+ */
+$output = $this->helper(Output::class);
+$product = $block->getProduct();
+$src = $output->productAttribute($product, $product->getOverviewSeries(),'overview_series');
+
+$call = $block->getAtCall();
+$code = $block->getAtCode();
+$className = $block->getCssClass();
+$attributeLabel = $block->getAtLabel();
+$attributeType = $block->getAtType();
+$attributeAddAttribute = $block->getAddAttribute();
+
+if ($attributeLabel && $attributeLabel == 'default') {
+    $attributeLabel = $product->getResource()->getAttribute($code)->getFrontendLabel();
+}
+if ($attributeType && $attributeType == 'text') {
+    $attributeValue = ($output->productAttribute($product, $product->$call(), $code)) ? $product->getAttributeText($code) : '';
+} else {
+    $attributeValue = $output->productAttribute($product, $product->$call(), $code);
+}
+?>
+
+<?php if ($attributeValue): ?>
+    <div class="product attibute <?php /* @escapeNotVerified */ echo $className?>">
+        <?php if ($attributeLabel != 'none'): ?>
+            <strong class="type"><?php /* @escapeNotVerified */ echo $attributeLabel?></strong>
+        <?php endif; ?>
+
+        <div class="value" <?php /* @escapeNotVerified */ echo $attributeAddAttribute;?>><?php /* @escapeNotVerified */ echo $attributeValue; ?></div>
+    </div>
+
+    <?php if($src): ?>
+        <h4><?= $product->getResource()->getAttribute('overview_series')->getStoreLabel() ?></h4>
+        <iframe class="lazy" data-src="<?= /* @noEscape */ $src ?>" height="800" width="100%"></iframe>
+        <script>
+            require(['jquery'], function ($) {
+                $('#tab-label-about_series').on('dimensionsChanged', function (e) {
+                    if(e.target && e.target.classList.contains('active')) {
+                        let mapIframe = $('#about_series').find('iframe');
+                        if(mapIframe.length !== 0) {
+                            mapIframe.attr('src', mapIframe.attr('src') ? mapIframe.attr('src') : mapIframe.attr('data-src'));
+                        }
+                    }
+                });
+            });
+        </script>
+    <?php endif; ?>
+<?php endif; ?>

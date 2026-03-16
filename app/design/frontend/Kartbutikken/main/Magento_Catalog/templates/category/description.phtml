@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+?>
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$filterProvider = $objectManager->create('\Magento\Cms\Model\Template\FilterProvider');
+$storeManager = $objectManager->create('\Magento\Store\Model\StoreManagerInterface');
+
+?>
+<?php if ($_description = $block->getCurrentCategory()->getDescription()) :?>
+    <div class="category-description">
+        <?= /* @noEscape */ $filterProvider->getBlockFilter()
+            ->setStoreId($storeManager->getStore()->getId())
+            ->filter(
+                $this->helper(Magento\Catalog\Helper\Output::class)->categoryAttribute(
+                    $block->getCurrentCategory(),
+                    $_description,
+                    'description'
+                )
+            );
+         ?>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,118 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Hryvinskyi\Base\Helper\Html;
+use Kartbutikken\Theme\Model\Config\Catalog\Frontend;
+use Magento\Framework\App\ObjectManager;
+
+/* @var $block \Magento\Catalog\Block\Product\ProductList\Related */
+
+$exist = $block->getItems()->getSize();
+$type = 'related';
+$class = $type;
+
+$image = 'related_products_list';
+$title = __('Related Products');
+$items = $block->getItems();
+$limit = 0;
+$shuffle = 0;
+$canItemsAddToCart = $block->canItemsAddToCart();
+
+$showAddTo = true;
+$showCart = false;
+$templateType = null;
+$description = false;
+$fontendConfig = ObjectManager::getInstance()->get(Frontend::class);
+$showQuantity = $fontendConfig->isShowQuantity();
+$wrapperTagOptions = [
+    'class' => ['block', $block->escapeHtmlAttr($class)],
+    'data'  => [
+        'mage-init' => [
+            'relatedProducts' => [
+                'relatedCheckbox' => '.related.checkbox',
+            ],
+        ],
+        'limit'     => $block->escapeHtmlAttr($limit),
+        'shuffle'   => $shuffle,
+    ],
+];
+
+if ($exist) :?>
+    <div id="block-related-heading"></div>
+    <?php echo Html::tag('h3', __('Related products')); ?>
+    <?php echo Html::beginTag('div', $wrapperTagOptions) ?>
+    <ol class="product-items-related">
+        <?php foreach ($items as $_item): ?>
+            <?php /** @var $_item \Magento\Catalog\Model\Product */ ?>
+            <div class="product-item-related"
+                <?php $_notVisible = $_item->getVisibility(); if ($_notVisible == 1) {echo("style='display: none;'");}?>>                <strong class="product name product-item-name">
+                    <a class="product-item-link" title="<?= $block->escapeHtml($_item->getName()) ?>"
+                       href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>">
+                        <?= $block->escapeHtml($_item->getName()) ?>
+                    </a>
+                </strong>
+                <div class="content">
+                    <div class="text-center">
+                        <?= $block
+                            ->getImage($_item, $image, ['class' => ''])
+                            ->setTemplate('MagicToolbox_MagicZoomPlus::product/image_with_zoom.phtml')
+                            ->toHtml() ?>
+                    </div>
+                    <div class="product details product-item-details text-left vertical-align-middle padding-xs-5">
+                        <div class="price-final_price" data-product-id="<?php echo $_item->getEntityId(); ?>"></div>
+                        <div class="product-item-info"></div>
+                        <div class="display-inline">
+                            <form data-role="tocart-form"
+                                  data-product-sku="<?= $block->escapeHtml($_item->getSku()) ?>"
+                                  action="<?= $block->escapeUrl($block->getAddToCartUrl($_item)) ?>"
+                                  class="display-inline"
+                                  data-mage-init='{"catalogAddToCart":{}}'
+                                  method="post">
+                                <?= $block->getBlockHtml('formkey') ?>
+                                <?php if ($showQuantity): ?>
+                                    <div class="box-to-cart" data-mage-init='{"qtyAddToCart":{}}'>
+                                        <div class="control">
+                                            <div class="qty-minus">
+                                                <a href="javascript:void(0)" class="btn-qty minus">-</a>
+                                            </div>
+                                            <div class="qty-input">
+                                                <input type="number" name="qty" title="<?= __('Qty'); ?>" value="1" class="input-text qty"></div>
+                                            <div class="qty-plus">
+                                                <a href="javascript:void(0)" class="btn-qty plus">+</a>
+                                            </div>
+                                        </div>
+                                        <button type="submit" title="<?= __('Add to cart'); ?>" class="action tocart green">
+                                            <span><?= __('Add to cart'); ?></span>
+                                        </button>
+                                    </div>
+                                <?php else: ?>
+                                    <button type="submit"
+                                            title="<?= $block->escapeHtml(__('Add to cart')) ?>"
+                                            class="action tocart green">
+                                        <span><?= $block->escapeHtml(__('Add to cart')) ?></span>
+                                    </button>
+                                <?php endif; ?>
+                            </form>
+                        </div>
+                        <div class="visible-xs-inline">
+                            <?php echo Html::a(
+                                '<span>' . __('Go To Product') . '</span>',
+                                $_item->getProductUrl(),
+                                [
+                                    'target' => '_blank',
+                                    'title'  => __('Go To Product'),
+                                    'class'  => ['action', 'yellow'],
+                                ]
+                            ); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </ol>
+    <?php echo Html::endTag('div') ?>
+<?php endif; ?>

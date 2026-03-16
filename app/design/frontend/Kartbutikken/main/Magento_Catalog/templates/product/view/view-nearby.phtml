@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+
+/**
+ * @var \Kartbutikken\Theme\Block\Product\Related $block
+ */
+
+?>
+<?php if($block->hasItems()): ?>
+<div class="view-nearby">
+    <a href="#block-related-heading"
+       data-mage-init='{"scrollTo":{"target":"#block-related-heading","offsetSelector":"header.page-header"}}'>
+        <?php echo __('View nearby'); ?>
+    </a>
+</div>
+<?php endif; ?>

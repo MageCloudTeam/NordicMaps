@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="MageCloud\Discountpercentage\Api\Data\ProductRender\SavedPriceInfoInterface"
+                type="\MageCloud\Discountpercentage\Model\ProductRender\SavedPriceInfo" />
+
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="saved_price"
+                      xsi:type="object">\MageCloud\Discountpercentage\Ui\DataProvider\Product\Listing\Collector\SavedPrice</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

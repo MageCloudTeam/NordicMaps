@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="header.container">
+            <referenceContainer name="header-wrapper">
+                <referenceBlock name="logo">
+                    <arguments>
+                        <argument name="view_model" xsi:type="object">Kartbutikken\Theme\ViewModel\Logo</argument>
+                    </arguments>
+                    <action method="setTemplate">
+                        <argument name="template" xsi:type="string">Kartbutikken_Theme::header/logo.phtml</argument>
+                    </action>
+                </referenceBlock>
+                <block class="Magento\Framework\View\Element\Template" name="panel-top"
+                       template="Magento_Theme::html/panel-top.phtml">
+                    <block name="panel-buttons" class="Kartbutikken\Theme\Block\Header\Panel\Buttons">
+                    </block>
+                </block>
+            </referenceContainer>
+        </referenceContainer>
+    </body>
+</page>

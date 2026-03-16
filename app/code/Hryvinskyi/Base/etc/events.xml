@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_front_send_response_before">
+        <observer name="Hryvinskyi_Base::layout_debug_response" instance="Hryvinskyi\Base\Observer\Response"/>
+    </event>
+    <event name="layout_generate_blocks_after">
+        <observer name="Hryvinskyi_Base::layout_debug_layout" instance="Hryvinskyi\Base\Observer\Layout"/>
+    </event>
+</config>

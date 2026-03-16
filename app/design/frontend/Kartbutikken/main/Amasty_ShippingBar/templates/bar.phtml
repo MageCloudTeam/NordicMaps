@@ -1,0 +1,72 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingBar
+ */
+?>
+<?php /** @var \Amasty\ShippingBar\Block\Frontend\Bar $block */ ?>
+<div data-bind="scope: 'amasty-shipbar-<?= $block->getPosition() ?>'" class="amasty-shipbar-<?= $block->getPosition() ?>"
+     id="freeship-bar">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+            }
+        }
+    </script>
+
+</div>
+
+<script>
+    require([
+        'jquery',
+        'domReady!'
+    ], function($) {
+        $(document).ready(function () {
+
+            setTimeout(function () {
+                var minicartWidgets = $('#minicart-widgets');
+                if (minicartWidgets.length) {
+                    // Copy the 'freeship-bar' div and append it after 'minicart-widgets'
+                    var freeshipBar = $('#freeship-bar').html();
+                    minicartWidgets.html(freeshipBar);
+
+                    $('#minicart-widgets').find('*').each(function () {
+                        var oldId = $(this).attr('id');
+                        if (oldId) {
+                            var newId = oldId + '-copied';
+                            $(this).attr('id', newId);
+                        }
+                    });
+                }
+                console.log('Delayed code after page load');
+            }, 3000); // 5000 milliseconds (5 seconds)
+
+
+        });
+        $(document).ajaxComplete(function (event, xhr, settings) {
+            console.log('asd');
+            if (settings.url.includes('section/load/')) {
+                // Check if the minicart content has finished loading
+                var minicartWidgets = $('#minicart-widgets');
+                if (minicartWidgets.length) {
+                    // Copy the 'freeship-bar' div and append it after 'minicart-widgets'
+                    var freeshipBar = $('#freeship-bar').html();
+                    minicartWidgets.html(freeshipBar);
+
+                    $('#minicart-widgets').find('*').each(function () {
+                        var oldId = $(this).attr('id');
+                        if (oldId) {
+                            var newId = oldId + '-copied';
+                            $(this).attr('id', newId);
+                        }
+                    });
+                }
+
+            }
+
+        });
+    });
+</script>

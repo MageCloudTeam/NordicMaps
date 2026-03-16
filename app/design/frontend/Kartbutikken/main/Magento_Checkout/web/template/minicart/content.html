@@ -1,0 +1,196 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="block-title">
+    <strong>
+        <span class="text" translate="'My Cart'"></span>
+        <span
+            class="qty empty"
+            text="getCartParam('summary_count')"
+            data-bind="css: { empty: !!getCartParam('summary_count') == false },
+                       attr: { title: $t('Items in Cart') }">
+        </span>
+    </strong>
+</div>
+
+<div class="block-content">
+    <button type="button"
+            id="btn-minicart-close"
+            class="action close"
+            data-action="close"
+            data-bind="
+                attr: {
+                    title: $t('Close')
+                },
+                click: closeMinicart()
+            ">
+        <span translate="'Close'"></span>
+    </button>
+
+    <if args="getCartParam('summary_count')">
+        <div class="items-total" style="display: none">
+            <span class="count" if="maxItemsToDisplay < getCartLineItemsCount()" text="maxItemsToDisplay"></span>
+            <translate args="'of'" if="maxItemsToDisplay < getCartLineItemsCount()"></translate>
+            <span class="count" text="getCartParam('summary_count').toLocaleString(window.LOCALE)"></span>
+                <!-- ko if: (getCartParam('summary_count') > 1) -->
+                    <span translate="'Items in Cart'"></span>
+                <!--/ko-->
+                <!-- ko if: (getCartParam('summary_count') <= 1) -->
+                    <span translate="'Item in Cart'"></span>
+                <!--/ko-->
+        </div>
+
+        <each args="getRegion('subtotalContainer')" render=""></each>
+        <each args="getRegion('extraInfo')" render=""></each>
+
+        <div class="actions" style="display: none" if="getCartParam('possible_onepage_checkout')">
+            <div class="primary">
+                <button
+                        id="top-cart-btn-checkout"
+                        type="button"
+                        class="action primary checkout"
+                        data-action="close"
+                        data-bind="
+                            attr: {
+                                title: $t('Proceed to Checkout')
+                            },
+                            click: closeMinicart()
+                        "
+                        translate="'Proceed to Checkout'">
+                </button>
+                <div data-bind="html: getCartParamUnsanitizedHtml('extra_actions')"></div>
+            </div>
+        </div>
+        <div class="actions" if="getCartParam('summary_count')" style="margin-top: 0; margin-bottom: 15px;">
+            <div class="secondary">
+                <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}">
+                    <span translate="'View and Edit Cart'"></span>
+                </a>
+            </div>
+        </div>
+    </if>
+
+    <if args="getCartParam('summary_count')">
+        <strong class="subtitle" translate="'Recently added item(s)'"></strong>
+        <div class="minicart-items-wrapper">
+            <ol id="mini-cart" class="minicart-items" data-bind="foreach: { data: getCartItems(), as: 'item' }">
+                <each args="$parent.getRegion($parent.getItemRenderer(item.product_type))"
+                      render="{name: getTemplate(), data: item, afterRender: function() {$parents[1].initSidebar()}}"></each>
+            </ol>
+        </div>
+    </if>
+
+    <ifnot args="getCartParam('summary_count')">
+        <strong class="subtitle empty"
+                translate="'You have no items in your shopping cart.'"></strong>
+        <if args="getCartParam('cart_empty_message')">
+            <p class="minicart empty text" text="getCartParam('cart_empty_message')"></p>
+            <div class="actions">
+                <div class="secondary">
+                    <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}">
+                        <span translate="'View and Edit Cart'"></span>
+                    </a>
+                </div>
+            </div>
+        </if>
+    </ifnot>
+
+    <div id="minicart-widgets" class="minicart-widgets" if="regionHasElements('promotion')">
+        <each args="getRegion('promotion')" render=""></each>
+    </div>
+
+    <div class="actions" if="getCartParam('summary_count')">
+        <div class="secondary">
+            <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}">
+                <span translate="'View and Edit Cart'"></span>
+            </a>
+        </div>
+    </div>
+
+
+</div>
+<each args="getRegion('sign-in-popup')" render=""></each>
+
+<style>
+    .block-minicart .secondary .action.viewcart {
+        background: #000;
+        color: #fff;
+        padding: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .minicart-items .product-item-details {
+        display: flex;
+        padding: 0 !important;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .minicart-items .product-item-name a {
+        color: #000 !important;
+    }
+    .minicart-items .product-item-name {
+        margin-bottom: 0;
+        width: 100%;
+    }
+    .minicart-items .product-item-pricing {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 65%;
+    }
+    .minicart-items .product-item-pricing .label {
+        display: none !important;
+    }
+    .minicart-items .product.actions {
+        display: flex;
+        align-items: center;
+        margin: 0;
+    }
+    .minicart-items .item-qty {
+        width: 20px;
+        padding: 0;
+        margin-left: 2px !important;
+        margin-right: 2px !important;
+        border: none;
+    }
+    .minicart-items .decreasing-qty, .minicart-items .increasing-qty {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0 1px;
+    }
+    .minicart-items .product-item-details .details-qty {
+        display: flex;
+        margin-top: 0;
+        width: 40%;
+        margin-left: 15%;
+    }
+    #minicart-spinner {
+        display: none;
+    }
+    .block-search {
+        z-index: 2;
+    }
+    .minicart-items .extra {
+        display: none;
+    }
+    .block-minicart .subtotal {
+        display: none;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .block-minicart .price-container {
+        padding-bottom: 2px;
+    }
+    .minicart-widgets .amasty-shipbar .extra {
+        display: none !important;
+    }
+    .minicart-widgets .amasty-shipbar .content {
+        padding-top: 7px !important;
+    }
+</style>

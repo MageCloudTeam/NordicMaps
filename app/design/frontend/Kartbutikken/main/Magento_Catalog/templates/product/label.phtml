@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var \Magento\Catalog\Block\Product\View $block
+ * @var \Magento\Framework\Registry $registry
+ */
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$registry = $objectManager->get('Magento\Framework\Registry');
+$product = $registry->registry('product');
+
+?>
+<?php $regularPrice =  $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+$finalPrice =  $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
+?>
+<?php if ($regularPrice != $finalPrice) {
+    $discount = $regularPrice * 100 / $finalPrice - 100;
+    $discount =  number_format($discount, 0);
+} ?>
+<?php if ($regularPrice != $finalPrice) :?>
+    <div class="discount_labels">
+        <span><?php echo $discount . '%';?></span>
+    </div>
+<?php endif;?>
+<style>
+    .product.media {
+        position: relative;
+    }
+    .discount_labels {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f00;
+        width: 60px;
+        height: 60px;
+        border-radius: 100%;
+        position: absolute;
+        bottom: 20%;
+        left: 5%;
+        color: #fff;
+        font-weight: 700;
+        z-index: 2;
+        font-size: 18px;
+    }
+</style>

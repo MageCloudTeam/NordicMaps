@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/** @var \Snowdog\Menu\Block\NodeType\Category $block */
+/** @var \Magento\Catalog\Model\Category $category */
+?>
+<?php
+$nodeId = $block->getId();
+$class = $block->getMenuClass();
+$category = $block->getCategory($nodeId);
+$categoryUrl = $block->getCategoryUrl($nodeId);
+$categoryUrl = $categoryUrl ?: '#';
+$dataAttribute = '';
+
+if ($block->getIsViewAllLink()) {
+    $title = __('View All');
+    $classLink = $class . '__inner-link';
+} else {
+    $classLink = $block->getIsRoot() ? $class . '__link' : $class . '__inner-link';
+    $title = $category->getName();
+
+    if ($nodeId) {
+        $dataAttribute = ' data-menu="menu-' . $nodeId . '"';
+    }
+
+    if ($block->isCurrentCategory($nodeId)) {
+        $classLink .= ' current';
+    }
+}
+?>
+<?php if($category->getIsActive()): ?>
+<a href="<?= $categoryUrl ?>"
+   class="level-top <?= $classLink ?>"<?= $dataAttribute ?>
+>
+    <?= $title ?>
+</a>
+<?php endif; ?>

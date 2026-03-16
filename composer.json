@@ -1,0 +1,115 @@
+{
+    "name": "magento/project-community-edition",
+    "description": "eCommerce Platform for Growth (Community Edition)",
+    "type": "project",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "magento/magento-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "magento/composer-dependency-version-audit-plugin": false,
+            "magento/inventory-composer-installer": false,
+            "php-http/discovery": false,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "laminas/laminas-dependency-plugin": true
+        }
+    },
+    "require": {
+        "akeneo/module-magento2-connector-community": "*",
+        "amzn/amazon-pay-magento-2-module": "^5.15",
+        "chojnicki/video-platforms-parser": "*",
+        "cweagans/composer-patches": "*",
+        "dhl/sdk-api-express": "*",
+        "dvdoug/boxpacker": "*",
+        "experius/module-emailcatcher": "*",
+        "facebook/facebook-for-magento2": "^1.4",
+        "klarna/m2-klarna": "^2.0",
+        "magento/product-community-edition": "2.4.6-p13",
+        "magepal/magento2-gmailsmtpapp": "*",
+        "magepal/magento2-googletagmanager": "*",
+        "magestat/module-log-webapi": "*",
+        "mailchimp/mc-magento2": "*",
+        "ricardofiorani/php-video-url-parser": "*",
+        "snowdog/module-menu": "*",
+        "stripe/stripe-payments": "*",
+        "vipps/module-payment": "*",
+        "voku/html-min": "*",
+        "voku/simple_html_dom": "*",
+        "zf1/zend-reflection": "*"
+    },
+    "require-dev": {
+        "allure-framework/allure-phpunit": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "*",
+        "friendsofphp/php-cs-fixer": "*",
+        "lusitanian/oauth": "*",
+        "magento/magento-coding-standard": "*",
+        "magento/magento2-functional-testing-framework": "*",
+        "pdepend/pdepend": "*",
+        "phpcompatibility/php-compatibility": "*",
+        "phpmd/phpmd": "*",
+        "phpstan/phpstan": "*",
+        "phpunit/phpunit": "*",
+        "sebastian/phpcpd": "*",
+        "squizlabs/php_codesniffer": "*"
+    },
+    "conflict": {
+        "gene/bluefoot": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Framework\\": "lib/internal/Magento/Framework/",
+            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\": "app/code/Magento/",
+            "Zend\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/"
+        },
+        "psr-0": {
+            "": [
+                "app/code/",
+                "generated/code/"
+            ]
+        },
+        "files": [
+            "app/etc/NonComposerComponentRegistration.php"
+        ],
+        "exclude-from-classmap": [
+            "**/dev/**",
+            "**/update/**",
+            "**/Test/**"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",
+            "Magento\\Tools\\": "dev/tools/Magento/Tools/",
+            "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
+            "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
+            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
+        }
+    },
+    "version": "2.4.6",
+    "minimum-stability": "stable",
+    "repositories": {
+        "0": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        },
+        "1": {
+            "type": "composer",
+            "url": "https://composer.amasty.com/community/"
+        }
+    },
+    "extra": {
+        "magento-force": "override",
+        "composer-exit-on-patch-failure": true,
+        "patches": {
+            "amasty/module-gdpr": {
+                "Fixed consent store filter error Item the same ID": "patches/composer/Fixed_consent_store_filter_error__Item_the_same_ID_.patch"
+            }
+        }
+    }
+}

@@ -1,0 +1,33 @@
+<style>
+    .mobile_button {
+        display: none;
+    }
+    .grand.totals.excl {
+        display: none;
+    }
+    @media screen and (max-width: 767px){
+        .mobile_button {
+            display: block;
+            margin: 20px 0 0;
+            padding: 0 15px;
+            text-align: center;
+        }
+        .mobile_button button {
+            width: 100%;
+        }
+        .mobile_button button span{
+            line-height: 2.2rem;
+            padding: 14px 17px;
+            font-size: 1.8rem;
+        }
+    }
+</style>
+<ul class="checkout checkout-methods-items items methods mobile_button">
+    <li class="item">
+        <button class="action checkout primary"
+                onclick="location.href='/checkout/';"
+                title="Fortsett til kassen" type="button">
+            <span><?= $block->escapeHtml(__('Proceed to Checkout')) ?></span>
+        </button>
+    </li>
+</ul>

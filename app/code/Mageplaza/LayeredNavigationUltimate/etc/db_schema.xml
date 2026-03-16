@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="layered_product_pages" resource="default" engine="innodb" comment="Mageplaza LayeredNavigation custom products page table">
+    <column xsi:type="int" name="page_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Page_id"/>
+    <column xsi:type="text" name="name" nullable="true" comment="Name"/>
+    <column xsi:type="text" name="page_title" nullable="true" comment="Page_title"/>
+    <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="false" identity="false" default="1" comment="Status"/>
+    <column xsi:type="varchar" name="route" nullable="true" length="255" comment="Route"/>
+    <column xsi:type="varchar" name="store_ids" nullable="false" length="255" default="0" comment="Store_ids"/>
+    <column xsi:type="varchar" name="position" nullable="true" length="255" comment="Position"/>
+    <column xsi:type="mediumtext" name="default_attributes" nullable="true" comment="Default_attributes"/>
+    <column xsi:type="text" name="description" nullable="true" comment="Description"/>
+    <column xsi:type="text" name="meta_title" nullable="true" comment="Meta_title"/>
+    <column xsi:type="text" name="meta_keywords" nullable="true" comment="Meta_keywords"/>
+    <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta_description"/>
+    <column xsi:type="text" name="cms_position" nullable="true" comment="CMS Block Display Position"/>
+    <column xsi:type="text" name="cms_block" nullable="true" comment="CMS Block"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="page_id"/>
+    </constraint>
+    <constraint xsi:type="unique" referenceId="LAYERED_PRODUCT_PAGES_ROUTE">
+      <column name="route"/>
+    </constraint>
+  </table>
+</schema>

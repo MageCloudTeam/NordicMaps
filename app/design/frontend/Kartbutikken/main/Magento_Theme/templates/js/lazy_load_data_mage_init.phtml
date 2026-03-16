@@ -1,0 +1,44 @@
+<?php
+/**
+ * Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ */
+?>
+<script>
+    require(['jquery'], function ($) {
+        var lazyMageInitThrottleTimeout,
+            lazyMageInitExecute = function () {
+                var lazyMageInit = $("[data-lazy-mage-init]");
+                if (lazyMageInitThrottleTimeout) {
+                    clearTimeout(lazyMageInitThrottleTimeout);
+                }
+                lazyMageInitThrottleTimeout = setTimeout(function () {
+                    var scrollTop = window.pageYOffset;
+                    lazyMageInit.each(function () {
+
+                        if ($(this).offset().top < (window.innerHeight + scrollTop) && this.hasAttribute('data-lazy-mage-init')) {
+                            var e = $(this);
+                            e.attr('data-mage-init', e.attr('data-lazy-mage-init'));
+                            e.removeAttr('data-lazy-mage-init');
+                            e.trigger('contentUpdated');
+                        }
+                    });
+                    if (lazyMageInit.length === 0) {
+                        document.removeEventListener("scroll", lazyMageInitExecute);
+                        window.removeEventListener("resize", lazyMageInitExecute);
+                        window.removeEventListener("orientationChange", lazyMageInitExecute);
+                    }
+                }, 50);
+            };
+
+        document.addEventListener("scroll", lazyMageInitExecute);
+        window.addEventListener("resize", lazyMageInitExecute);
+        window.addEventListener("orientationChange", lazyMageInitExecute);
+        lazyMageInitExecute();
+    });
+</script>

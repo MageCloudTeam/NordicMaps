@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var $block \Magento\Framework\View\Element\Template
+ * @var $viewModel \Kartbutikken\NordecakonsumentOrderAttributes\ViewModel\DefaultData
+ */
+
+$viewModel = $block->getData('defaultDataViewModel');
+?>
+<script>window.order_attributes = <?php echo json_encode($viewModel->getOrderAttributes()) ?>;</script>

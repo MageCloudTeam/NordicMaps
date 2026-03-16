@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mfgoogletagmanager>
+            <general>
+                <enabled>0</enabled>
+                <loader_type/>
+                <mfmodule>GoogleTagManager</mfmodule>
+                <mftype>1</mftype>
+            </general>
+            <web_container>
+                <enable>1</enable>
+                <account_id/>
+                <container_id/>
+                <public_id/>
+            </web_container>
+            <analytics>
+                <enable>1</enable>
+                <measurement_id/>
+            </analytics>
+            <attributes>
+                <product>sku</product>
+                <brand/>
+                <categories/>
+            </attributes>
+            <customer_data>
+                <protect>0</protect>
+            </customer_data>
+        </mfgoogletagmanager>
+    </default>
+</config>

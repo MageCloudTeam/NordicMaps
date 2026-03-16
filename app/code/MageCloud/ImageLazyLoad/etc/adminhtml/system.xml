@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<tab id="magecloud" translate="label" sortOrder="340">
+			<label>MageCloud</label>
+		</tab>
+		<section id="aggregaterating" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+			<class>separator-top</class>
+			<label>AggregateRating</label>
+			<tab>magecloud</tab>
+			<resource>MageCloud_ImageLazyLoad::settings</resource>
+			<group id="aggregate" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+				<field id="enableaggregatecategory" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enable AggregateRating on Category Pages</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="enableaggregateproduct" translate="label" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enable AggregateRating on Product Pages</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<label>AggregateRating:</label>
+				<field id="magecloud_rating_value" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Rating Value:</label>
+				</field>
+				<field id="magecloud_rating_count" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Review Count:</label>
+				</field>
+			</group>
+		</section>
+
+		<section id="lazyload" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+			<class>separator-top</class>
+			<label>Image Lazy Load</label>
+			<tab>magecloud</tab>
+			<resource>MageCloud_ImageLazyLoad::settings</resource>
+			<group id="general" translate="label" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>General Settings</label>
+				<field id="enable" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enable Lazy Load</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="skip_classes" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Skip images with classes</label>
+					<comment>Comma-separated. Example: "no-lazy, lazy-ignore"</comment>
+				</field>
+				<field id="threshold" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Threshold</label>
+					<validate>validate-not-negative-number</validate>
+					<comment>Amount of pixels below the viewport, in which all images gets loaded before the user sees them.</comment>
+				</field>
+				<field id="delay" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Delay</label>
+					<validate>validate-number</validate>
+					<comment>If you want to load all elements at once after page load, then you can specify a delay time in milliseconds.</comment>
+				</field>
+				<field id="effect" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Effect</label>
+					<source_model>MageCloud\ImageLazyLoad\Model\Config\Source\Effect</source_model>
+				</field>
+				<field id="effect_time" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Effect Time</label>
+					<comment>Time in milliseconds the effect should use to view the image.</comment>
+					<validate>validate-not-negative-number</validate>
+				</field>
+			</group>
+		</section>
+	</system>
+</config>

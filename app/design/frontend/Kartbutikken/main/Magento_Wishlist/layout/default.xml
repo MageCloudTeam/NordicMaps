@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="panel-buttons">
+            <block class="Kartbutikken\Theme\Block\Header\Panel\Button" name="my-wishlist-button">
+                <action method="setSortOrder">
+                    <argument name="order" xsi:type="number">10</argument>
+                </action>
+                <action method="setTitle">
+                    <argument name="title" xsi:type="string" translate="true">My Wish List</argument>
+                </action>
+                <action method="setLabel">
+                    <argument name="label" xsi:type="string" translate="true">Wishlist</argument>
+                </action>
+                <action method="setIcon">
+                    <argument name="order" xsi:type="string"><![CDATA[<i class="icon-heart"></i>]]></argument>
+                </action>
+                <action method="setIsDropDown">
+                    <argument name="order" xsi:type="boolean">false</argument>
+                </action>
+                <action method="setIsLink">
+                    <argument name="isLink" xsi:type="boolean">true</argument>
+                </action>
+                <action method="setLinkUrl">
+                    <argument name="linkUrl" xsi:type="url" path="wishlist"/>
+                </action>
+                <action method="setAdditionalClasses">
+                    <argument name="classes" xsi:type="array">
+                        <item name="hidden-xs" xsi:type="string">hidden-xs</item>
+                    </argument>
+                </action>
+            </block>
+        </referenceBlock>
+
+        <move element="wish-list-link" destination="account.store.links"/>
+
+        <referenceBlock name="wish-list-link">
+            <arguments>
+                <argument name="sortOrder" xsi:type="number">100</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

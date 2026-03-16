@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <referenceContainer name="product.info.media">
+                <block class="Magento\Catalog\Block\Product\View" name="product.view.media.image.labasdasdel"
+                       before="product.info.media.image" template="Magento_Catalog::product/label.phtml"/>
+            </referenceContainer>
+        </referenceContainer>
+        <referenceContainer name="page.main.title">
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.series_short_description"
+                   as="series_short_description" template="Magento_Catalog::product/view/attribute.phtml" after="-">
+                <arguments>
+                    <argument name="at_call" xsi:type="string">getSeriesShortDescription</argument>
+                    <argument name="at_code" xsi:type="string">series_short_description</argument>
+                    <argument name="css_class" xsi:type="string">series-short-description</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View"
+                   name="category.products.customs.block"
+                   as="product_list_customs_block"
+                   template="Magento_Catalog::product/custom_block.phtml">
+            </block>
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.main.sales_bullets"
+                   template="Magento_Catalog::product/view/sales-bullets.phtml"
+                   before="product.info.price"/>
+            <block class="Kartbutikken\Theme\Block\Product\Related" name="product.info.main.view_nearby"
+                   template="Magento_Catalog::product/view/view-nearby.phtml"
+                   after="product.info.main.sales_bullets"/>
+
+            <block class="Magento\Catalog\Block\Product\View"
+                   template="Magento_Catalog::product/view/gallery-thumbs.phtml" name="gallery-thumbs"/>
+        </referenceContainer>
+
+        <referenceBlock name="product.info.details">
+            <referenceBlock name="product.attributes">
+                <arguments>
+                    <argument name="title" translate="true" xsi:type="string">Details</argument>
+                    <argument name="sort_order" xsi:type="string">10</argument>
+                </arguments>
+            </referenceBlock>
+            <referenceBlock name="product.info.description" template="Magento_Catalog::product/view/details-tab.phtml">
+                <arguments>
+                    <argument name="title" translate="true" xsi:type="string">Description</argument>
+                    <argument name="sort_order" xsi:type="string">20</argument>
+                </arguments>
+            </referenceBlock>
+            <block class="Kartbutikken\Theme\Block\Product\OverviewMap" name="product.info.overview_map"
+                   as="overview_map" template="Magento_Catalog::product/view/overview-map.phtml" group="detailed_info">
+                <arguments>
+                    <argument name="at_label" xsi:type="string">none</argument>
+                    <argument name="sort_order" xsi:type="string">30</argument>
+                </arguments>
+            </block>
+            <block class="Kartbutikken\Theme\Block\Product\SeriesLongDescription" name="product.info.about_series"
+                   as="about_series" template="Magento_Catalog::product/view/attribute-and-map.phtml" group="detailed_info">
+                <arguments>
+                    <argument name="at_call" xsi:type="string">getSeriesLongDescription</argument>
+                    <argument name="at_code" xsi:type="string">series_long_description</argument>
+                    <argument name="css_class" xsi:type="string">series-long-description</argument>
+                    <argument name="at_label" xsi:type="string">none</argument>
+                    <argument name="sort_order" xsi:type="string">40</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="catalog.product.related">
+            <action method="setTemplate">
+                <argument name='template' xsi:type='string'>Magento_Catalog::product/list/related.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceContainer name="product.info.stock.sku" remove="true"/>
+        <referenceBlock name="view.addto.compare" remove="true" />
+        <referenceBlock name="catalog.compare.sidebar" remove="true"/>
+
+        <move element="product.info" destination="product.info.main" after="product.info.price"/>
+        <move element="product.info.type" destination="product.info.main" after="product.info"/>
+        <move element="product.info.addto" destination="product.info.main" after="product.info.type"/>
+        <move element="product.info.review" destination="product.info.main" before="product.info.main.sales_bullets"/>
+    </body>
+</page>

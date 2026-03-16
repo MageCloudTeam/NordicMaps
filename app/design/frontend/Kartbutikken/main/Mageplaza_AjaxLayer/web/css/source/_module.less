@@ -1,0 +1,71 @@
+//
+//  Variables
+//  ---------------------------------------------
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .ln_overlay {
+        background-color: #FFFFFF;
+        height: 300%;
+        left: 0;
+        text-align: center;
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+        position: absolute;
+        top: 0px;
+        width: 500%;
+        z-index: 555;
+        display: none;
+    }
+
+    .ln_overlay img {
+        margin-top: 300px;
+        left: 45%;
+        display: block;
+        position: fixed;
+    }
+
+    .ln_slider_container {
+        width: calc(100% - 20px);
+        margin: 0 15px 0 5px;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+
+}

@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Block\Product\Image;
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * @var $block Image
+ * @var $productHelper Product
+ * @var $productRepository ProductRepositoryInterface
+ */
+$productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+$productHelper = $this->helper(Product::class);
+$product = $productRepository->getById($block->getData('product_id'));
+?>
+<a href="<?= $block->escapeUrl($productHelper->getImageUrl($product)) ?>"
+   data-options="zoomPosition:inner;zoomOn:click;lazyZoom:true;" class="MagicZoom">
+    <img <?= $block->escapeHtmlAttr($block->getClass()) ?>"
+         src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
+         width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
+         height="<?= $block->escapeHtmlAttr($block->getHeight()) ?>"
+         alt="<?= /* @noEscape */ $block->stripTags($block->getLabel(), null, true) ?>"/>
+</a>

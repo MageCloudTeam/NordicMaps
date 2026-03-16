@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+        <policies>
+            <policy id="script-src">
+                <values>
+                    <value id="www.nordicmaps.no" type="host">https://www.nordicmaps.no/</value>
+                    <value id="admi.nordicmaps.no" type="host">https://admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="img-src">
+                <values>
+                    <value id="www.nordicmaps.no" type="host">https://www.nordicmaps.no/</value>
+                    <value id="admi.nordicmaps.no" type="host">https://admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="font-src">
+                <values>
+                    <value id="www.nordicmaps.no" type="host">https://www.nordicmaps.no/</value>
+                    <value id="admi.nordicmaps.no" type="host">https://admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="frame-src">
+                <values>
+                    <value id="www.nordicmaps.no" type="host">https://www.nordicmaps.no/</value>
+                    <value id="admi.nordicmaps.no" type="host">https://admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="frame-ancestors">
+                <values>
+                    <value id="www.nordicmaps.no" type="host">https://www.nordicmaps.no/</value>
+                    <value id="admi.nordicmaps.no" type="host">https://admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="connect-src">
+                <values>
+                    <value id="en.nordicmaps.no" type="host">https://en.nordicmaps.no</value>
+                    <value id="www.nordicmaps.no" type="host">https://www.nordicmaps.no/</value>
+                    <value id="admi.nordicmaps.no" type="host">https://admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="style-src">
+                <values>
+                    <value id="www.nordicmaps.no" type="host">https://www.nordicmaps.no/</value>
+                    <value id="admi.nordicmaps.no" type="host">https://admi.nordicmaps.no</value>
+                </values>
+            </policy>
+        </policies>
+</csp_whitelist>

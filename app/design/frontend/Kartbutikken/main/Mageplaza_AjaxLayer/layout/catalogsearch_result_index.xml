@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <container name="layered_navigation-wrapper" htmlId="layer-product-list" htmlTag="div"/>
+        </referenceContainer>
+        <move element="searchindex.result" destination="layered_navigation-wrapper" />
+    </body>
+</page>

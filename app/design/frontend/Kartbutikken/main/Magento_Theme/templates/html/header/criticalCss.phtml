@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Theme\Block\Html\Header\CriticalCss $criticalCssViewModel
+ */
+?>
+<?php $criticalCssViewModel = $block->getData('criticalCssViewModel'); ?>
+
+<style type="text/css" data-type="criticalCss" data-po-cmp-ignore>
+    <?= /* @noEscape */ $criticalCssViewModel->getCriticalCssData() ?>
+</style>
+<style>
+    @media screen and (min-width: 768px)  {
+        .page-header {
+            max-height: 119px;
+        }
+        .sections.nav-sections, .nav-sections-items {
+            height: 43px;
+        }
+        .page-layout-1column .product.media {
+            width: 57%;
+        }
+        .page-layout-1column .product-info-main {
+            width: 40%;
+        }
+        .product-info-main {
+            float: right;
+        }
+        .product.media {
+            float: left;
+            margin-bottom: 25px;
+        }
+        .amasty-shipbar-top {
+            height: 30px !important;
+        }
+    }
+
+    .product.media {
+        -ms-flex-order: -1;
+        -webkit-order: -1;
+        order: -1;
+    }
+    @media only screen and (max-width: 767px) {
+
+        .action-skip-wrapper, .MagicToolboxContainer {
+            display: none;
+        }
+        .amasty-shipbar .main-container {
+            height: 20px !important;
+        }
+        .page-header {
+            height: 150px;
+        }
+        .product.media {
+            overflow: hidden;
+            min-height: 90vw;
+        }
+    }
+
+</style>

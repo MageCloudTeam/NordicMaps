@@ -1,0 +1,49 @@
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+if ($objectManager->get('Magento\Framework\Registry')->registry('current_category')) {
+    $category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');
+    $collection = $category->getProductCollection();
+    $sortCollection = $collection->setOrder('price', 'asc');
+    $minProductPrice =  $sortCollection->getFirstItem()->getMinimalPrice();
+    $maxProductPrice = $sortCollection->getLastItem()->getMaxPrice();
+}
+
+$aggregaterating = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('aggregaterating/aggregate/magecloud_rating_value');
+$aggregateratingcount = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('aggregaterating/aggregate/magecloud_rating_count');
+$aggregateratingcategory = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('aggregaterating/aggregate/enableaggregatecategory');
+
+?>
+
+
+<script type="application/ld+json">{
+"@context": "http://schema.org",
+"@type": "Product",
+<?php if ($objectManager->get('Magento\Framework\Registry')->registry('current_category')): ?>
+    "name": "<?php echo $category->getName() ?>",
+    "offers": {
+    "@type": "AggregateOffer",
+    "lowPrice": "<?php echo round($minProductPrice, 2)?>",
+    "highPrice": "<?php echo round($maxProductPrice, 2)?>",
+    "priceCurrency": "NOK"
+    }
+<?php endif;?>
+<?php if ($aggregateratingcategory === "1") :?>
+,
+"aggregateRating":{
+"@type":"AggregateRating",
+"ratingValue": "<?php echo $aggregaterating;?>",
+"reviewCount": "<?php echo $aggregateratingcount;?>",
+"bestRating": "5",
+"worstRating": "1"
+}
+<?php endif;?>
+}</script>

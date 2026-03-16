@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<lazyload>
+			<general>
+				<enable>1</enable>
+				<skip_classes>no-lazy</skip_classes>
+				<threshold>200</threshold>
+				<delay>-1</delay>
+				<effect>show</effect>
+				<effect_time>0</effect_time>
+			</general>
+		</lazyload>
+	</default>
+</config>

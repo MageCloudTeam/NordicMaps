@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var \Magento\Store\Block\Switcher $block
+ * @var \Kartbutikken\WebsiteLocator\ViewModel\SwitcherUrlProvider $viewModel
+ */
+
+$viewModel = $block->getData('view_model');
+
+$storeManager = $viewModel->getStoreManager();
+$websites = $viewModel->getWebsites();
+$website = $storeManager->getWebsite();
+$websiteid = $website->getWebsiteId();
+?>
+<?php if($viewModel->isEnabled()): ?>
+<div class="switcher store switcher-store" id="switcher-store">
+    <strong class="label switcher-label"><span><?php echo __('Select Store') ?></span></strong>
+    <div class="actions dropdown options switcher-options">
+        <?php foreach ($websites as $websiteItem): ?>
+            <?php if ($websiteid == $websiteItem->getId()): ?>
+                <div class="action toggle switcher-trigger 6666"
+                     role="button"
+                     tabindex="0"
+                     data-mage-init='{"dropdown":{"openedState": "active", "active": true}}'
+                     data-toggle="dropdown"
+                     data-trigger-keypress-button="true"
+                     id="switcher-store-trigger">
+                    <strong>
+                        <img src="<?php echo $viewModel->getWebsiteCountryImage($websiteItem) ?>" alt="<?php echo $websiteItem->getName(); ?>">
+                        <span><?php echo $block->escapeHtml($websiteItem->getName()) ?></span>
+                    </strong>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <ul class="dropdown switcher-dropdown" data-target="dropdown">
+            <?php foreach ($websites as $websiteItem): ?>
+                <?php if ($websiteid != $websiteItem->getId()): ?>
+                    <li class="switcher-option">
+                        <a href="<?php echo $viewModel->getUrlOfAnotherStoreId($website->getDefaultStore(), $websiteItem->getDefaultStore()) ?>">
+                            <img src="<?php echo $viewModel->getWebsiteCountryImage($websiteItem) ?>" alt="<?php echo $websiteItem->getName(); ?>">
+                            <?php echo $block->escapeHtml($websiteItem->getName()) ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>
+<script>
+    require([
+        'jquery',
+        'matchMedia',
+        'mage/dropdown'
+    ], function ($, mediaCheck) {
+        $(document).ready(function () {
+            mediaCheck({
+                media: '(max-width: 767px)', // Adjust this media query as needed
+                entry: function () {
+                    $('.logo').on('click', function () {
+                        setTimeout(function () { // Delay to ensure the sections are opened
+                            $('.switcher-options').addClass('active');
+                        }, 300);
+                    });
+                },
+                exit: function () {
+                    $('.switcher-options').removeClass('active');
+                }
+            });
+        });
+    });
+
+</script>

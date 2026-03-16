@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Hryvinskyi\Base\Helper\Html;
+use Magento\Catalog\Block\Product\View;
+
+/** @var $block View */
+$_product = $block->getProduct();
+if ($_product->isSaleable()) : ?>
+<div class="box-tocart">
+    <div class="fieldset">
+
+        <div class="actions">
+            <?php if ($block->shouldRenderQuantity()) :?>
+                <div class="box-to-cart" data-mage-init='{"qtyAddToCart":{}}'>
+                    <div class="control">
+                        <div class="qty-minus">
+                            <a href="javascript:void(0)" class="btn-qty minus">-</a>
+                        </div>
+                        <div class="qty-input">
+                            <input type="number"
+                                   name="qty"
+                                   id="qty"
+                                   min="0"
+                                   value="<?= $block->getProductDefaultQty() * 1 ?>"
+                                   title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
+                                   class="input-text qty"
+                                   data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                            />
+                        </div>
+                        <div class="qty-plus">
+                            <a href="javascript:void(0)" class="btn-qty plus">+</a>
+                        </div>
+                    </div>
+                    <button type="submit" title="<?= __('Add to cart'); ?>" class="action tocart green">
+                        <span><?= __('Add to cart'); ?></span>
+                    </button>
+                </div>
+            <?php else: ?>
+                <button type="submit" title="<?= __('Add to cart'); ?>" class="action tocart green">
+                    <span><?= __('Add to cart'); ?></span>
+                </button>
+            <?php endif; ?>
+            <?= $block->getChildHtml('', true) ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/js/validate-product": {}
+        }
+    }
+</script>

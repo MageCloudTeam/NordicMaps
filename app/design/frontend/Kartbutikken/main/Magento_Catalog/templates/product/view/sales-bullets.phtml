@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Magento\Catalog\Block\Product\View\Description;
+use Magento\Catalog\Helper\Output;
+
+/**
+ * @var Description $block
+ * @var Output $output
+ */
+$output = $this->helper(Output::class);
+
+$bullet1 = $output->productAttribute(
+    $block->getProduct(),
+    $block->getProduct()->getData('salesbullet_1'),
+    'salesbullet_1'
+);
+$bullet2 = $output->productAttribute(
+    $block->getProduct(),
+    $block->getProduct()->getData('salesbullet_2'),
+    'salesbullet_2'
+);
+$bullet3 = $output->productAttribute(
+    $block->getProduct(),
+    $block->getProduct()->getData('salesbullet_3'),
+    'salesbullet_3'
+);
+$bullet4 = $output->productAttribute(
+    $block->getProduct(),
+    $block->getProduct()->getData('salesbullet_4'),
+    'salesbullet_4'
+);
+$same_map_link = $output->productAttribute(
+    $block->getProduct(),
+    $block->getProduct()->getData('same_map_link'),
+    'same_map_link'
+);
+?>
+<div class="sales-bullets">
+    <ul>
+        <?php if($bullet1): ?><li><?php echo $bullet1; ?></li><?php endif; ?>
+        <?php if($bullet2): ?><li><?php echo $bullet2; ?></li><?php endif; ?>
+        <?php if($bullet3): ?><li><?php echo $bullet3; ?></li><?php endif; ?>
+        <?php if($bullet4): ?><li><?php echo $bullet4; ?></li><?php endif; ?>
+        <?php if($same_map_link): ?>
+            <?php if (intval($block->getProduct()->getSku())  > 16000): ?>
+                <li><a href="<?php echo $same_map_link; ?>">Se samme kartet i Tyvek</a></li>
+            <?php else: ?>
+                <li><a href="<?php echo $same_map_link; ?>">Se samme kartet i papir (veggkart)</a></li>
+            <?php endif; ?>
+        <?php endif; ?>
+
+    </ul>
+</div>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="compare-link-wrapper" remove="true" />
+        <referenceBlock name="panel-buttons">
+            <block class="Kartbutikken\Theme\Block\Header\Panel\Button"
+                   template="Magento_Catalog::product/compare/button.phtml" name="contact-button">
+                <action method="setSortOrder">
+                    <argument name="order" xsi:type="number">30</argument>
+                </action>
+                <action method="setTitle">
+                    <argument name="title" xsi:type="string" translate="true">Contact</argument>
+                </action>
+                <action method="setLabel">
+                    <argument name="label" xsi:type="string" translate="true">Contact</argument>
+                </action>
+                <action method="setIcon">
+                    <argument name="order" xsi:type="string"><![CDATA[<i class="icon-headset"></i>]]></argument>
+                </action>
+                <action method="setIsDropDown">
+                    <argument name="order" xsi:type="boolean">false</argument>
+                </action>
+                <action method="setIsLink">
+                    <argument name="isLink" xsi:type="boolean">true</argument>
+                </action>
+                <action method="setLinkUrl">
+                    <argument name="linkUrl" xsi:type="url" path="contact"/>
+                </action>
+                <action method="setAdditionalClasses">
+                    <argument name="classes" xsi:type="array">
+                        <item name="hidden-xs" xsi:type="string">hidden-xs</item>
+                    </argument>
+                </action>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

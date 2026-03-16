@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magecloud">
+            <label>MageCloud</label>
+        </tab>
+        <section id="auto_invoice" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Auto Invoice</label>
+            <tab>magecloud</tab>
+            <resource>MageCloud_AutoInvoice::settings</resource>
+            <group id="general" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Auto invoice</label>
+                <field id="module_enabled" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="processing_rules" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Processing Rules</label>
+                    <frontend_model>MageCloud\AutoInvoice\Block\Adminhtml\Form\Field\ProcessingRule</frontend_model>
+                    <backend_model>MageCloud\AutoInvoice\Model\Adminhtml\System\Config\ProcessingRule</backend_model>
+                </field>
+                <field id="module_debugging" translate="label" type="select" sortOrder="30" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Enabled Debugging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

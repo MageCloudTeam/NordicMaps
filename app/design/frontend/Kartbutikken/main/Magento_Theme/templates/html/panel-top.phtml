@@ -1,0 +1,20 @@
+<div class="panel-buttons">
+<?php echo $this->getChildHtml("store_language"); ?>
+<?php echo $this->getChildHtml("panel-buttons"); ?>
+</div>
+<style>
+    .page-header .switcher img {
+        width: 4rem !important;
+    }
+    @media screen and (min-width: 1200px){
+        .page-header .switcher {
+            display: flex !important;
+            position: static !important;
+            align-items: center;
+        }
+        .page-header .switcher strong span {
+            display: none;
+        }
+    }
+
+</style>

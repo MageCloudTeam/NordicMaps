@@ -1,0 +1,20 @@
+<?php
+    $url = $this->getJsUrl();
+?>
+<!--<script type="text/javascript" src="--><?php //echo $url;?><!--" defer></script>-->
+<script>
+    setTimeout(load_js, 4000); // Delay 4 seconds in loading function
+
+    function load_js() {
+        // Get the head tag
+        console.log("start mailchimp");
+        var head_ID = document.getElementsByTagName("head")[0];
+        // Create script element
+        var script_element = document.createElement('script');
+        // Set the script type to JavaScript
+        script_element.type = 'text/javascript';
+        // External JS file
+        script_element.src = '<?php echo $url;?>';
+        head_ID.appendChild(script_element);
+    }
+</script>

@@ -1,0 +1,23 @@
+{
+	"name": "kartbutikken/nordecakonsument-order-attributes",
+	"version": "1.0.0",
+	"description": "N/A",
+	"type": "magento2-module",
+	"require": {
+		"magento/framework": "*",
+		"magento/module-checkout": "100.3.*",
+		"magento/module-quote": "101.1.*",
+		"magento/module-sales": "102.0.*"
+	},
+	"license": [
+		""
+	],
+	"autoload": {
+		"files": [
+			"registration.php"
+		],
+		"psr-4": {
+			"Kartbutikken\\NordecakonsumentOrderAttributes\\": ""
+		}
+	}
+}

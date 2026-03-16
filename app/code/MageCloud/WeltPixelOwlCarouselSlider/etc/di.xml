@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="WeltPixel\OwlCarouselSlider\Block\Slider\Custom"
+                type="MageCloud\WeltPixelOwlCarouselSlider\Block\Slider\Custom"/>
+    <preference for="WeltPixel\OwlCarouselSlider\Block\Slider\Products"
+                type="MageCloud\WeltPixelOwlCarouselSlider\Block\Slider\Products"/>
+</config>
+
+

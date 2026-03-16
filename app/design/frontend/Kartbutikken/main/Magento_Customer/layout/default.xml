@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="panel-buttons">
+            <block class="Kartbutikken\Theme\Block\Header\Panel\Button" name="my-sing-in-button">
+                <action method="setSortOrder">
+                    <argument name="order" xsi:type="number">40</argument>
+                </action>
+                <action method="setTitle">
+                    <argument name="title" xsi:type="string" translate="true">Sign in</argument>
+                </action>
+                <action method="setLabel">
+                    <argument name="label" xsi:type="string" translate="true">Sign in</argument>
+                </action>
+                <action method="setIcon">
+                    <argument name="order" xsi:type="string"><![CDATA[<i class="icon-user"></i>]]></argument>
+                </action>
+                <action method="setIsDropDown">
+                    <argument name="order" xsi:type="boolean">false</argument>
+                </action>
+                <action method="setIsDisabled">
+                    <argument name="isDisabled" xsi:type="helper" helper="\Kartbutikken\Customer\Model\IsLoggedIn::check"/>
+                </action>
+                <action method="setIsLink">
+                    <argument name="isLink" xsi:type="boolean">true</argument>
+                </action>
+                <action method="setLinkUrl">
+                    <argument name="linkUrl" xsi:type="helper" helper="\Magento\Customer\Model\Url::getAccountUrl"/>
+                </action>
+                <action method="setAdditionalClasses">
+                    <argument name="classes" xsi:type="array">
+                        <item name="hidden-xs" xsi:type="string">hidden-xs</item>
+                    </argument>
+                </action>
+            </block>
+            <block class="Kartbutikken\Theme\Block\Header\Panel\Button" name="customer-button">
+                <action method="setSortOrder">
+                    <argument name="order" xsi:type="number">40</argument>
+                </action>
+                <action method="setTitle">
+                    <argument name="title" xsi:type="string" translate="true">My account</argument>
+                </action>
+                <action method="setLabel">
+                    <argument name="label" xsi:type="string" translate="true">Account</argument>
+                </action>
+                <action method="setIcon">
+                    <argument name="order" xsi:type="string"><![CDATA[<i class="icon-user"></i>]]></argument>
+                </action>
+                <action method="setIsDropDown">
+                    <argument name="order" xsi:type="boolean">true</argument>
+                </action>
+                <action method="setIsDisabled">
+                    <argument name="isDisabled" xsi:type="helper" helper="\Kartbutikken\Customer\Model\IsLoggedIn::check"/>
+                    <argument name="invert" xsi:type="boolean">true</argument>
+                </action>
+                <action method="setAdditionalClasses">
+                    <argument name="classes" xsi:type="array">
+                        <item name="customer-welcome" xsi:type="string">customer-welcome</item>
+                        <item name="hidden-xs" xsi:type="string">hidden-xs</item>
+                    </argument>
+                </action>
+            </block>
+            <block class="Kartbutikken\Theme\Block\Header\Panel\Button" name="my-sign-out-button">
+                <action method="setSortOrder">
+                    <argument name="order" xsi:type="number">41</argument>
+                </action>
+                <action method="setTitle">
+                    <argument name="title" xsi:type="string" translate="true">Sign out</argument>
+                </action>
+                <action method="setLabel">
+                    <argument name="label" xsi:type="string" translate="true">Sign out</argument>
+                </action>
+                <action method="setIcon">
+                    <argument name="order" xsi:type="string"><![CDATA[<i class="icon-sign-out"></i>]]></argument>
+                </action>
+                <action method="setIsDropDown">
+                    <argument name="order" xsi:type="boolean">false</argument>
+                </action>
+                <action method="setIsDisabled">
+                    <argument name="isDisabled" xsi:type="helper" helper="\Kartbutikken\Customer\Model\IsLoggedIn::check"/>
+                    <argument name="invert" xsi:type="boolean">true</argument>
+                </action>
+                <action method="setIsLink">
+                    <argument name="isLink" xsi:type="boolean">true</argument>
+                </action>
+                <action method="setLinkUrl">
+                    <argument name="linkUrl" xsi:type="helper" helper="\Magento\Customer\Model\Url::getLogoutUrl"/>
+                </action>
+                <action method="setAdditionalClasses">
+                    <argument name="classes" xsi:type="array">
+                        <item name="hidden-xs" xsi:type="string">hidden-xs</item>
+                    </argument>
+                </action>
+            </block>
+        </referenceBlock>
+
+        <move element="top.links" destination="customer-button"/>
+        <move element="authorization-link" destination="account.store.links" after="-"/>
+        <move element="bss-authorization-link" destination="account.store.links" after="-"/>
+        <referenceBlock name="bss-authorization-link-login" remove="true" />
+
+        <referenceBlock name="authorization-link">
+            <arguments>
+                <argument name="sortOrder" xsi:type="number">0</argument>
+            </arguments>
+        </referenceBlock>
+
+        <referenceBlock name="account.store.links">
+            <block class="Magento\Customer\Block\Account\RegisterLink" name="account.store.links.register-link">
+                <arguments>
+                    <argument name="sortOrder" xsi:type="number">50</argument>
+                    <argument name="label" xsi:type="string" translate="true">Create an Account</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="authentication-popup" remove="true"/>
+    </body>
+</page>

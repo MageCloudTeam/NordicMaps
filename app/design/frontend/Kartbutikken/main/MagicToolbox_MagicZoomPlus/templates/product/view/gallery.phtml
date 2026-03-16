@@ -1,0 +1,7 @@
+<?php
+
+/**
+ * @var $block \MagicToolbox\MagicZoomPlus\Block\Product\View\Gallery
+ */
+
+echo str_replace('itemprop="image"', 'class="no-lazy" data-nowebp="true" itemprop="image"', $block->getRenderedHtml());

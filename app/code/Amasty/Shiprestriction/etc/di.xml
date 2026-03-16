@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Shipping Restrictions for Magento 2
+ */-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Amasty\Shiprestriction\Model\Quote\Inventory\QuoteSourceSelectionResultInterface"
+                type="Amasty\Shiprestriction\Model\Quote\Inventory\QuoteSourceSelectionResult" />
+
+    <type name="Amasty\Shiprestriction\Model\Rule">
+        <arguments>
+            <argument name="conditionCombine" xsi:type="object" shared="false">Amasty\Shiprestriction\Model\Rule\Condition\Combine</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Shipping\Model\Shipping">
+        <plugin name="Amasty_Shiprestriction::RestrictRates" type="Amasty\Shiprestriction\Plugin\Model\ShippingPlugin"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Config">
+        <plugin name="Amasty_Shiprestriction::ProductAttributes" type="Amasty\Shiprestriction\Plugin\ProductAttributes" />
+    </type>
+    <preference for="Magento\Quote\Model\ShippingMethodManagement"     type="Amasty\Shiprestriction\Model\Quote\ShippingMethodManagement"/>
+
+    <type name="Amasty\Shiprestriction\Model\Message\RestrictionMessageProcessor">
+        <arguments>
+            <argument name="variables" xsi:type="array">
+                <item name="delivery_name" xsi:type="array">
+                    <item name="name" xsi:type="string">{delivery_name}</item>
+                    <item name="data" xsi:type="string">carrier_title</item>
+                </item>
+                <item name="delivery_method" xsi:type="array">
+                    <item name="name" xsi:type="string">{delivery_method}</item>
+                    <item name="data" xsi:type="string">method_title</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

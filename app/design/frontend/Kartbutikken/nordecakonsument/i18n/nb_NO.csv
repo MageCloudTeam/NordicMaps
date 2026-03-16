@@ -1,0 +1,13 @@
+Add additional delivery address,Legg til postboks adresse
+Additional Delivery Address,Leveringsadresse postboks
+"Excl Tax","eks mva"
+"Tax","MVA"
+"Order Total","Ordretotal inkl. mva"
+"<span>Your discount is %1 (%2)</span>","<span>Rabatt: %2</span>"
+"Reference Code","Ditt referansenummer"
+"You will receive an invoice at EHF","Du vil motta faktura på EHF."
+"You will receive an invoice by email to: %1","Du vil motta faktura på: %1"
+"The shipping method is missing. Select the shipping method and try again.","Du må velge en leveringsmåte"
+"Please enter less or equal than %1 symbols.","Legg inn %1 siffer"
+"Please enter more or equal than %1 symbols.","Legg inn %1 siffer"
+"Product that you are trying to add is not available.","Noen produkter i listen er utsolgt. Vennligst fjern disse og prøv på nytt å legge til listen i handlekurven."

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sales\Model\Order\Email\Container\InvoiceIdentity">
+        <plugin name="Kartbutikken_B2BCustomerHasInvoiceEmail::add_cc_copy"
+                type="Kartbutikken\B2BCustomerHasInvoiceEmail\Plugin\AddCCCopy"/>
+    </type>
+</config>

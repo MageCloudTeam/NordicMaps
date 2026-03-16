@@ -1,0 +1,41 @@
+<?php
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2023 Amasty (https://www.amasty.com)
+ * @package Cookie Consent (GDPR) for Magento 2
+ */
+/** @var \Amasty\GdprCookie\Block\Consent $block */
+$jsLayout = $block->getJsLayout();
+$config = $jsLayout['config'];
+$components = $jsLayout['jsComponents'];
+?>
+
+<?php if ($jsLayout['isCookiePolicyAllowed']): ?>
+    <script>
+        window.isGdprCookieEnabled = true;
+
+        require(['Amasty_GdprFrontendUi/js/modal-show'], function (modalConfigInit) {
+            modalConfigInit(<?= /* @noEscape */ json_encode($config) ?>);
+        });
+    </script>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ json_encode($components) ?>
+            }
+        }
+    </script>
+    <!-- ko scope: 'gdpr-cookie-modal' -->
+        <!--ko template: getTemplate()--><!-- /ko -->
+    <!-- /ko -->
+    <style>
+        .amgdprjs-bar-template {
+            z-index: 15;
+        <?php if ((int)$config['barLocation']): ?>
+            top: 0;
+        <?php else: ?>
+            bottom: 0;
+        <?php endif; ?>
+        }
+    </style>
+<?php endif; ?>

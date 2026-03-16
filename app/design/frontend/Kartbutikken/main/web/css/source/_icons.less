@@ -1,0 +1,69 @@
+// Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+// @author: <mailto:volodymyr@hryvinskyi.com>
+// @github: <https://github.com/hryvinskyi>
+
+& when (@media-common = true) {
+    .lib-font-face(
+        @family-name: @icons__font-name,
+        @font-path: @icons__font-path,
+        @font-weight: normal,
+        @font-style: normal,
+        @font-display: swap
+    );
+
+    [class^="icon-"],
+    [class*=" icon-"] {
+        display: inline-block;
+        font-family: '@{icons__font-name}' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .icon-heart:before {
+        content: "\f004";
+    }
+
+    .icon-user:before {
+        content: "\f007";
+    }
+
+    .icon-chevron-left:before {
+        content: @icon-chevron-left;
+    }
+
+    .icon-chevron-right:before {
+        content: @icon-chevron-right;
+    }
+
+    .icon-box-open:before {
+        content: "\f49e";
+    }
+
+    .icon-headset:before {
+        content: "\f590";
+    }
+
+    .icon-sign-out:before {
+        content: "\f08b";
+    }
+
+    .icon-instagram:before {
+        content: "\f16d";
+    }
+
+    .icon-facebook:before {
+        content: "\f082";
+    }
+
+    .icon-filter:before {
+        content: "\f0b0";
+    }
+}

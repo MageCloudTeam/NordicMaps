@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="payment_additional_info">
+            <block class="Kartbutikken\NordecakonsumentOrderAttributes\Block\Info\Info"
+                   name="nordeca_info" template="Kartbutikken_NordecakonsumentOrderAttributes::info/info.phtml" />
+        </referenceContainer>
+    </body>
+</page>

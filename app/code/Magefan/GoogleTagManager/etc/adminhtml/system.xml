@@ -1,0 +1,142 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="mfgoogletagmanager" translate="label" sortOrder="10423249260" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Google Tag Manager and Analytics</label>
+            <tab>magefan</tab>
+            <resource>Magefan_GoogleTagManager::mfgoogletagmanager_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <attribute type="expanded">1</attribute>
+                <field id="version" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Magefan\GoogleTagManager\Block\Adminhtml\System\Config\Form\Info</frontend_model>
+                </field>
+                <field id="attention" translate="label comment" type="text" sortOrder="9999" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Magefan\GoogleTagManager\Block\Adminhtml\System\Config\Form\Attention</frontend_model>
+                </field>
+                <field id="enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Extension</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Key</label>
+                    <frontend_model>Magefan\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
+                </field>
+            </group>
+            <group id="web_container" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" >
+                <label>Web Container</label>
+                <attribute type="expanded">1</attribute>
+                <!--
+                <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                -->
+                <field id="public_id" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Public ID</label>
+                    <comment><![CDATA[
+                        <div class="default_loader_mfgtm_js_example">
+                        E.g. <strong>GTM-XXXXXXX</strong><br/>
+                        Please note that we do not allow pasting the GTM JavaScript code directly for security reasons. Public ID is used to automatically insert the code to your pages:
+                        <pre style="border: 1px dashed #5f5f5f;padding: 5px;background: #f4f4f4;">
+&lt;!-- Google Tag Manager --&gt;
+&lt;script&gt;(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({&#39;gtm.start&#39;:
+new Date().getTime(),event:&#39;gtm.js&#39;});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!=&#39;dataLayer&#39;?&#39;&amp;l=&#39;+l:&#39;&#39;;j.async=true;j.src=
+&#39;https://www.googletagmanager.com/gtm.js?id=&#39;+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,&#39;script&#39;,&#39;dataLayer&#39;,&#39;<strong>GTM-XXXXXXX</strong>&#39;);&lt;/script&gt;
+&lt;!-- End Google Tag Manager --&gt;
+</pre>
+<pre style="border: 1px dashed #5f5f5f;padding: 5px;background: #f4f4f4;">
+&lt;!-- Google Tag Manager (noscript) --&gt;
+&lt;noscript&gt;&lt;iframe src=&quot;https://www.googletagmanager.com/ns.html?id=<strong>GTM-XXXXXXX</strong>&quot;
+height=&quot;0&quot; width=&quot;0&quot; style=&quot;display:none;visibility:hidden&quot;&gt;&lt;/iframe&gt;&lt;/noscript&gt;
+&lt;!-- End Google Tag Manager (noscript) --&gt;
+</pre>
+</div>
+<div id="mfgtm_js_example"></div>
+
+                    ]]></comment>
+                </field>
+                <field id="account_id" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Account ID</label>
+                    <comment><![CDATA[
+                            <p>Please get the <a href="https://tagmanager.google.com/" title="Google Tag Manager" target="_blank">Google Tag Manager</a> account ID from the GTM Workspace URL path. E.g.<br/>
+                            <pre style="border: 1px dashed #5f5f5f;padding: 5px;background: #f4f4f4;">https://tagmanager.google.com/#/container/accounts/<strong>XXXXXXXXXX</strong>/containers/XXXXXXXXX</pre></p>
+                        ]]>
+                    </comment>
+                </field>
+                <field id="container_id" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Container ID</label>
+                    <comment><![CDATA[
+                            <p>Please get the <a href="https://tagmanager.google.com/" title="Google Tag Manager" target="_blank">Google Tag Manager</a> container ID from the GTM Workspace URL path. E.g.<br/>
+                            <pre style="border: 1px dashed #5f5f5f;padding: 5px;background: #f4f4f4;">https://tagmanager.google.com/#/container/accounts/XXXXXXXXXX/containers/<strong>XXXXXXXXX</strong></pre></p>
+                        ]]>
+                    </comment>
+                </field>
+            </group>
+            <group id="analytics" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Google Analytics 4</label>
+                <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="measurement_id" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Measurement ID</label>
+                    <comment><![CDATA[
+                            <p>Please get the measurement ID from the Stream details page (<a href="https://analytics.google.com/analytics/web/" title="Google Analitics" target="_blank" rel="nofollow noopener">Google Analytics</a> > Admin > Data Streams).</p>
+                            <p>E.g. G-XXXXXXXXXX
+                        ]]>
+                    </comment>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="events" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Events</label>
+                    <frontend_model>Magefan\GoogleTagManager\Block\Adminhtml\System\Config\Form\EventList</frontend_model>
+                </field>
+            </group>
+            <group id="attributes" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Product Attributes Mapping</label>
+                <field id="product" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product Identifier</label>
+                    <source_model>Magefan\GoogleTagManager\Model\Config\Source\ProductAttribute</source_model>
+                </field>
+                <field id="brand" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Brand Identifier</label>
+                    <source_model>Magefan\GoogleTagManager\Model\Config\Source\BrandAttribute</source_model>
+                </field>
+                <field id="categories" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Include Categories</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[<strong class="colorRed">Warning!</strong> Enabling this option may cause the performance impact.]]></comment>
+                </field>
+            </group>
+            <group id="customer_data" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GDPR/CCPA/LGPD (Customer Data Protection Regulation)</label>
+                <field id="protect" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Protect Customer Data</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <frontend_model>Magefan\GoogleTagManager\Block\Adminhtml\System\Config\Form\ProtectCustomerData</frontend_model>
+                </field>
+            </group>
+            <group id="container" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Export Container</label>
+                <field id="export" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Magefan\GoogleTagManager\Block\Adminhtml\System\Config\Form\Button</frontend_model>
+                    <depends>
+                        <field id="mfgoogletagmanager/general/loader_type" separator="|">default_loader|stape_loader</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

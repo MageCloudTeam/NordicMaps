@@ -1,0 +1,43 @@
+<?php
+/** @var $block \Jajuma\WebpImages\Block\Picture */
+$customSrcTag = $block->getCustomSrcTag();
+$customSrcSetTag = $block->getCustomSrcSetTag();
+$originalTag = $block->getOriginalTag();
+
+
+if(@($size = getimagesize($block->getOriginalImagePath())) !== false) {
+    list($width, $height, $type, $attr) = $size;
+    $originalTag = str_replace([' >', '" >', '/>'], 'height="' . $height . '"' . ' width="' . $width .'" style=height:auto />', $originalTag);
+}
+
+?>
+<?php if ($block->getMobileImage()): ?>
+    <?php if ($customSrcTag): ?>
+        <picture>
+            <source type="image/webp" media="(max-width: 768px)" <?= $customSrcSetTag ? $customSrcSetTag : 'srcset' ?>="<?= $block->getMobileImage() ?>">
+            <source type="image/webp" media="(min-width: 768px)" <?= $customSrcSetTag ? $customSrcSetTag : 'srcset' ?>="<?= $block->getWebpImage() ?>">
+            <?= $originalTag ?>
+        </picture>
+    <?php else: ?>
+        <picture>
+            <source type="image/webp" media="(max-width: 768px)" srcset="<?= $block->getMobileImage() ?>">
+            <source type="image/webp" media="(min-width: 768px)" srcset="<?= $block->getWebpImage() ?>">
+            <?= $originalTag ?>
+        </picture>
+    <?php endif; ?>
+<?php else: ?>
+    <?php if ($customSrcTag): ?>
+        <picture>
+            <source type="image/webp" <?= $customSrcSetTag ? $customSrcSetTag : 'srcset' ?>="<?= $block->getWebpImage() ?>">
+            <source type="<?= $block->getOriginalImageType() ?>" <?= $customSrcSetTag ? $customSrcSetTag : 'srcset' ?>="<?= $block->getOriginalImage() ?>">
+            <?= $originalTag ?>
+        </picture>
+    <?php else: ?>
+        <picture>
+            <source type="image/webp" srcset="<?= $block->getWebpImage() ?>">
+            <source type="<?= $block->getOriginalImageType() ?>" srcset="<?= $block->getOriginalImage() ?>">
+            <?= $originalTag ?>
+        </picture>
+    <?php endif; ?>
+<?php endif; ?>
+

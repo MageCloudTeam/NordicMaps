@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var \Magento\Catalog\Block\Product\View $block
+ * @var \Magento\Framework\Registry $registry
+ */
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$registry = $objectManager->get('Magento\Framework\Registry');
+$product = $registry->registry('product');
+$aggregaterating = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('aggregaterating/aggregate/magecloud_rating_value');
+$aggregateratingcount = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('aggregaterating/aggregate/magecloud_rating_count');
+$aggregateratingproduct = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('aggregaterating/aggregate/enableaggregateproduct');
+
+?>
+<!--<script type="application/ld+json">{-->
+<!--"@context": "http://schema.org",-->
+<!--"@type": "Product",-->
+<!--"name": "--><?php //echo $product->getName() ?><!--"-->
+<?php //if ($aggregateratingproduct === "1") :?><!--,-->
+<!--"aggregateRating":{-->
+<!--"@type":"AggregateRating",-->
+<!--"ratingValue": "--><?php //echo $aggregaterating;?><!--",-->
+<!--"reviewCount": "--><?php //echo $aggregateratingcount;?><!--",-->
+<!--"bestRating": "5",-->
+<!--"worstRating": "1"-->
+<!--}-->
+<?php //endif;?>
+<!--}</script>-->

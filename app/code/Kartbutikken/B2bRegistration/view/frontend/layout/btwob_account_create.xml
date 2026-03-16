@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="mage/custom-calendar.css"/>
+    </head>
+    <body>
+        <referenceBlock name="bss-register">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Kartbutikken_B2bRegistration::account/register.phtml</argument>
+            </action>
+            <container name="bss.recaptcha" as="bss.recaptcha"/>
+        </referenceBlock>
+        <referenceContainer name="bss.recaptcha">
+            <block class="MSP\ReCaptcha\Block\Frontend\ReCaptcha" name="msp-recaptcha" after="-"
+                   template="MSP_ReCaptcha::msp_recaptcha.phtml"
+                   ifconfig="msp_securitysuite_recaptcha/frontend/enabled">
+
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="msp-recaptcha" xsi:type="array">
+                                <item name="component" xsi:type="string">MSP_ReCaptcha/js/reCaptcha</item>
+                                <item name="zone" xsi:type="string">forgot</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+            <block class="Magento\ReCaptchaUi\Block\ReCaptcha"
+                   name="recaptcha"
+                   after="-"
+                   template="Magento_ReCaptchaFrontendUi::recaptcha.phtml"
+                   ifconfig="recaptcha_frontend/type_for/customer_create">
+                <arguments>
+                    <argument name="recaptcha_for" xsi:type="string">customer_create</argument>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="recaptcha" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_ReCaptchaFrontendUi/js/reCaptcha</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="bss-register-taxvat" template="Kartbutikken_B2bRegistration::widget/taxvat.phtml" />
+    </body>
+</page>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="panel-buttons">
+            <block class="Kartbutikken\Theme\Block\Header\Panel\Button" name="minicart-button">
+                <action method="setSortOrder">
+                    <argument name="order" xsi:type="number">20</argument>
+                </action>
+                <action method="setIsCustom">
+                    <argument name="order" xsi:type="boolean">true</argument>
+                </action>
+                <action method="setTitle">
+                    <argument name="title" xsi:type="string" translate="true">Cart</argument>
+                </action>
+            </block>
+        </referenceBlock>
+
+        <move element="minicart" destination="minicart-button" />
+    </body>
+</page>

@@ -1,0 +1,29 @@
+// Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+// @author: <mailto:volodymyr@hryvinskyi.com>
+// @github: <https://github.com/hryvinskyi>
+
+
+.icon-font(@_font, @_font-size) {
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: @_font;
+    font-size: @_font-size;
+}
+
+.kartbutikken-icon-font(@_font, @_font-size) {
+    .icon-font(@_font, @_font-size);
+    font-family: @icons__font-name;
+}
+
+.transform(@_value: initial) {
+    transform: @_value;
+}
+
+.transition(@_value: all 500ms ease) {
+    transition: @_value;
+    backface-visibility: hidden;
+}

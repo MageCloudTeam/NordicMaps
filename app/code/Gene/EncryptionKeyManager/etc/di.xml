@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Framework\Encryption\Encryptor">
+        <plugin name="gene-encryption-key-manager-log-decrypts" type="Gene\EncryptionKeyManager\Plugin\LogDecrypts" disabled="false"/>
+    </type>
+
+    <type name="Magento\JwtUserToken\Model\SecretBasedJwksFactory">
+        <arguments>
+            <argument name="deploymentConfig" xsi:type="object">Gene\EncryptionKeyManager\Model\DeploymentConfig</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Catalog\Model\View\Asset\Image">
+        <arguments>
+            <argument name="encryptor" xsi:type="object">Gene\EncryptionKeyManager\Service\InvalidatedKeyHasher</argument>
+        </arguments>
+    </type>
+
+    <type name="Gene\EncryptionKeyManager\Console\GenerateEncryptionKey">
+        <arguments>
+            <argument name="changeEncryptionKey" xsi:type="object">Gene\EncryptionKeyManager\Service\ChangeEncryptionKey\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Gene\EncryptionKeyManager\Service\ChangeEncryptionKey">
+        <arguments>
+            <argument name="structure" xsi:type="object">Magento\Config\Model\Config\StructureLazy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="gene_encryption_key_generate" xsi:type="object">Gene\EncryptionKeyManager\Console\GenerateEncryptionKey</item>
+                <item name="gene_encryption_key_invalidate" xsi:type="object">Gene\EncryptionKeyManager\Console\InvalidateOldEncryptionKeys</item>
+                <item name="gene_encryption_key_reencrypt" xsi:type="object">Gene\EncryptionKeyManager\Console\ReencryptUnhandledCoreConfigData</item>
+                <item name="gene_encryption_key_reencryptcolumn" xsi:type="object">Gene\EncryptionKeyManager\Console\ReencryptColumn</item>
+                <item name="gene_encryption_key_reencrypt_tfa" xsi:type="object">Gene\EncryptionKeyManager\Console\ReencryptTfaData</item>
+                <item name="gene_encryption_key_get_reencrypted_cloud_env_keys"
+                      xsi:type="object">Gene\EncryptionKeyManager\Console\GetReEncryptedCloudEnvironmentsKeys</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Logger -->
+    <virtualType name="GeneEncryptionHandler"
+                 type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/gene_encryption_key.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GeneEncryptionLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">GeneEncryptionHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Gene\EncryptionKeyManager\Plugin\LogDecrypts">
+        <arguments>
+            <argument name="logger" xsi:type="object">GeneEncryptionLogger</argument>
+        </arguments>
+    </type>
+
+</config>

@@ -1,0 +1,80 @@
+<?php
+/**
+ * Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+$priceModel = $block->getPriceType('regular_price');
+$finalPriceModel = $block->getPriceType('final_price');
+$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
+$schema = ($block->getZone() == 'item_view') ? true : false;
+
+/**
+ * @var $catalogHelper \Magento\Catalog\Helper\Data
+ * @var $customAmount \Magento\Framework\Pricing\Amount\Base
+ */
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+$taxHelper = $objectManager->get('MageCloud\Discountpercentage\Model\Tax');
+$customAmount = $objectManager->get('\Magento\Framework\Pricing\Amount\BaseFactory');
+$currencyCode = $storeManager->getStore()->getCurrentCurrencyCode();
+$currency = $objectManager->create('Magento\Directory\Model\CurrencyFactory')->create()->load($currencyCode);
+$currencySymbol = $currency->getCurrencySymbol();
+?>
+<?php
+$pricingHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+$oldPrice = (float)$priceModel->getValue();
+$finalPrice = (float)$finalPriceModel->getValue();
+$save = (float)$oldPrice - (float)$finalPrice;
+$saving = number_format($save, 2, '.', '');
+$savePercent = 100 - round(($finalPrice / $oldPrice) * 100);
+
+$oldPriceAndTax = $taxHelper->getPriceInclAndExclTax($block->getSaleableItem());
+?>
+<?php if ($block->hasSpecialPrice()): ?>
+
+    <span class="special-price">
+        <?php echo $block->renderAmount($finalPriceModel->getAmount(), [
+            'display_label' => __('Special Price'),
+            'price_id' => $block->getPriceId('product-price-' . $idSuffix),
+            'price_type' => 'finalPrice',
+            'include_container' => true,
+            'schema' => $schema
+        ]); ?>
+        <?php echo __('Excl Tax'); ?>
+    </span>
+    <span class="old-price">
+        <?php echo $block->renderAmount($customAmount->create(['amount' => $oldPriceAndTax['incl']]), [
+                'display_label' => '',
+                'price_id' => $block->getPriceId('old-price-' . $idSuffix),
+                'price_type' => 'oldPrice',
+                'include_container' => true,
+                'skip_adjustments' => true
+            ]); ?> <?php echo __('Veil.'); ?></span>
+    <div class="save-price" data-price-amount="<?php echo $saving ?>" id="<?php echo $block->getPriceId('save-price-' . $idSuffix) ?>">
+        <?php echo __('<span>Your discount is %1 (%2)</span>', $pricingHelper->currency($saving, true, false), $savePercent . '%'); ?>
+    </div>
+<?php else: ?>
+    <span class="vertical-align-bottom">
+    <?php echo $block->renderAmount($finalPriceModel->getAmount(), [
+        'price_id' => $block->getPriceId('product-price-' . $idSuffix),
+        'price_type' => 'finalPrice',
+        'include_container' => true,
+        'schema' => $schema
+    ]); ?><span class="fs-12"><?php echo __('Excl Tax'); ?></span>
+    </span>
+<?php endif; ?>
+
+<?php if ($block->showMinimalPrice()): ?>
+    <?php if ($block->getUseLinkForAsLowAs()): ?>
+        <a href="<?= $block->getSaleableItem()->getProductUrl() ?>" class="minimal-price-link">
+            <?= $block->renderAmountMinimal() ?>
+        </a>
+    <?php else: ?>
+        <span class="minimal-price-link">
+            <?= $block->renderAmountMinimal() ?>
+        </span>
+    <?php endif ?>
+<?php endif; ?>

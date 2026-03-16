@@ -1,0 +1,326 @@
+// Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+// @author: <mailto:volodymyr@hryvinskyi.com>
+// @github: <https://github.com/hryvinskyi>
+
+//
+//  Variables
+//  ---------------------------------------------
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .hide-text {
+        font: 0/0 a;
+        color: transparent;
+        text-shadow: none;
+        background-color: transparent;
+        border: 0;
+    }
+
+    .input-block-level {
+        display: block;
+        width: 100%;
+        min-height: 3rem;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    a.product-image {
+        position: relative;
+    }
+
+    .cataloglabel {
+        &.cataloglabel-product-top-label {
+            display: table;
+            position: absolute;
+            top: 0;
+            right: 0;
+            text-align: center;
+            z-index: 2;
+
+            .catalog-product-view & {
+                right: 10%;
+            }
+
+            > span {
+                color: #fff;
+                display: table-cell;
+                vertical-align: middle;
+                line-height: 14px;
+                padding: 1rem 1rem;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+        }
+
+        &.cataloglabel-product-list {
+            img {
+                margin-right: .3rem;
+            }
+        }
+
+        &.cataloglabel-product-view {
+            img {
+                margin-right: 1rem;
+            }
+
+            table {
+                width: 100%;
+
+                td {
+                    text-align: left;
+
+                    b {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        &.position-TL {
+            top: 0;
+            left: 0;
+            position: absolute;
+            z-index: 94;
+
+            .catalog-product-view & {
+                left: 10%;
+            }
+        }
+
+        &.position-TR {
+            top: 0;
+            right: 0;
+            left: auto;
+            position: absolute;
+            z-index: 94;
+
+            .catalog-product-view & {
+                right: 10%;
+            }
+        }
+
+        &.position-TC {
+            top: 0;
+            right: auto;
+            left: 50%;
+            position: absolute;
+            z-index: 94;
+        }
+
+        &.position-ML {
+            top: 50%;
+            bottom: auto;
+            left: 0;
+            position: absolute;
+            z-index: 94;
+        }
+
+        &.position-MR {
+            top: 50%;
+            bottom: auto;
+            right: 0;
+            left: auto;
+            position: absolute;
+            z-index: 94;
+        }
+
+        &.position-MC {
+            top: 50%;
+            bottom: auto;
+            right: auto;
+            left: 50%;
+            position: absolute;
+            z-index: 94;
+        }
+
+        &.position-BL {
+            bottom: 0;
+            top: auto;
+            left: 0;
+            position: absolute;
+            z-index: 94;
+        }
+
+        &.position-BR {
+            bottom: 0;
+            top: auto;
+            left: auto;
+            right: 0;
+            position: absolute;
+            z-index: 94;
+        }
+
+        &.position-BC {
+            bottom: 0;
+            top: auto;
+            left: 50%;
+            right: auto;
+            position: absolute;
+            z-index: 94;
+        }
+    }
+
+    .category-products {
+        li {
+            &.item {
+                position: relative;
+            }
+        }
+    }
+
+    .tooltip {
+        position: absolute;
+        z-index: 94;
+        display: block;
+        visibility: visible;
+        font-size: 1.2rem;
+        line-height: 1.4;
+        opacity: 0;
+
+        &.in {
+            opacity: 0.9;
+        }
+
+        &.top {
+            margin-top: -.3rem;
+            padding: .5rem 0;
+        }
+
+        &.right {
+            margin-left: .3rem;
+            padding: 0 .5rem;
+        }
+
+        &.bottom {
+            margin-top: .3rem;
+            padding: .5rem 0;
+        }
+
+        &.left {
+            margin-left: -.3rem;
+            padding: 0 .5rem;
+        }
+    }
+
+    .tooltip-inner {
+        max-width: 20rem;
+        min-width: 7rem;
+        padding: .8rem .4rem;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        background-color: #666;
+        border-radius: .3rem;
+        font-size: 1rem;
+
+        b {
+            display: block;
+            font-size: 12px;
+        }
+    }
+
+    .tooltip-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+    }
+
+    .tooltip.top {
+        .tooltip-arrow {
+            bottom: 0;
+            left: 50%;
+            margin-left: -.5rem;
+            border-width: .5rem .5rem 0;
+            border-top-color: #666;
+        }
+    }
+
+    .tooltip.right {
+        .tooltip-arrow {
+            top: 50%;
+            left: 0;
+            margin-top: -.5rem;
+            border-width: .5rem .5rem .5rem 0;
+            border-right-color: #666;
+        }
+    }
+
+    .tooltip.left {
+        .tooltip-arrow {
+            top: 50%;
+            right: 0;
+            margin-top: -.5rem;
+            border-width: .5rem 0 .5rem .5rem;
+            border-left-color: #666;
+        }
+    }
+
+    .tooltip.bottom {
+        .tooltip-arrow {
+            top: 0;
+            left: 50%;
+            margin-left: -.5rem;
+            border-width: 0 .5rem .5rem;
+            border-bottom-color: #666;
+        }
+    }
+
+    .catalog-product-view-media {
+        position: relative;
+    }
+
+    .product {
+        &.media {
+            position: relative;
+        }
+    }
+
+    .product-item-info {
+        a {
+            position: relative;
+            display: block;
+        }
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+
+}

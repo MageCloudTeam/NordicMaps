@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Kartbutikken\Theme\Block\Product\OverviewMap"
+                 type="Kartbutikken\Theme\Block\Product\AttributeTab">
+        <arguments>
+            <argument name="attribute" xsi:type="string">overview_map</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Kartbutikken\Theme\Block\Product\SeriesLongDescription"
+                 type="Kartbutikken\Theme\Block\Product\AttributeTab">
+        <arguments>
+            <argument name="attribute" xsi:type="string">series_long_description</argument>
+        </arguments>
+    </virtualType>
+</config>

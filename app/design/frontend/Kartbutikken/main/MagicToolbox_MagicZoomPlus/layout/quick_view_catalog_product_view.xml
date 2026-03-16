@@ -1,0 +1,25 @@
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="quickview_area">
+            <block class="MagicToolbox\MagicZoomPlus\Block\Html\Head" name="magiczoomplus-header" template="MagicToolbox_MagicZoomPlus::html/head.phtml">
+                <arguments>
+                    <argument name="page" xsi:type="string">product</argument>
+                </arguments>
+            </block>
+            <!--BEGIN quickview MEDIA-->
+            <referenceContainer name="quickview_media">
+                <referenceBlock name="product.info.media.image" remove="true"/>
+                <block class="MagicToolbox\MagicZoomPlus\Block\Product\View\Gallery" name="product.info.media.image.magicZoom"
+                       template="MagicToolbox_MagicZoomPlus::product/view/gallery.phtml" />
+            </referenceContainer>
+            <!--END quickview MEDIA-->
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,114 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var \Magento\Catalog\Block\Product\View\Details $block
+ * @var \Magento\Framework\Registry $registry
+ */
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$registry = $objectManager->get('Magento\Framework\Registry');
+$product = $registry->registry('product');
+?>
+<?php if ($detailedInfoGroup = $block->getGroupSortedChildNames('detailed_info', 'getChildHtml')) :?>
+<?php $active = []; $i = 0; ?>
+    <div class="product info detailed">
+        <?php $layout = $block->getLayout(); ?>
+        <div class="product data items">
+            <?php foreach ($detailedInfoGroup as $name) :?>
+                <?php
+                $html = $layout->renderElement($name);
+                if (!trim($html)) {
+                    continue;
+                }
+                $alias = $layout->getElementAlias($name);
+                $label = $block->getChildData($alias, 'title');
+                ?>
+                <div class="data item title"
+                     data-role="collapsible" id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>">
+                    <a class="data switch"
+                       tabindex="-1"
+                       data-toggle="trigger"
+                       href="#<?= $block->escapeUrl($alias) ?>"
+                       id="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title">
+                        <?= /* @noEscape */ $label ?>
+                    </a>
+                </div>
+                <div class="data item content"
+                     aria-labelledby="tab-label-<?= $block->escapeHtmlAttr($alias) ?>-title" id="<?= $block->escapeHtmlAttr($alias) ?>" data-role="content">
+                    <?= /* @noEscape */ $html ?>
+                </div>
+                <?php $active[] = $i; $i++; ?>
+            <?php endforeach;?>
+        </div>
+    </div>
+    <script type="text/javascript">
+        require(['jquery', 'matchMedia', 'tabs', 'accordion'], function($, mediaCheck) {
+
+            let detailsTabs = $('.product.data.items'),
+                destroy = function () {
+                    if(detailsTabs.data('mageTabs')) {
+                        detailsTabs.tabs('destroy');
+                    }
+
+                    if(detailsTabs.data('mageAccordion')) {
+                        detailsTabs.accordion('destroy');
+                    }
+
+                    detailsTabs.find('[data-role="content"]').css('display', 'block');
+                },
+                getTab = function(name) {
+                    return Math.ceil(detailsTabs.find('#' + name).index() / 2) - 1;
+                },
+                defaultTab = <?php if($product && (int)$product->getAttributeSetId() !== 10): ?>getTab('description')<?php else: ?>null<?php endif; ?>;
+
+            destroy();
+
+            detailsTabs.accordion({
+                openedState: "active",
+                active: false,
+                collapsible: false
+            });
+
+            detailsTabs.accordion('activate', defaultTab);
+
+            //mediaCheck({
+            //    media: '(min-width: 768px)',
+            //    /**
+            //     * Switch to Desktop Version.
+            //     */
+            //    entry: function () {
+            //        destroy();
+            //
+            //        detailsTabs.accordion({
+            //            openedState: "active",
+            //            active: false,
+            //            collapsible: false
+            //        });
+            //
+            //        detailsTabs.accordion('activate', defaultTab);
+            //    },
+            //
+            //    /**
+            //     * Switch to Mobile Version.
+            //     */
+            //    exit: function () {
+            //        destroy();
+            //
+            //        detailsTabs.accordion({
+            //            openedState: "active",
+            //            active: "<?php //echo implode(' ', range(0, $i)); ?>//",
+            //            collapsible: true,
+            //            multipleCollapsible: true,
+            //            scrollTo: false,
+            //            // offsetSelector: 'header.page-header',
+            //            // target: '.product.info.detailed'
+            //        });
+            //    }
+            //});
+        })
+    </script>
+<?php endif; ?>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Kartbutikken\WebsiteLocator\Api\UrlRepositoryInterface"
+                type="Kartbutikken\WebsiteLocator\Model\UrlRepository"/>
+    <preference for="Kartbutikken\WebsiteLocator\Model\PageResolverInterface"
+                type="Kartbutikken\WebsiteLocator\Model\PageResolver" />
+    <preference for="Kartbutikken\WebsiteLocator\Model\PageInterface"
+                type="Kartbutikken\WebsiteLocator\Model\Page" />
+
+    <type name="Kartbutikken\WebsiteLocator\Model\Page\EntityList">
+        <arguments>
+            <argument name="entityTypes" xsi:type="array">
+                <item name="product" xsi:type="string">Kartbutikken\WebsiteLocator\Model\Page\Type\Product</item>
+                <item name="category" xsi:type="string">Kartbutikken\WebsiteLocator\Model\Page\Type\Category</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,125 @@
+// Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+// @author: <mailto:volodymyr@hryvinskyi.com>
+// @github: <https://github.com/hryvinskyi>
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    //  Using buttons mixins
+    button,
+    a.action.primary {
+        .lib-css(border-radius, @button__border-radius);
+    }
+
+    button {
+        &:not(.primary, .green) {
+            .lib-css(box-shadow, @button__shadow);
+
+            &:active {
+                .lib-css(box-shadow, @button__shadow-active);
+            }
+        }
+    }
+
+    body {
+        &:not(._keyfocus) {
+            button {
+                &:focus {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+
+    a.action.default,
+    a.action.primary,
+    a.action.green,
+    a.action.yellow {
+        .lib-link-as-button();
+    }
+
+    .action.primary {
+        .lib-button-primary();
+    }
+
+    .action.green {
+        .lib-button-primary(
+            @_button-font-family: @button-green__font-family,
+            @_button-font-size: @button-green__font-size,
+            @_button-font-weight: @button-green__font-weight,
+            @_button-line-height: @button-green__line-height,
+            @_button-width: @button-green__width,
+            @_button-margin: @button-green__margin,
+            @_button-padding: @button-green__padding,
+            @_button-color: @button-green__color,
+            @_button-background: @button-green__background,
+            @_button-border: @button-green__border,
+            @_button-gradient-color-start: @button-green__gradient-color-start,
+            @_button-gradient-color-end: @button-green__gradient-color-end,
+            @_button-color-hover: @button-green__hover__color,
+            @_button-background-hover: @button-green__hover__background,
+            @_button-border-hover: @button-green__hover__border,
+            @_button-gradient-color-start-hover: @button-green__hover__gradient-color-start,
+            @_button-gradient-color-end-hover: @button-green__hover__gradient-color-end,
+            @_button-color-active: @button-green__active__color,
+            @_button-background-active: @button-green__active__background,
+            @_button-border-active: @button-green__active__border,
+            @_button-gradient-color-start-active: @button-green__active__gradient-color-start,
+            @_button-gradient-color-end-active: @button-green__active__gradient-color-end,
+            @_button-gradient: @button-green__gradient,
+            @_button-gradient-direction: @button-green__gradient-direction
+        );
+    }
+
+    .action.yellow {
+        .lib-button-primary(
+            @_button-font-family: @button-yellow__font-family,
+            @_button-font-size: @button-yellow__font-size,
+            @_button-font-weight: @button-yellow__font-weight,
+            @_button-line-height: @button-yellow__line-height,
+            @_button-width: @button-yellow__width,
+            @_button-margin: @button-yellow__margin,
+            @_button-padding: @button-yellow__padding,
+            @_button-color: @button-yellow__color,
+            @_button-background: @button-yellow__background,
+            @_button-border: @button-yellow__border,
+            @_button-gradient-color-start: @button-yellow__gradient-color-start,
+            @_button-gradient-color-end: @button-yellow__gradient-color-end,
+            @_button-color-hover: @button-yellow__hover__color,
+            @_button-background-hover: @button-yellow__hover__background,
+            @_button-border-hover: @button-yellow__hover__border,
+            @_button-gradient-color-start-hover: @button-yellow__hover__gradient-color-start,
+            @_button-gradient-color-end-hover: @button-yellow__hover__gradient-color-end,
+            @_button-color-active: @button-yellow__active__color,
+            @_button-background-active: @button-yellow__active__background,
+            @_button-border-active: @button-yellow__active__border,
+            @_button-gradient-color-start-active: @button-yellow__active__gradient-color-start,
+            @_button-gradient-color-end-active: @button-yellow__active__gradient-color-end,
+            @_button-gradient: @button-yellow__gradient,
+            @_button-gradient-direction: @button-yellow__gradient-direction
+        );
+    }
+
+    .action.transparent {
+        background-color: transparent;
+        border-color: transparent;
+
+        &:focus,
+        &:active,
+        &:hover{
+            background-color: transparent;
+            border-color: transparent;
+        }
+
+        &.disabled,
+        &[disabled],
+        fieldset[disabled] & {
+            opacity: 1;
+            cursor: default;
+            pointer-events: none;
+        }
+    }
+}

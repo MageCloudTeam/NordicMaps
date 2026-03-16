@@ -1,0 +1,97 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Footer"}} @-->
+<!--@vars {
+"var store.frontend_name":"Store Name",
+"var url_about_us":"About Us URL",
+"var url_customer_service":"Customer Service URL",
+"var store_phone":"Store Phone",
+"var store_hours":"Store Hours",
+"var store.formatted_address|raw":"Store Address"
+} @-->
+
+                    <!-- End Content -->
+                    </td>
+                </tr>
+                <tr>
+                    <td class="footer">
+                        <table style="border-collapse: collapse; width: 100%; vertical-align: top;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 55%;">
+                                        <span style="width: 32px;display: inline-block;text-align: center">
+                                            <img src="{{view url=Magento_Email/truck.png}}" style="vertical-align: middle"
+                                                 width="30" alt="truck">
+                                        </span>
+                                        <span style="margin-left: 7px">{{trans '<b>Shipping</b> for letters (no tracking)' store_hours=$store_hours |raw}}</span>
+                                    </td>
+                                    <td style="width: 35%;" rowspan="4">
+                                        <table style="border-collapse: collapse; width: 100%;">
+                                            <tbody>
+                                            <tr>
+                                                <td style="width: 100%;">
+                                                    <b>{{trans 'Customer service'}}</b><br>
+                                                    Email: <a href="mailto:post@kartbutikken.no">post@kartbutikken.no</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width: 100%;padding-bottom: 0">
+                                                    <a href='{{store url=""}}'><b>Kartbutikken.no</b></a>
+                                                    <br>
+                                                    <span class="address">
+                                                        {{var store.formatted_address|raw}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 45%;">
+                                        <span style="width: 32px;display: inline-block;text-align: center">
+                                            <img src="{{view url=Magento_Email/question.png}}"
+                                                 style="vertical-align: middle" width="22" alt="question">
+                                        </span>
+                                        <a href='{{store url=""}}{{trans "faq_url"}}' style="margin-left: 7px">{{trans "<b>FAQ</b>" |raw}}</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <span style="width: 32px;display: inline-block;text-align: center">
+                                            <img src="{{view url=Magento_Email/user.png}}"
+                                                 style="vertical-align: middle" width="25" alt="user">
+                                        </span>
+                                        <a href="{{store url=customer/account}}" style="margin-left: 7px"><b>{{trans 'My page'}}</b></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <span style="width: 32px;display: inline-block;text-align: center">
+                                            <a href="https://www.instagram.com/kartbutikkenno" style="text-decoration: none;">
+                                            <img src="{{view url=Magento_Email/insta.png}}"
+                                                 style="vertical-align: middle" width="30" alt="instagram">
+                                            </a>
+                                        </span>
+                                        <span style="width: 32px;display: inline-block;text-align: center; padding-left: 40px">
+                                            <a href="https://www.instagram.com/kartbutikkenno" style="text-decoration: none;">
+                                            <img src="{{view url=Magento_Email/facebook.png}}"
+                                                 style="vertical-align: middle" width="30" alt="facebook">
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<!-- End wrapper table -->
+</body>

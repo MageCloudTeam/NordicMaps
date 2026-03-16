@@ -1,0 +1,49 @@
+{
+    "amasty_shipbar_profile": {
+        "column": {
+            "id": true,
+            "name": true,
+            "status": true,
+            "goal": true,
+            "goal_source": true,
+            "priority": true,
+            "stores": true,
+            "customer_groups": true,
+            "position": true,
+            "pages": true,
+            "action_clickable": true,
+            "action_link": true,
+            "closeable": true,
+            "car_icon_visible": true,
+            "text_font": true,
+            "text_size": true,
+            "text_color": true,
+            "extra_color": true,
+            "background_color": true,
+            "custom_style": true
+        },
+        "index": {
+            "AMASTY_SHIPBAR_PROFILE_PRIORITY": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "amasty_shipbar_profile_label": {
+        "column": {
+            "label_id": true,
+            "profile_id": true,
+            "store_id": true,
+            "action": true,
+            "label": true
+        },
+        "index": {
+            "AMASTY_SHIPBAR_PROFILE_LABEL_STORE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_FB7BF0E20B007362A754EA23E2BA1D05": true,
+            "AMASTY_SHIPBAR_PROFILE_LABEL_STORE_ID_STORE_STORE_ID": true
+        }
+    }
+}

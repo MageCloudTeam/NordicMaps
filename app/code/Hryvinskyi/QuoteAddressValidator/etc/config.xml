@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <quote_address_validator>
+            <general>
+                <enabled>1</enabled>
+                <enabled_firstname>1</enabled_firstname>
+                <validation_type>2</validation_type>
+                <firstname_stopwords><![CDATA[{{,}},gettemplate,base64_,afterfiltercall,.filter(]]></firstname_stopwords>
+                <firstname_regex><![CDATA[/^([\p{L}0-9&#$€£¥¢%&?!()@_:;,'+\s\-\.\*\/\\\\]{1,50})$/u]]></firstname_regex>
+                <firstname_error_message>First Name "%1" is not valid, please check and try again</firstname_error_message>
+                <enabled_lastname>1</enabled_lastname>
+                <lastname_stopwords><![CDATA[{{,}},gettemplate,base64_,afterfiltercall,.filter(]]></lastname_stopwords>
+                <lastname_regex><![CDATA[/^([\p{L}0-9&#$€£¥¢%&?!()@_:;,'+\s\-\.\*\/\\\\]{1,50})$/u]]></lastname_regex>
+                <lastname_error_message>Last Name "%1" is not valid, please check and try again</lastname_error_message>
+                <enabled_street>1</enabled_street>
+                <street_stopwords><![CDATA[{{,}},gettemplate,base64_,afterfiltercall,.filter(]]></street_stopwords>
+                <street_regex><![CDATA[/^([\p{L}0-9&#$€£¥¢%&?!()@_:;,'+\s\-\.\*\/\\\\]*)$/u]]></street_regex>
+                <street_error_message>Street "%1" is not valid, please check and try again.</street_error_message>
+            </general>
+        </quote_address_validator>
+    </default>
+</config>

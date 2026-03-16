@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+        <policies>
+            <policy id="script-src">
+                <values>
+                    <value id="chimpstatic-com" type="host">chimpstatic.com</value>
+                    <value id="bam-nr-data-net" type="host">bam.nr-data.net</value>
+                    <value id="www-google-analytics-com" type="host">www.google-analytics.com</value>
+                    <value id="stats-g-doubleclick-net" type="host">stats.g.doubleclick.net</value>
+                    <value id="static-no" type="host">nordicmaps.no</value>
+                    <value id="static-kartbutikken-admin" type="host">admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="font-src">
+                <values>
+                    <value id="font-src-data" type="host">data:</value>
+                    <value id="static-kartbutikken-no" type="host">static.nordicmaps.no</value>
+                    <value id="static-no" type="host">www.nordicmaps.no</value>
+                    <value id="static-kartbutikken-admin" type="host">admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="img-src">
+                <values>
+                    <value id="img-src-data" type="host">data:</value>
+                </values>
+            </policy>
+            <policy id="connect-src">
+                <values>
+                    <value id="www-google-analytics-com" type="host">www.google-analytics.com</value>
+                    <value id="static-no" type="host">nordicmaps.no</value>
+                    <value id="static-kartbutikken-admin" type="host">admi.nordicmaps.no</value>
+                </values>
+            </policy>
+            <policy id="frame-src">
+                <values>
+                    <value id="youtube-com" type="host">youtube.com</value>
+                    <value id="www-youtube-com" type="host">www.youtube.com</value>
+                    <value id="papirkart-no" type="host">papirkart.no</value>
+                </values>
+            </policy>
+        </policies>
+</csp_whitelist>

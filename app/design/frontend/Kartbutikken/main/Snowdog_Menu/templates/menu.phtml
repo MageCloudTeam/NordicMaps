@@ -1,0 +1,80 @@
+<?php /** @var \Snowdog\Menu\Block\Menu $block */ ?>
+<?php if ($block->getMenu()): ?>
+    <?php $menuClass = $block->getMenu()->getCssClass() ?>
+
+    <?php /*
+    <div class="<?= $menuClass ?>__mobile">
+        <svg title="icon-arrow-down" class="<?= $menuClass ?>__mobile-icon">
+            <use xlink:href="<?= $block->getViewFileUrl('images/icon-sprite.svg#icon-mobile-menu') ?>"></use>
+        </svg>
+    </div>
+    */ ?>
+
+    <nav class="<?= $menuClass ?>">
+        <ul class="<?= $menuClass ?>__list" data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+            <?php foreach ($block->getNodes() as $node): ?>
+                <?php
+                    /** @var \Snowdog\Menu\Model\Menu\Node $node */
+                    $childrenLevel = $node->getLevel() + 1;
+                    $children = $this->getNodes($childrenLevel, $node);
+                    $node->setIsParent((bool) $children);
+                    $parentClass = $children ? ' ' . $menuClass . '__item--parent' : '';
+                    $additionalClasses = $node->getClasses() ? ' ' . $node->getClasses() : '';
+                    $itemClasses = $parentClass . $additionalClasses;
+                    $menuNode = $block->renderMenuNode($node);
+                ?>
+                <?php if($menuNode != ''): ?>
+                <li class="<?= $menuClass ?>__item<?= $itemClasses ?> level0 level-top">
+                    <?php echo $menuNode ?>
+                    <?php echo $block->renderSubmenu($children, $node, $childrenLevel) ?>
+                </li>
+                <?php endif; ?>
+            <?php endforeach ?>
+        </ul>
+
+        <div class="panel-buttons-mobile">
+            <a class="panel-button" href="/wishlist/" title="Min ønskeliste">
+                <div class="panel-button-icon"><i class="icon-heart"></i></div>
+                <?= $block->escapeHtml(__('Wish List')) ?>
+            </a>
+
+            <a class="panel-button" href="/contact/" title="Kontakt"> <div class="panel-button-icon"><i class="icon-headset"></i></div>
+                <?= $block->escapeHtml(__('Contact')) ?>
+            </a>
+            <a class="panel-button" href="/customer/account/" title="Logg inn"> <div class="panel-button-icon"><i class="icon-user"></i></div>
+                <?= $block->escapeHtml(__('Sign in')) ?>
+            </a>
+        </div>
+
+        <div class="<?= $menuClass ?>__mobile-bg"></div>
+    </nav>
+<?php endif; ?>
+<script type="text/javascript">
+    require(['jquery'], function($){
+            if($(window).width() < 768){
+                $(document).ready(function(){
+                    $(".navigation a.has-children").click(function() {
+                        var link = $(this).attr('href');
+                        console.log(link);
+                        window.location.href = link;
+                    });
+                });
+            }
+    });
+</script>
+<script>
+    require(['jquery'], function ($) {
+        $(document).on('click','.tocart',function(event){
+            // console.log("incopyright")
+            var minicart = $('[data-block="minicart"]');
+            setTimeout(function() {
+                minicart.find('[data-role="dropdownDialog"]').dropdownDialog('open');
+            }, 3000);
+            setTimeout(function() {
+                minicart.find('[data-role="dropdownDialog"]').dropdownDialog('close');
+            }, 10000);
+
+            event.stopPropagation();
+        });
+    });
+</script>

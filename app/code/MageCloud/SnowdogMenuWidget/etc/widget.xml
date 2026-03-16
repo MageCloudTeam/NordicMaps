@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="snowdog_menu_widget" class="MageCloud\SnowdogMenuWidget\Block\Widget">
+        <label translate="true">MageCloud Snowdog Menu</label>
+        <description translate="true">MageCloud Snowdog Menu</description>
+        <parameters>
+            <parameter name="menu" xsi:type="select" visible="true" sort_order="10"
+                       source_model="MageCloud\SnowdogMenuWidget\Model\Config\Source\Menus">
+                <label translate="true">Select MegaMenu</label>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

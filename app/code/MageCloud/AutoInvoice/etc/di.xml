@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="MageCloud\AutoInvoice\Api\InvoiceProcessInterface"
+                type="MageCloud\AutoInvoice\Model\InvoiceProcess" />
+	<preference for="MageCloud\AutoInvoice\Api\Data\InvoiceProcessItemInterface"
+                type="MageCloud\AutoInvoice\Model\InvoiceProcessItem" />
+
+	<virtualType name="MageCloud\AutoInvoice\Model\Logger" type="Magento\Framework\Logger\Monolog">
+		<arguments>
+			<argument name="handlers" xsi:type="array">
+				<item name="debug" xsi:type="object">MageCloud\AutoInvoice\Model\Debug</item>
+			</argument>
+		</arguments>
+	</virtualType>
+
+	<type name="MageCloud\AutoInvoice\Model\InvoiceProcess">
+		<arguments>
+			<argument name="logger" xsi:type="object">MageCloud\AutoInvoice\Model\Logger</argument>
+		</arguments>
+	</type>
+
+	<type name="MageCloud\AutoInvoice\Observer\CreateInvoiceProcessor">
+		<arguments>
+			<argument name="logger" xsi:type="object">MageCloud\AutoInvoice\Model\Logger</argument>
+		</arguments>
+	</type>
+</config>

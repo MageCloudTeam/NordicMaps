@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+        <remove src="Magento_Swatches::css/swatches.css"/>
+        <font src="fonts/Kartbutikken-Icons.woff2"/>
+    </head>
+</page>

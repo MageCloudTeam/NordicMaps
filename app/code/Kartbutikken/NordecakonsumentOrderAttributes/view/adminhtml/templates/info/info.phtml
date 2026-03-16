@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @var $block \Kartbutikken\NordecakonsumentOrderAttributes\Block\Info\Info
+ */
+
+$order = $block->getOrder();
+/** @var \Magento\Quote\Model\Quote\Payment $payment */
+$payment = $order->getPayment(); ?>
+<?php if($payment->hasMethodInstance()): ?>
+    <div class="admin__page-section-item-content">
+        <strong><?php echo __('Reference Code:') ?></strong>
+        <span class="price"><?php echo $order->getData('reference_code'); ?></span>
+    </div>
+    <div class="admin__page-section-item-content">
+        <strong><?php echo __('Use invoice email address:') ?></strong>
+        <span class="price"><?php echo $order->getData('use_invoice_email'); ?></span>
+    </div>
+    <div class="admin__page-section-item-content">
+        <strong><?php echo __('Invoice Email Address:') ?></strong>
+        <span class="price"><?php echo $order->getData('invoice_email'); ?></span>
+    </div>
+<?php endif; ?>

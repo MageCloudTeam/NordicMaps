@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="header_logo_src" xsi:type="array">
+                    <item name="backend_model" xsi:type="string">Kartbutikken\Theme\Model\Design\Backend\Logo</item>
+                </item>
+                <item name="header_logo_small_src" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/header_logo_small_src</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
+                    <item name="backend_model" xsi:type="string">Kartbutikken\Theme\Model\Design\Backend\Logo</item>
+                    <item name="base_url" xsi:type="array">
+                        <item name="type" xsi:type="string">media</item>
+                        <item name="scope_info" xsi:type="string">1</item>
+                        <item name="value" xsi:type="string">logo</item>
+                    </item>
+                </item>
+                <item name="header_logo_slogan" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/header_logo_slogan</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="result-js-footer" disabled="true"/>
+        <plugin name="Kartbutikken_Theme::result-js-footer"
+                type="Kartbutikken\Theme\Plugin\JsFooter"/>
+    </type>
+    <type name="Magento\Store\Model\Address\Renderer">
+        <arguments>
+            <argument name="template" xsi:type="const">Kartbutikken\Theme\Model\Store\Model\Address\Renderer::TEMPLATE</argument>
+        </arguments>
+    </type>
+</config>

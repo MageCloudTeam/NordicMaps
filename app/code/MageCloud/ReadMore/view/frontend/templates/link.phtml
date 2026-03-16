@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Hryvinskyi\Base\Helper\Html;
+use MageCloud\ReadMore\Block\Link;
+
+/**
+ * @var Link $block
+ */
+$selector = '.read-more-wrapper';
+
+switch ($block->getData('type_page')) {
+    case 'category':
+        $selector = '.category-description';
+        break;
+    case 'product':
+        $selector = '#description';
+        break;
+    case 'cms_block':
+        $selector = '.block-static-block';
+        break;
+    case 'cms_page':
+        $selector = '.column.main';
+        break;
+    case 'custom':
+        if($block->getData('custom_selector') && trim($block->getData('custom_selector')) !== '') {
+            $selector = $block->getData('custom_selector');
+        }
+        break;
+}
+
+echo Html::tag('readmore', '', [
+    'data' => [
+        'mage-init' => [
+            'readMoreWidget' => [
+                'slicePoint' => '5000',
+                'sliceOn' => '<readmore></readmore>',
+                'element' => $selector,
+                'expandText' => $block->getData('open'),
+                'userCollapseText' => $block->getData('close'),
+                'expandSpeed' => 0,
+                'collapseSpeed' => 0,
+            ]
+        ]
+    ]
+]);

@@ -1,0 +1,79 @@
+//
+//  Variables
+//  ---------------------------------------------
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+	.block.crosssell{
+		.owl-stage{
+			.owl-item{
+				.product-item{
+					width: 89% !important;
+				}
+			}
+		}
+	}
+
+	.clearfix {
+		*zoom: 1;
+		&:after {
+			content: '';
+			display: block;
+			clear: both;
+			height: 0;
+		}
+	}
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+	.columns {
+		.column.main {
+			max-width: 100%;
+		}
+	}
+	.owl-carousel {
+		.owl-item {
+			.product-item {
+				.product-item-info {
+					background: none transparent !important;
+					box-shadow: none;
+				}
+			}
+		}
+	}
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+
+}

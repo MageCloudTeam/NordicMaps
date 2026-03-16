@@ -1,0 +1,51 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var $block \MagicToolbox\MagicZoomPlus\Block\Template
+ */
+
+$id = $block->getData('id');
+$mainHTML = $block->getData('mainHTML');
+$selectorsArray = $block->getData('selectorsArray');
+$selectorMaxWidth = $block->getData('selectorMaxWidth');
+$additionalClasses = $block->getData('additionalClasses');
+$scrollOptions = $block->getData('scrollOptions');
+$thumbSwitcherOptions = $block->getData('thumbSwitcherOptions');
+?>
+
+
+<div id="MagicToolboxContainerShow" class="MagicToolboxContainer selectorsBottom minWidth" <?= $thumbSwitcherOptions ?>>
+    <?= $mainHTML; ?>
+    <?php if (count($selectorsArray)): ?>
+    <div id="MagicToolboxSelectorsContainer<?= $id ?>"
+         class="MagicToolboxSelectorsContainer<?php if (count($selectorsArray) == 1) echo ' hidden-container' ?>">
+        <div id="MagicToolboxSelectors<?= $id ?>" class="<?= $additionalClasses ?>"<?= $scrollOptions ?>>
+        <?= join("\n\t\t", $selectorsArray); ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+
+<script>
+    (function() {
+        var magicToolboxContainer = document.getElementById('MagicToolboxContainerShow');
+        if (magicToolboxContainer) {
+            magicToolboxContainer.style.display = 'none';
+            setTimeout(function () {
+                magicToolboxContainer.style.display = 'block';
+            }, 500);
+
+            window.addEventListener('scroll', function () {
+                magicToolboxContainer.style.display = 'block';
+            }, { once: true });
+        }
+    })();
+</script>
+
+
+

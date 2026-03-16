@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/** @var \Magento\Customer\Block\Widget\Taxvat $block */
+?>
+<div class="field taxva required">
+    <label class="label" for="<?= $block->escapeHtmlAttr($block->getFieldId('taxvat')) ?>">
+        <span><?= $block->escapeHtml($block->getStoreLabel('taxvat')) ?></span>
+    </label>
+    <div class="control">
+        <input type="text" id="<?= $block->escapeHtmlAttr($block->getFieldId('taxvat')) ?>"
+               name="<?= $block->escapeHtmlAttr($block->getFieldName('taxvat')) ?>"
+               value="<?= $block->escapeHtmlAttr($block->getTaxvat()) ?>"
+               title="<?= $block->escapeHtmlAttr($block->getStoreLabel('taxvat')) ?>"
+               class="input-text required validate-number validate-length minimum-length-9 maximum-length-9 <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('taxvat')) ?>">
+    </div>
+</div>

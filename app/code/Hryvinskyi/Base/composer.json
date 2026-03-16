@@ -1,0 +1,16 @@
+{
+    "name": "hryvinskyi/magento2-base",
+    "description": "N/A",
+    "require": {
+        "magento/framework": "*"
+    },
+    "type": "magento2-module",
+    "version": "2.1.1",
+    "license": "MIT",
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Hryvinskyi\\Base\\": ""
+        }
+    }
+}

@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+?>
+<?php /** @var \Amasty\Gdpr\Block\Checkbox $block */ ?>
+
+<div class="field choice gdpr required" id="amprivacy-checkbox" data-role="amasty-gdpr-consent">
+    <input type="checkbox"
+           name="amgdpr_agree_newsletter"
+           title="<?= $block->escapeHtml(__('Accept privacy policy')) ?>"
+           value="1"
+           id="amgdpr_agree_newsletter"
+           class="checkbox"
+           data-validate="{required:true}"
+           style="margin-top: 8px;">
+    <label for="amgdpr_agree_newsletter" class="label" style="position: unset;"><?= /* @escapeNotVerified */ $block->getConsentText() ?></label>
+</div>

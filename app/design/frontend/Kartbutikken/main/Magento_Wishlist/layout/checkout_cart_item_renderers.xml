@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.cart.item.renderers.default.actions">
+            <referenceBlock name="checkout.cart.item.renderers.default.actions.move_to_wishlist" remove="true"/>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.simple.actions">
+            <referenceBlock name="checkout.cart.item.renderers.simple.actions.move_to_wishlist" remove="true"/>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.bundle.actions">
+            <referenceBlock name="checkout.cart.item.renderers.bundle.actions.move_to_wishlist" remove="true"/>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.downloadable.actions">
+            <referenceBlock name="checkout.cart.item.renderers.downloadable.actions.move_to_wishlist" remove="true"/>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.grouped.actions">
+            <referenceBlock name="checkout.cart.item.renderers.grouped.actions.move_to_wishlist" remove="true"/>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.configurable.actions">
+            <referenceBlock name="checkout.cart.item.renderers.configurable.actions.move_to_wishlist" remove="true"/>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.virtual.actions">
+            <referenceBlock name="checkout.cart.item.renderers.virtual.actions.move_to_wishlist" remove="true"/>
+        </referenceBlock>
+    </body>
+</page>

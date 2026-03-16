@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <meta name="format-detection" content="telephone=no"/>
+
+        <remove src="mage/calendar.css"/>
+
+        <css src="css/common.css"/>
+<!--        <css src="css/mobile-xs.css"/>-->
+<!--        <css src="css/mobile-s.css"/>-->
+<!--        <css src="css/mobile-m.css"/>-->
+<!--        <css src="css/desktop-s.css"/>-->
+<!--        <css src="css/desktop-m.css"/>-->
+<!--        <css src="css/desktop-l.css"/>-->
+<!--        <css src="css/desktop-xl.css"/>-->
+        <css src="css/mobile-xs.css" media="screen and (max-width: 480px)"/>
+        <css src="css/mobile-s.css" media="screen and (max-width: 640px)"/>
+        <css src="css/mobile-m.css" media="screen and (max-width: 768px)"/>
+        <css src="css/desktop-s.css" media="screen and (min-width: 640px)"/>
+        <css src="css/desktop-m.css" media="screen and (min-width: 768px)"/>
+        <css src="css/desktop-l.css" media="screen and (min-width: 1024px)"/>
+        <css src="css/desktop-xl.css" media="screen and (min-width: 1440px)"/>
+        <css src="css/print.css" media="print"/>
+    </head>
+</page>

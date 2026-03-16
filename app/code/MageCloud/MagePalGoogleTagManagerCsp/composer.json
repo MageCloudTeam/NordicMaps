@@ -1,0 +1,22 @@
+{
+	"name": "mage-cloud/mage-pal-google-tag-manager-csp",
+	"version": "1.0.0",
+	"description": "N/A",
+	"type": "magento2-module",
+	"require": {
+		"magento/framework": "*",
+        "magento/module-csp": "100.4.*",
+        "magepal/magento2-googletagmanager": "2.5.1"
+	},
+	"license": [
+		"MIT"
+	],
+	"autoload": {
+		"files": [
+			"registration.php"
+		],
+		"psr-4": {
+			"MageCloud\\MagePalGoogleTagManagerCsp\\": ""
+		}
+	}
+}

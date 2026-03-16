@@ -1,0 +1,210 @@
+//
+// Responsive: Utility classes
+// --------------------------------------------------
+
+.responsive-visibility() {
+    display: block !important;
+    table&  { display: table !important; }
+    tr&     { display: table-row !important; }
+    th&,
+    td&     { display: table-cell !important; }
+}
+
+.responsive-invisibility() {
+    display: none !important;
+}
+
+//
+//  Variables
+//  ---------------------------------------------
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    @-ms-viewport {
+        width: device-width;
+    }
+
+
+    // Visibility utilities
+    // Note: Deprecated .visible-xs, .visible-sm, .visible-md, and .visible-lg as of v3.2.0
+    .visible-xs,
+    .visible-sm,
+    .visible-md,
+    .visible-lg {
+        .responsive-invisibility();
+    }
+
+    .visible-xs-block,
+    .visible-xs-inline,
+    .visible-xs-inline-block,
+    .visible-sm-block,
+    .visible-sm-inline,
+    .visible-sm-inline-block,
+    .visible-md-block,
+    .visible-md-inline,
+    .visible-md-inline-block,
+    .visible-lg-block,
+    .visible-lg-inline,
+    .visible-lg-inline-block {
+        display: none !important;
+    }
+
+    // Print utilities
+    //
+    // Media queries are placed on the inside to be mixin-friendly.
+
+    // Note: Deprecated .visible-print as of v3.2.0
+    .visible-print {
+        .responsive-invisibility();
+
+        @media print {
+            .responsive-visibility();
+        }
+    }
+
+    .visible-print-block {
+        display: none !important;
+
+        @media print {
+            display: block !important;
+        }
+    }
+
+    .visible-print-inline {
+        display: none !important;
+
+        @media print {
+            display: inline !important;
+        }
+    }
+
+    .visible-print-inline-block {
+        display: none !important;
+
+        @media print {
+            display: inline-block !important;
+        }
+    }
+
+    .hidden-print {
+        @media print {
+            .responsive-invisibility();
+        }
+    }
+
+    .display-inline {
+        display: inline;
+    }
+
+    .display-inline-block {
+        display: inline-block;
+    }
+
+    .pull-right {
+        float: right;
+    }
+
+    .pull-left {
+        float: left;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .hidden-xs {
+        .responsive-invisibility();
+    }
+
+    .visible-xs {
+        .responsive-visibility();
+    }
+
+    .visible-xs-block {
+        display: block !important;
+    }
+
+    .visible-xs-inline {
+        display: inline !important;
+    }
+
+    .visible-xs-inline-block {
+        display: inline-block !important;
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .visible-sm {
+        .responsive-visibility();
+    }
+
+    .visible-sm-block {
+        display: block !important;
+    }
+
+    .visible-sm-inline {
+        display: inline !important;
+    }
+
+    .visible-sm-inline-block {
+        display: inline-block !important;
+    }
+
+    .hidden-sm {
+        .responsive-invisibility();
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .visible-md {
+        .responsive-visibility();
+    }
+
+    .visible-md-block {
+        display: block !important;
+    }
+
+    .visible-md-inline {
+        display: inline !important;
+    }
+
+    .visible-md-inline-block {
+        display: inline-block !important;
+    }
+
+    .hidden-md {
+        .responsive-invisibility();
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+    .visible-lg {
+        .responsive-visibility();
+    }
+
+    .visible-lg-block {
+        display: block !important;
+    }
+
+    .visible-lg-inline {
+        display: inline !important;
+    }
+
+    .visible-lg-inline-block {
+        display: inline-block !important;
+    }
+
+    .hidden-lg {
+        .responsive-invisibility();
+    }
+}

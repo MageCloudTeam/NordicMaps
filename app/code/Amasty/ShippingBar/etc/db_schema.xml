@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) Amasty (https://www.amasty.com)
+ * @package Free Shipping Bar for Magento 2
+ */-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="amasty_shipbar_profile" resource="default" engine="innodb" comment="Amasty Shipping Bar Profile">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+    <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Profile name"/>
+    <column xsi:type="boolean" name="status" nullable="false" comment="Active/inactive"/>
+    <column xsi:type="float" name="goal" scale="2" precision="10" unsigned="false" nullable="true"/>
+    <column xsi:type="smallint" name="goal_source" padding="6" unsigned="false" nullable="false" identity="false" default="0" comment="Goal Source"/>
+    <column xsi:type="smallint" name="priority" padding="6" unsigned="false" nullable="false" identity="false" default="1" comment="Priority"/>
+    <column xsi:type="varchar" name="stores" nullable="true" length="255" comment="Store Views"/>
+    <column xsi:type="varchar" name="customer_groups" nullable="true" length="255" comment="Customer Groups"/>
+    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="true" identity="false" comment="Bar position"/>
+    <column xsi:type="varchar" name="pages" nullable="true" length="255" comment="Show on pages"/>
+    <column xsi:type="boolean" name="action_clickable" nullable="false" comment="Action by click"/>
+    <column xsi:type="varchar" name="action_link" nullable="true" length="255" comment="Action link"/>
+    <column xsi:type="boolean" name="closeable" nullable="false" comment="Can be closed"/>
+    <column xsi:type="boolean" name="car_icon_visible" nullable="false" default="true" comment="Car visibility"/>
+    <column xsi:type="varchar" name="text_font" nullable="false" length="255" comment="Text font"/>
+    <column xsi:type="int" name="text_size" padding="11" unsigned="false" nullable="false" identity="false" comment="Text size"/>
+    <column xsi:type="varchar" name="text_color" nullable="false" length="255" comment="Text color"/>
+    <column xsi:type="varchar" name="extra_color" nullable="false" length="255" comment="Color of goal and action budges"/>
+    <column xsi:type="varchar" name="background_color" nullable="true" length="255" comment="Bar background color"/>
+    <column xsi:type="text" name="custom_style" nullable="true" comment="Custom css"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <index referenceId="AMASTY_SHIPBAR_PROFILE_PRIORITY" indexType="btree">
+      <column name="priority"/>
+    </index>
+  </table>
+  <table name="amasty_shipbar_profile_label" resource="default" engine="innodb" comment="Amasty Shipping Bar Profile Label">
+    <column xsi:type="int" name="label_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Label Id"/>
+    <column xsi:type="int" name="profile_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Profile Id"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false" comment="Store Id"/>
+    <column xsi:type="varchar" name="action" nullable="false" length="64" comment="Profile Id"/>
+    <column xsi:type="varchar" name="label" nullable="false" length="255" comment="Label"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="label_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="FK_FB7BF0E20B007362A754EA23E2BA1D05" table="amasty_shipbar_profile_label" column="profile_id" referenceTable="amasty_shipbar_profile" referenceColumn="id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="AMASTY_SHIPBAR_PROFILE_LABEL_STORE_ID_STORE_STORE_ID" table="amasty_shipbar_profile_label" column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+    <index referenceId="AMASTY_SHIPBAR_PROFILE_LABEL_STORE_ID" indexType="btree">
+      <column name="store_id"/>
+    </index>
+  </table>
+</schema>

@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/** @var \MageCloud\ImageLazyLoad\Block\Scripts $block */
+$threshold = $block->getConfig()->getThreshold();
+$delay = $block->getConfig()->getDelay();
+$effect = $block->getConfig()->getEffect();
+$effectTime = $block->getConfig()->getEffectTime();
+
+?>
+<script>
+    require(['jquery', 'lazyLoad'], function ($, LazyLoad) {
+        setTimeout(function () {
+            var mcLazyload = new LazyLoad({
+                elements_selector: '.lazy',
+                load_delay: <?= $delay ? $delay : '-1' ?>,
+                threshold: <?= $threshold ?>,
+            });
+
+            mcLazyload.update();
+
+            $(document).on('ajaxComplete initialized_swiper', function () {
+                mcLazyload.update();
+            });
+        }, 50);
+    });
+</script>

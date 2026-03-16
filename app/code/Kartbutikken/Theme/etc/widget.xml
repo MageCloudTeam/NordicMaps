@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget_file.xsd">
+
+    <widget id="catalog_recently_viewed">
+        <containers>
+            <container name="sidebar.main">
+                <template name="default" value="sidebar" />
+            </container>
+            <container name="content">
+                <template name="grid" value="grid" />
+                <template name="list" value="list" />
+            </container>
+            <container name="page.bottom.container">
+                <template name="grid" value="grid" />
+                <template name="list" value="list" />
+            </container>
+            <container name="sidebar.additional">
+                <template name="default" value="sidebar" />
+            </container>
+        </containers>
+    </widget>
+</widgets>
+

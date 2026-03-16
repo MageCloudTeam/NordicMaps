@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Hryvinskyi\Base\Helper\Html;
+use Kartbutikken\Theme\Block\Header\Panel\Buttons;
+
+/**
+ * @var Buttons $block
+ */
+?>
+<?php if(count($block->getButtons()) > 0): ?>
+    <?php foreach ($block->getButtons() as $button): ?>
+        <?php
+            $tag = 'div';
+            $classes = array_merge(['panel-button'], $button->getAdditionalClasses());
+            $attributes = ['class' => $classes, 'title' => $button->getTitle()];
+            if($button->isLink()) {
+                $tag = 'a';
+                $attributes['href'] = $button->getLinkUrl();
+            }
+            if($button->isDropDown()) {
+                $attributes['data']['mage-init'] = ['dropdown' => ['menu' => false]];
+                $attributes['data']['toggle'] = 'dropdown';
+                $attributes['data']['trigger-keypress-button'] = 'true';
+            }
+        ?>
+        <?php if($button->isCustom() === false): ?>
+            <?php echo Html::beginTag($tag, $attributes); ?>
+                <div class="panel-button-icon"><?php echo $button->getIcon() ?></div>
+                <div class="panel-button-label"><span><?php echo $button->getLabel() ?></span></div>
+            <?php echo Html::endTag($tag); ?>
+        <?php else: ?>
+            <?php echo Html::tag($tag, $button->toHtml(), $attributes) ?>
+        <?php endif; ?>
+        <?php if($button->toHtml() !== '' && $button->isDropDown()): ?>
+            <div class="panel-button-content <?php echo implode(' ', $button->getAdditionalClasses())?>" data-target="dropdown">
+                <?php echo $button->toHtml(); ?>
+            </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
+<?php endif; ?>

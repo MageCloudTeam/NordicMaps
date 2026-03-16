@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+  ~ @author: <mailto:volodymyr@hryvinskyi.com>
+  ~ @github: <https://github.com/hryvinskyi>
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block name="lazy-load-data-mage-init"
+                   template="Magento_Theme::js/lazy_load_data_mage_init.phtml"/>
+            <block name="preload-preconnect"
+                   template="Magento_Theme::html/header/preconect-preload.phtml"/>
+        </referenceBlock>
+        <referenceContainer name="after.body.start">
+            <referenceBlock name="cookie-status-check" remove="true"/>
+        </referenceContainer>
+    </body>
+</page>

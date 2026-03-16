@@ -1,0 +1,169 @@
+<?php
+
+namespace Jajuma\WebpImages\Block;
+
+class Picture extends \Magento\Framework\View\Element\Template
+{
+    protected $_template = "picture-tag-format.phtml";
+
+    /**
+     * @var string
+     */
+    private $webpImage = '';
+
+    /**
+     * @var string
+     */
+    private $originalImage = '';
+
+    /**
+     * @var string
+     */
+    private $originalTag = '';
+
+    /**
+     * @var string
+     */
+    private $customSrcTag = '';
+
+    /**
+     * @var string
+     */
+    private $customSrcSetTag = '';
+
+    /**
+     * @var string
+     */
+    private $mobileImage = '';
+
+    /**
+     * @var string
+     */
+    private $originalImagePath = '';
+
+    /**
+     * @param string $originalImage
+     *
+     * @return Picture
+     */
+    public function setOriginalImage($originalImage)
+    {
+        $this->originalImage = $originalImage;
+        return $this;
+    }
+
+    public function getOriginalImage()
+    {
+        return $this->originalImage;
+    }
+
+    /**
+     * @param string $webpImage
+     *
+     * @return Picture
+     */
+    public function setWebpImage($webpImage)
+    {
+        $this->webpImage = $webpImage;
+        return $this;
+    }
+
+    public function getWebpImage()
+    {
+        return $this->webpImage;
+    }
+
+    /**
+     * @param string $originalTag
+     *
+     * @return Picture
+     */
+    public function setOriginalTag($originalTag)
+    {
+        $this->originalTag = $originalTag;
+        return $this;
+    }
+
+    public function getOriginalTag()
+    {
+        return $this->originalTag;
+    }
+
+    public function setCustomSrcTag($customSrcTag)
+    {
+        $this->customSrcTag = $customSrcTag;
+        return $this;
+    }
+
+    public function getCustomSrcTag()
+    {
+        return $this->customSrcTag;
+    }
+
+    public function setCustomSrcSetTag($customSrcSetTag)
+    {
+        $this->customSrcSetTag = $customSrcSetTag;
+        return $this;
+    }
+
+    public function getCustomSrcSetTag()
+    {
+        return $this->customSrcSetTag;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileImage(): string
+    {
+        return $this->mobileImage;
+    }
+
+    /**
+     * @param string $mobileImage
+     *
+     * @return $this
+     */
+    public function setMobileImage(string $mobileImage)
+    {
+        $this->mobileImage = $mobileImage;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalImageType()
+    {
+        if (preg_match('/\.(jpg|jpeg)$/i', $this->getOriginalImage())) {
+            return 'image/jpg';
+        }
+
+        if (preg_match('/\.(png)$/i', $this->getOriginalImage())) {
+            return 'image/png';
+        }
+
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalImagePath(): string
+    {
+        return $this->originalImagePath;
+    }
+
+    /**
+     * @param string $originalImagePath
+     *
+     * @return self
+     */
+    public function setOriginalImagePath(string $originalImagePath)
+    {
+        $this->originalImagePath = $originalImagePath;
+
+        return $this;
+    }
+}

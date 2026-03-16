@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright (c) 2020. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+use Magento\Catalog\Block\Product\View\Description;
+use Magento\Catalog\Helper\Output;
+
+/**
+ * @var Description $block
+ * @var Output $output
+ */
+$output = $this->helper(Output::class);
+$src = $output->productAttribute(
+    $block->getProduct(),
+    $block->getProduct()->getOverviewMap(),
+    'overview_map'
+);
+?>
+<?php if($src): ?>
+    <iframe class="lazy" data-src="<?= /* @noEscape */ $src ?>" height="800" width="100%"></iframe>
+    <script>
+        require(['jquery'], function ($) {
+            $('#tab-label-overview_map').on('dimensionsChanged', function (e) {
+                if(e.target && e.target.classList.contains('active')) {
+                    let mapIframe = $('#overview_map').find('iframe');
+                    if(mapIframe.length !== 0) {
+                        mapIframe.attr('src', mapIframe.attr('src') ?  mapIframe.attr('src') : mapIframe.attr('data-src'));
+                    }
+                }
+            });
+        });
+    </script>
+<?php endif; ?>

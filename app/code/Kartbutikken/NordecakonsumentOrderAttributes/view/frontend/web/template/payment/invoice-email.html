@@ -1,0 +1,45 @@
+<div class="step-title" data-role="title" data-bind="i18n: 'Billing Address'"></div>
+<div class="mb-10 mt-10">
+    <!-- ko i18n: console.log(paymentFormData.use_invoice_email(), String(paymentFormData.invoice_email()).trim())
+     --><!-- /ko -->
+    <!-- ko if: (paymentFormData.use_invoice_email()) -->
+        <strong data-bind="i18n: 'You will receive an invoice at EHF'"></strong>
+    <!--/ko-->
+    <!-- ko if: (!paymentFormData.use_invoice_email() && String(paymentFormData.invoice_email()).trim() !== '') -->
+        <strong>
+            <!-- ko text: $t('You will receive an invoice by email to: %1').replace('%1', paymentFormData.invoice_email()) --><!--/ko-->
+       </strong>
+   <!--/ko-->
+</div>
+<input id="payment_use_invoice_email" type="checkbox"
+       name="payment[use_invoice_email]" data-bind="checked: paymentFormData.use_invoice_email" style="display:none"/>
+<input type="hidden" name="payment[invoice_email]" id="payment_invoice_email"
+       data-bind="value: paymentFormData.invoice_email"/>
+<!--div class="field" style="margin-bottom: 1.5rem">
+    <div class="control">
+        <label>
+            <input id="payment_use_invoice_email" type="checkbox"
+                   name="payment[use_invoice_email]" data-bind="
+               event: {change: userChanges},
+               attr: {title: $t('Yes we want invoice at EHF')},
+               checked: paymentFormData.use_invoice_email
+            "/>
+            <span data-bind="text: $t('You will receive an invoice at EHF')"></span>
+        </label>
+    </div>
+</div>
+<div class="field" style="margin-bottom: 1.5rem" data-bind="visible: paymentFormData.use_invoice_email">
+    <div class="control">
+        <input type="email" name="payment[invoice_email]" class="input-text" value="" data-bind="
+               event: {change: userChanges},
+               attr: {
+                    id: 'payment_invoice_email',
+                    title: $t('We want an invoice by email to this email address'),
+                    'data-validate': JSON.stringify({'required':true}),
+                    'placeholder': $t('We want an invoice by email to this email address'),
+                },
+                valueUpdate: 'keyup',
+                value: paymentFormData.invoice_email
+            "/>
+    </div>
+</div-->

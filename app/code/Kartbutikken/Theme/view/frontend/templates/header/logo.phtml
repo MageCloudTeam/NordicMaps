@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright (c) 2019. Volodymyr Hryvinskyi.  All rights reserved.
+ * @author: <mailto:volodymyr@hryvinskyi.com>
+ * @github: <https://github.com/hryvinskyi>
+ */
+
+/**
+ * @var \Magento\Theme\Block\Html\Header\Logo $block
+ * @var \Kartbutikken\Theme\ViewModel\Logo $viewModel
+ */
+$viewModel = $block->getData('view_model');
+$headerConfig = $viewModel->getHeaderConfig();
+$storeName = $block->getThemeName() ? $block->getThemeName() : $headerConfig->getLogoAlt();
+?>
+<div class="logo">
+    <span data-action="toggle-nav" class="action nav-toggle"><span><?= $block->escapeHtml(__('Toggle Nav')) ?></span></span>
+    <a href="<?= $block->escapeUrl($block->getUrl('')) ?>" title="<?= $block->escapeHtmlAttr($storeName) ?>"
+            aria-label="store logo">
+        <img class="no-lazy" src="<?= $block->escapeUrl($viewModel->getLogoSrc()) ?>"
+             title="<?= $block->escapeHtmlAttr($storeName) ?>"
+             alt="<?= $block->escapeHtmlAttr($storeName) ?>"
+            <?= $headerConfig->getLogoWidth() ? 'width="' . $block->escapeHtmlAttr($headerConfig->getLogoWidth()) . '"' : '' ?>
+            <?= $headerConfig->getLogoHeight() ? 'height="' . $block->escapeHtmlAttr($headerConfig->getLogoHeight()) . '"' : '' ?>
+        />
+    </a>
+    <span class="slogan"><?= $headerConfig->getLogoSlogan() ?></span>
+</div>
